@@ -29,5 +29,16 @@ namespace NetHome.Helpers
             var response = await client.GetAsync(url);
             return response.IsSuccessStatusCode;
         }
+        
+        internal static async Task<HttpResponseMessage> RegisterAsync(RegisterModel registerModel)
+        {
+            var json = JsonSerializer.Serialize(registerModel);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var url = "http://192.168.0.100:34674/api/user/register";
+            using var client = new HttpClient();
+
+            return await client.PostAsync(url, data);
+        }
     }
 }

@@ -4,8 +4,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:NetHome.ViewModels"
              x:Class="NetHome.Views.LoginPage"
-             Shell.NavBarIsVisible="False"
-             x:Name="Cont">
+             Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <ResourceDictionary>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
@@ -29,7 +28,7 @@
                 </StackLayout>
             </StackLayout>
             <StackLayout Padding="10,0,10,0" VerticalOptions="Center" Grid.Row="1">
-                <Entry x:Name="UsernameEntry" Margin="10,5,10,5" Placeholder="Username" Text="{Binding Username}" 
+                <Entry x:Name="UsernameEntry" ReturnType="Next" Margin="10,5,10,5" Placeholder="Username" Text="{Binding Username}" 
                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
                 <Entry x:Name="PasswordEntry" Margin="10,5,10,5" Placeholder="Password" IsPassword="True" Text="{Binding Password}" 
                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
@@ -46,6 +45,8 @@
                         </ActivityIndicator.Scale>
                     </ActivityIndicator>
                 </Grid>
+                <Button x:Name="RegisterButton" VerticalOptions="Center" Text="Register" Command="{Binding RegisterCommand}" CornerRadius="10" Margin="50,20,50,0"
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

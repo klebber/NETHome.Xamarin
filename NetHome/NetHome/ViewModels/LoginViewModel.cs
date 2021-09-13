@@ -2,6 +2,7 @@
 using NetHome.Models.User;
 using NetHome.Services;
 using NetHome.Views;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -28,6 +29,15 @@ namespace NetHome.ViewModels
         private Command loginCommand;
 
         public ICommand LoginCommand => loginCommand ??= new Command(async () => await LoginAsync());
+
+        private Command registerCommand;
+
+        public ICommand RegisterCommand => registerCommand ??= new Command(async () => await RegisterAsync());
+
+        private async Task RegisterAsync()
+        {
+            await Shell.Current.GoToAsync(nameof(RegistrationPage));
+        }
 
         public LoginViewModel()
         {

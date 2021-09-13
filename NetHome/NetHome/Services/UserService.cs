@@ -25,5 +25,11 @@ namespace NetHome.Services
             string token = await SecureStorage.GetAsync("AuthorizationToken");
             return token != null && await HttpRequestHelper.ValidateAsync(token);
         }
+        
+        public async Task<bool> Register(RegisterModel registerModel)
+        {
+            HttpResponseMessage response = await HttpRequestHelper.RegisterAsync(registerModel);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

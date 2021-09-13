@@ -12,7 +12,6 @@ namespace NetHome.Views
         {
             InitializeComponent();
             BindingContext = _viewModel = new LoginViewModel();
-            UsernameEntry.ReturnCommand = new Command(() => PasswordEntry.Focus());
         }
 
         protected override async void OnAppearing()

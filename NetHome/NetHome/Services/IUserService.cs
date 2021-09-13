@@ -7,5 +7,6 @@ namespace NetHome.Services
     {
         Task<bool> Login(LoginModel loginModel);
         Task<bool> Validate();
+        Task<bool> Register(RegisterModel registerModel);
     }
 }

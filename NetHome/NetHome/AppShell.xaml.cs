@@ -14,6 +14,7 @@ namespace NetHome
         private static void RegisterRoutes()
         {
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
             Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
         }
     }
