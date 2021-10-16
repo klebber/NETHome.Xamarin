@@ -14,24 +14,48 @@ namespace NetHome.Services
         private HubConnection hubConnection;
         public async Task<bool> Connect()
         {
-            if (hubConnection != null && hubConnection.State == HubConnectionState.Connected) return true;
+            if (hubConnection != null && hubConnection.State == HubConnectionState.Connected) 
+                return true;
 
             hubConnection = new HubConnectionBuilder()
-                .WithUrl("http://192.168.0.100:34674/nethomehub", options =>
+                .WithUrl("http://192.168.0.100:58332/nethomehub", options =>
                 {
-                    options.AccessTokenProvider = () =>
-                    {
-                        return SecureStorage.GetAsync("AuthorizationToken");
-                    };
+                    options.AccessTokenProvider = () => SecureStorage.GetAsync("AuthorizationToken");
                 })
                 .Build();
+            
+            hubConnection.KeepAliveInterval = TimeSpan.FromSeconds(3);
+            hubConnection.ServerTimeout = TimeSpan.FromSeconds(6);
 
-            _ = hubConnection.On<bool>("Switched", (ison) =>
+            hubConnection.Reconnecting += HubReconnecting;
+            hubConnection.Reconnected += HubReconnected;
+            hubConnection.Closed += HubClosed;
+
+            hubConnection.On<bool>("Switched", (ison) =>
             {
                 MessagingCenter.Send<object, bool>(this, "Switched", ison);
             });
-            await hubConnection.StartAsync(); //timeout??
+
+            await hubConnection.StartAsync();
             return hubConnection.State == HubConnectionState.Connected;
+        }
+
+        private Task HubReconnecting(Exception arg)
+        {
+            MessagingCenter.Send<object>(this, "HubReconnecting");
+            return Task.CompletedTask;
+        }
+
+        private Task HubReconnected(string arg)
+        {
+            MessagingCenter.Send<object>(this, "HubReconnected");
+            return Task.CompletedTask;
+        }
+
+        private Task HubClosed(Exception arg)
+        {
+            MessagingCenter.Send<object>(this, "HubClosed");
+            return Task.CompletedTask;
         }
 
         public Task Disconnect()

@@ -1,4 +1,4 @@
-﻿using NetHome.Models.User;
+﻿using NetHome.Common.Models;
 using NetHome.Services;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace NetHome.ViewModels
         {
             IsLoading = true;
             if (!await Validate()) return;
-            RegisterModel reg = new RegisterModel()
+            var reg = new RegisterModel()
             {
                 Username = Username,
                 Password = Password,

@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:NetHome.ViewModels"
              x:Class="NetHome.Views.HomePage"
              Shell.NavBarIsVisible ="False">
+    <ContentPage.BindingContext>
+        <local:HomeViewModel/>
+    </ContentPage.BindingContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -18,7 +22,7 @@
 
         <ScrollView Grid.Row="1">
             <StackLayout Padding="10" Margin="5">
-
+                
                 <Frame IsClippedToBounds="True" HasShadow="True" Padding="0" Margin="0" CornerRadius="10" BackgroundColor="{StaticResource Secondary}" >
                     <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="80">
                         <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical" Padding="20,5,20,10" VerticalOptions="Center">

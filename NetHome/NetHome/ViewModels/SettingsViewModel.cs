@@ -12,6 +12,7 @@ namespace NetHome.ViewModels
 {
     public class SettingsViewModel
     {
+        private readonly IUserService _userService;
         private readonly IServerConnection _serverConnection;
 
         private Command logoutCommand;
@@ -19,11 +20,13 @@ namespace NetHome.ViewModels
 
         public SettingsViewModel()
         {
+            _userService = DependencyService.Get<IUserService>();
             _serverConnection = DependencyService.Get<IServerConnection>();
         }
 
         private async Task LogoutAsync()
         {
+            _userService.ClearUserData();
             await _serverConnection.Disconnect();
             SecureStorage.Remove("AuthorizationToken");
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");

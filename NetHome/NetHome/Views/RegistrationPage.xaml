@@ -8,7 +8,6 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
-            <xct:BoolToObjectConverter x:Key="BoolToObjectConverter" TrueObject="" FalseObject="Register" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.BindingContext>
@@ -16,33 +15,28 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Margin="10,10,10,10">
-            <Entry x:Name="UsernameEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="Username" Text="{Binding Username}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Entry x:Name="PasswordEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding Password}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Entry x:Name="PasswordRepeatEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding PasswordRepeat}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Entry x:Name="EmailEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="Email" Keyboard="Email" Text="{Binding Email}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Entry x:Name="FirstNameEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="First name" Text="{Binding FirstName}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Entry x:Name="LastNameEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="Last name" Text="{Binding LastName}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Entry x:Name="AgeEntry" Margin="10,5,10,5" ReturnType="Next" Placeholder="Age" Text="{Binding Age}" Keyboard="Numeric" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
-            <Picker x:Name="GenderPicker" Margin="10,5,10,5" Title="Gender" SelectedItem="{Binding Gender}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
-                <Picker.Items>
-                    <x:String>Male</x:String>
-                    <x:String>Female</x:String>
-                    <x:String>Other</x:String>
-                </Picker.Items>
-            </Picker>
-            <Grid Margin="50,20,50,0">
-                <Button x:Name="LoginButton" VerticalOptions="Center" Text="{Binding IsLoading, Converter={StaticResource BoolToObjectConverter}}" Command="{Binding RegisterCommand}" CornerRadius="10" 
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="UsernameEntry" ReturnType="Next" Placeholder="Username" Text="{Binding Username}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="PasswordEntry" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding Password}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="PasswordRepeatEntry" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding PasswordRepeat}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="EmailEntry" ReturnType="Next" Placeholder="Email" Keyboard="Email" Text="{Binding Email}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="FirstNameEntry" ReturnType="Next" Placeholder="First name" Text="{Binding FirstName}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="LastNameEntry" ReturnType="Next" Placeholder="Last name" Text="{Binding LastName}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="AgeEntry" ReturnType="Next" Placeholder="Age" Text="{Binding Age}" Keyboard="Numeric" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Picker x:Name="GenderPicker" Title="Gender" SelectedItem="{Binding Gender}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+                    <Picker.Items>
+                        <x:String>Male</x:String>
+                        <x:String>Female</x:String>
+                        <x:String>Other</x:String>
+                    </Picker.Items>
+                </Picker>
+            </Frame>
+            <Button x:Name="RegisterButton" Margin="10,20,10,0" VerticalOptions="Center" Text="Register" Command="{Binding RegisterCommand}"
                         IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+            <AbsoluteLayout VerticalOptions="Center" HorizontalOptions="Center">
                 <ActivityIndicator IsVisible="{Binding IsLoading}" Opacity="100" x:Name="ActivityIndicator" IsRunning="True" 
-                                   HorizontalOptions="Center" VerticalOptions="Center" Color="White">
-                    <ActivityIndicator.Scale>
-                        <OnPlatform x:TypeArguments="x:Double">
-                            <On Platform="Android">0.7</On>
-                            <On Platform="iOS">1</On>
-                        </OnPlatform>
-                    </ActivityIndicator.Scale>
-                </ActivityIndicator>
-            </Grid>
+                                   HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Color="White"/>
+            </AbsoluteLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

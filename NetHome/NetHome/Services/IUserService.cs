@@ -1,4 +1,4 @@
-﻿using NetHome.Models.User;
+﻿using NetHome.Common.Models;
 using System.Threading.Tasks;
 
 namespace NetHome.Services
@@ -8,5 +8,7 @@ namespace NetHome.Services
         Task<bool> Login(LoginModel loginModel);
         Task<bool> Validate();
         Task<bool> Register(RegisterModel registerModel);
+        UserModel GetUserData();
+        void ClearUserData();
     }
 }

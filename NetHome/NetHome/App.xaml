@@ -7,12 +7,28 @@
     -->
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#282b33</Color>
-            <Color x:Key="Secondary">#444d5c</Color>
-            <Color x:Key="Accent">#005cba</Color>
-            <Color x:Key="TabBarBackground">#2e343d</Color>
+            <Color x:Key="Primary">#26272c</Color>
+            <Color x:Key="Secondary">#313139</Color>
+            <Color x:Key="Accent">#119664</Color>
+            <Color x:Key="AccentSecondary">#1fd38f</Color>
+            <Color x:Key="Warning">#a63733</Color>
+            <Color x:Key="Neutral">Gray</Color>
+            <Color x:Key="TabBarBackground">#313139</Color>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="Black"></Setter>
+                <Setter Property="BackgroundColor" Value="White"></Setter>
+                <Setter Property="PlaceholderColor" Value="Gray"></Setter>
+                <Setter Property="Margin" Value="10,0,10,0"></Setter>
+            </Style>
+            <Style TargetType="Picker">
+                <Setter Property="TextColor" Value="Black"></Setter>
+                <Setter Property="BackgroundColor" Value="White"></Setter>
+                <Setter Property="Margin" Value="10,0,0,0"></Setter>
+            </Style>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
+                <Setter Property="FontSize" Value="16"></Setter>
+                <Setter Property="CornerRadius" Value="10"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">
@@ -23,7 +39,7 @@
                             </VisualState>
                             <VisualState x:Name="Disabled">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#332196F3" />
+                                    <Setter Property="BackgroundColor" Value="#2f5949" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>

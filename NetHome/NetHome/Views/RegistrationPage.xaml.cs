@@ -13,11 +13,10 @@ namespace NetHome.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RegistrationPage : ContentPage
     {
-        private readonly RegistrationViewModel _viewModel;
         public RegistrationPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new RegistrationViewModel();
+            BindingContext = new RegistrationViewModel();
         }
     }
 }

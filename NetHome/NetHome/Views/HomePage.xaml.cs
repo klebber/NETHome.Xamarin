@@ -22,8 +22,8 @@ namespace NetHome.Views
 
         protected override void OnAppearing()
         {
-            _viewModel.Connect();
             base.OnAppearing();
+            _viewModel.OnAppearing();
             uiSettings.SetStatusBarColor((Color)Application.Current.Resources["Primary"], false);
             uiSettings.SetNavBarColor((Color)Application.Current.Resources["TabBarBackground"]);
             MessagingCenter.Subscribe<object, bool>(this, "Switched", (sender, ison) =>
