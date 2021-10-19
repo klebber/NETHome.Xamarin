@@ -1,12 +1,17 @@
 ﻿using NetHome.Common.Models;
+using NetHome.Helpers;
 using NetHome.Services;
+using NetHome.Views;
+using NetHome.Views.Popups;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 
 namespace NetHome.ViewModels
@@ -39,8 +44,12 @@ namespace NetHome.ViewModels
         private async Task RegisterAsync()
         {
             IsLoading = true;
-            if (!await Validate()) return;
-            var reg = new RegisterModel()
+            if (!await Validate())
+            {
+                IsLoading = false;
+                return;
+            }
+            RegisterModel reg = new()
             {
                 Username = Username,
                 Password = Password,
@@ -50,14 +59,22 @@ namespace NetHome.ViewModels
                 Age = int.Parse(Age),
                 Gender = Gender
             };
-            if (await _userService.Register(reg))
+            try
             {
-                await Shell.Current.DisplayAlert("Registration successful!", "Registration finished. Use you username and password to log in.", "Ok");
+                await _userService.Register(reg);
+                await Shell.Current.ShowPopupAsync(new Alert("Registration successful!", "You can now use your credentials to login.", "Ok", true));
                 await Shell.Current.GoToAsync("..");
             }
-            else
+            catch (ServerException e)
             {
-                await Shell.Current.DisplayAlert("Registration error!", "Unable to register!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
+            }
+            catch (OperationCanceledException)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert("Server unreachable!",
+                    "Http request has timed out. Check if server address is correct and if server is running.",
+                    "Ok",
+                    true));
             }
             IsLoading = false;
         }
@@ -66,37 +83,37 @@ namespace NetHome.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Username) || Username.Length < 4 || Username.Length > 16)
             {
-                await Shell.Current.DisplayAlert("Input error!", "Invalid username!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Invalid username!", "Ok", true));
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Password) || Password.Length < 4 || Password.Length > 16)
             {
-                await Shell.Current.DisplayAlert("Input error!", "Invalid password!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Invalid password!", "Ok", true));
                 return false;
             }
             if (Password != PasswordRepeat)
             {
-                await Shell.Current.DisplayAlert("Input error!", "Passwords should match!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Passwords should match!", "Ok", true));
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email))
             {
-                await Shell.Current.DisplayAlert("Input error!", "Invalid email!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Invalid email!", "Ok", true));
                 return false;
             }
             if (string.IsNullOrWhiteSpace(FirstName) || FirstName.Length < 2 || FirstName.Length > 32)
             {
-                await Shell.Current.DisplayAlert("Input error!", "Invalid frist name!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Invalid frist name!", "Ok", true));
                 return false;
             }
             if (string.IsNullOrWhiteSpace(LastName) || LastName.Length < 2 || LastName.Length > 32)
             {
-                await Shell.Current.DisplayAlert("Input error!", "Invalid last name!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Invalid last name!", "Ok", true));
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Age) || !int.TryParse(Age, out int age) || age < 13 || age > 100)
             {
-                await Shell.Current.DisplayAlert("Input error!", "Invalid last name!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Input error!", "Invalid last name!", "Ok", true));
                 return false;
             }
             return true;
@@ -106,7 +123,7 @@ namespace NetHome.ViewModels
         {
             try
             {
-                var addr = new System.Net.Mail.MailAddress(email);
+                MailAddress addr = new(email);
                 return addr.Address == email;
             }
             catch

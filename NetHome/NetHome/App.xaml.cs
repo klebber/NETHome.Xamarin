@@ -10,7 +10,7 @@ namespace NetHome
         {
             InitializeComponent();
             DependencyService.Register<IUserService, UserService>();
-            DependencyService.Register<IServerConnection, ServerConnection>();
+            DependencyService.Register<ISignalRConnection, SignalRConnection>();
             MainPage = new AppShell();
         }
 

@@ -2,9 +2,9 @@
 
 namespace NetHome.Services
 {
-    public interface IServerConnection
+    public interface ISignalRConnection
     {
-        Task<bool> Connect();
+        Task Connect();
         Task Disconnect();
         Task Switch(bool ison);
     }

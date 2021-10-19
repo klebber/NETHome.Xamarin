@@ -8,6 +8,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <xct:BoolToObjectConverter x:Key="HyperlinkColor" TrueObject="{StaticResource DisabledTextColor}" FalseObject="{StaticResource Accent}" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.BindingContext>
@@ -41,7 +42,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Dont have an account? " />
-                            <Span Text="Register" TextColor="{StaticResource Accent}" TextDecorations="Underline">
+                            <Span Text="Register" TextColor="{Binding IsLoading, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
                                 </Span.GestureRecognizers>
@@ -54,7 +55,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="You can change server address " />
-                            <Span Text="here" TextColor="{StaticResource Accent}" TextDecorations="Underline">
+                            <Span Text="here" TextColor="{Binding IsLoading, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding AddressSetupCommand}"/>
                                 </Span.GestureRecognizers>

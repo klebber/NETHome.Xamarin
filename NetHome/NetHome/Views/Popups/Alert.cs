@@ -5,11 +5,11 @@ using System.Text;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 
-namespace NetHome.Views
+namespace NetHome.Views.Popups
 {
-    public class CustomAlert : Popup
+    public class Alert : Popup
     {
-        public CustomAlert(string title, string message, string okButtonText, bool modal)
+        public Alert(string title, string message, string okButtonText, bool modal)
         {
             Size = new Size(300, 200);
             Color = Color.Transparent;

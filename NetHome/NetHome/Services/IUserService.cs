@@ -5,9 +5,9 @@ namespace NetHome.Services
 {
     public interface IUserService
     {
-        Task<bool> Login(LoginModel loginModel);
-        Task<bool> Validate();
-        Task<bool> Register(RegisterModel registerModel);
+        Task Login(LoginModel loginModel);
+        Task Validate();
+        Task Register(RegisterModel registerModel);
         UserModel GetUserData();
         void ClearUserData();
     }

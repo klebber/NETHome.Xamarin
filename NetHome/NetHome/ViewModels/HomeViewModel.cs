@@ -7,24 +7,24 @@ namespace NetHome.ViewModels
     public class HomeViewModel
     {
         private readonly IUserService _userService;
-        private readonly IServerConnection _serverConnection;
+        private readonly ISignalRConnection _signalRConnection;
 
         public HomeViewModel()
         {
             _userService = DependencyService.Get<IUserService>();
-            _serverConnection = DependencyService.Get<IServerConnection>();
+            _signalRConnection = DependencyService.Get<ISignalRConnection>();
         }
         public void OnAppearing()
         {
         }
         internal async Task SwitchAsync(bool ison)
         {
-            await _serverConnection.Switch(ison);
+            await _signalRConnection.Switch(ison);
         }
 
         internal void Disconnect()
         {
-            _ = _serverConnection.Disconnect();
+            _ = _signalRConnection.Disconnect();
         }
     }
 }

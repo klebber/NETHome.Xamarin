@@ -8,11 +8,13 @@ using Xamarin.Forms;
 
 namespace NetHome.Views
 {
-    public class CustomPropmpt : Popup<string>
+    public class Propmpt : Popup<string>
     {
-        public CustomPropmpt(string title, string message, string placeholder, string text, string okButtonText, bool modal, bool showCancelButton, string cancelButtonText = "Cancel")
+        public Propmpt(string title, string message, string placeholder, string text, string okButtonText,
+            bool modal, bool showCancelButton, string cancelButtonText = "Cancel", Keyboard keyboard = null)
         {
             Entry entry;
+            keyboard ??= Keyboard.Default;
             Size = new Size(300, 250);
             Color = Color.Transparent;
             IsLightDismissEnabled = !modal;
@@ -59,7 +61,8 @@ namespace NetHome.Views
                             Content = entry = new Entry
                             {
                                 Placeholder = placeholder,
-                                Text = text
+                                Text = text,
+                                Keyboard = keyboard
                             }
                         },
                         new StackLayout

@@ -23,15 +23,9 @@ namespace NetHome.Droid
         protected override void OnResume()
         {
             base.OnResume();
-            Task startupWork = new Task(() => { Startup(); });
-            startupWork.Start();
+            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
 
         public override void OnBackPressed() { }
-
-        private async void Startup()
-        {
-            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
-        }
     }
 }

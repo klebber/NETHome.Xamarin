@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.CommunityToolkit.Extensions;
+using NetHome.Views.Popups;
 
 namespace NetHome.ViewModels
 {
@@ -17,7 +18,7 @@ namespace NetHome.ViewModels
     {
         private readonly IUserService _userService;
         private readonly IEnvironment _uiSettings;
-        private readonly IServerConnection _serverConnection;
+        private readonly ISignalRConnection _signalRConnection;
 
         private string username;
         public string Username { get => username; set => SetProperty(ref username, value); }
@@ -44,80 +45,101 @@ namespace NetHome.ViewModels
         {
             _userService = DependencyService.Get<IUserService>();
             _uiSettings = DependencyService.Get<IEnvironment>();
-            _serverConnection = DependencyService.Get<IServerConnection>();
+            _signalRConnection = DependencyService.Get<ISignalRConnection>();
         }
 
         private async Task LoginAsync()
         {
+            IsLoading = true;
             if (!Preferences.ContainsKey("ServerAddress") || string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty)))
             {
-                await Shell.Current.ShowPopupAsync(new CustomAlert("No server url!", "You must set an address of the server first.", "Ok", true));
+                IsLoading = false;
+                await Shell.Current.ShowPopupAsync(new Alert("No server url!", "You must set an address of the server first.", "Ok", true));
                 return;
             }
-            IsLoading = true;
-            var loginModel = new LoginModel()
+            LoginModel loginModel = new()
             {
                 Username = Username,
                 Password = Password
             };
 
-            if (await _userService.Login(loginModel))
+            try
             {
-                if(await _serverConnection.Connect())
-                {
-                    await GoToHomePage();
-                }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Connection error!", "Could not connect to hub!", "Ok");
-                }
-                IsLoading = false;
+                await _userService.Login(loginModel);
+                await _signalRConnection.Connect();
+                await GoToHomePage();
             }
-            else
+            catch (ServerException e)
             {
-                IsLoading = false;
-                await Shell.Current.DisplayAlert("Login error!", "Incorrect Username and/or Password!", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
             }
+            catch (OperationCanceledException)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert("Server unreachable!",
+                    "Http request has timed out. Check if server address is correct and if server is running.",
+                    "Ok",
+                    true));
+            }
+            IsLoading = false;
         }
 
         private async Task RegisterAsync()
         {
+            if (IsLoading) return;
             if (!Preferences.ContainsKey("ServerAddress") || string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty)))
             {
-                await Shell.Current.DisplayAlert("Server address not set!", "You must set an address of the server first.", "Ok");
+                await Shell.Current.ShowPopupAsync(new Alert("Server address not set!", "You must set an address of the server first.", "Ok", true));
                 return;
             }
-            if (isLoading) return;
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
 
         private async Task AddressSetup()
         {
-            if (isLoading) return;
+            if (IsLoading) return;
             string current = Preferences.Get("ServerAddress", string.Empty);
-            string result = await Shell.Current.ShowPopupAsync(new CustomPropmpt(
+            string result = await Shell.Current.ShowPopupAsync(new Propmpt(
                 "Server Adress", "You can set url address of a server here:",
-                "URL", current, "Save", true, true));
+                "URL", current, "Save", true, true, keyboard: Keyboard.Url));
             if (result == null) return;
             if (string.IsNullOrWhiteSpace(result))
+            {
                 Preferences.Remove("ServerAddress");
+                return;
+            }
+            else if (Uri.IsWellFormedUriString(result, UriKind.Absolute))
+            {
+                Preferences.Set("ServerAddress", result);
+            }
             else
-                Preferences.Set("ServerAddress", result); //TODO proveri da li je validan url
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(
+                    "Incorrect url!",
+                    "Server url you have entered is in incorrect format. Please try again.",
+                    "Ok", true));
+            }
         }
 
         private async Task ValidateExistingToken()
         {
+            if (await SecureStorage.GetAsync("AuthorizationToken") == null) return;
             IsLoading = true;
-            if (await _userService.Validate())
+            try
             {
-                if (await _serverConnection.Connect())
-                {
-                    await GoToHomePage();
-                }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Connection error!", "Could not connect to hub!", "Ok");
-                }
+                await _userService.Validate();
+                await _signalRConnection.Connect();
+                await GoToHomePage();
+            }
+            catch (ServerException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
+            }
+            catch (OperationCanceledException)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert("Server unreachable!",
+                    "Http request has timed out. Check if server address is correct and if server is running.",
+                    "Ok",
+                    true));
             }
             IsLoading = false;
         }

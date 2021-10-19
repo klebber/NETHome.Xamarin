@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using NetHome.Helpers;
 using System;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,13 +11,13 @@ using Xamarin.Forms;
 
 namespace NetHome.Services
 {
-    public class ServerConnection : IServerConnection
+    public class SignalRConnection : ISignalRConnection
     {
         private HubConnection hubConnection;
-        public async Task<bool> Connect()
+        public async Task Connect()
         {
-            if (hubConnection != null && hubConnection.State == HubConnectionState.Connected) 
-                return true;
+            if (hubConnection != null && hubConnection.State == HubConnectionState.Connected)
+                return;
 
             hubConnection = new HubConnectionBuilder()
                 .WithUrl("http://192.168.0.100:58332/nethomehub", options =>
@@ -23,7 +25,7 @@ namespace NetHome.Services
                     options.AccessTokenProvider = () => SecureStorage.GetAsync("AuthorizationToken");
                 })
                 .Build();
-            
+
             hubConnection.KeepAliveInterval = TimeSpan.FromSeconds(3);
             hubConnection.ServerTimeout = TimeSpan.FromSeconds(6);
 
@@ -36,8 +38,16 @@ namespace NetHome.Services
                 MessagingCenter.Send<object, bool>(this, "Switched", ison);
             });
 
-            await hubConnection.StartAsync();
-            return hubConnection.State == HubConnectionState.Connected;
+            try
+            {
+                await hubConnection.StartAsync();
+            }
+            catch (HttpRequestException e)
+            {
+                throw new ServerException("Hub connection error!", e.Message);
+            }
+            if (hubConnection.State != HubConnectionState.Connected)
+                throw new ServerException("Hub connection error!", "Unable to connect to SignalR hub.");
         }
 
         private Task HubReconnecting(Exception arg)
