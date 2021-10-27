@@ -1,13 +1,14 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common;
+using NetHome.Common.Models;
 using System.Threading.Tasks;
 
 namespace NetHome.Services
 {
     public interface IUserService
     {
-        Task Login(LoginModel loginModel);
+        Task Login(LoginRequest loginRequest);
         Task Validate();
-        Task Register(RegisterModel registerModel);
+        Task Register(RegisterRequest registerRequest);
         UserModel GetUserData();
         void ClearUserData();
     }

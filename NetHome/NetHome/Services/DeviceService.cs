@@ -1,11 +1,10 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common.JsonConverters;
+using NetHome.Common.Models;
 using NetHome.Helpers;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Essentials;

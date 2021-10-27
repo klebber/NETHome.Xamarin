@@ -1,4 +1,5 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common;
+using NetHome.Common.Models;
 using NetHome.Helpers;
 using System.Collections.Generic;
 using System.IO;
@@ -11,9 +12,9 @@ namespace NetHome.Services
 {
     public class UserService : IUserService
     {
-        public async Task Login(LoginModel loginModel)
+        public async Task Login(LoginRequest loginRequest)
         {
-            string json = JsonSerializer.Serialize(loginModel);
+            string json = JsonSerializer.Serialize(loginRequest);
             HttpResponseMessage response = await HttpRequestHelper.PostAsync("api/user/login", json);
             Stream stream = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -31,7 +32,7 @@ namespace NetHome.Services
                 }
                 throw new ServerException(reason, message);
             }
-            LoginResponseModel loginResponse = await JsonSerializer.DeserializeAsync<LoginResponseModel>(stream, options);
+            LoginResponse loginResponse = await JsonSerializer.DeserializeAsync<LoginResponse>(stream, options);
             SaveUserInfo(loginResponse.User);
             await SecureStorage.SetAsync("AuthorizationToken", loginResponse.Token);
         }
@@ -62,9 +63,9 @@ namespace NetHome.Services
             SaveUserInfo(userData);
         }
         
-        public async Task Register(RegisterModel registerModel)
+        public async Task Register(RegisterRequest registerRequest)
         {
-            var json = JsonSerializer.Serialize(registerModel);
+            var json = JsonSerializer.Serialize(registerRequest);
             HttpResponseMessage response = await HttpRequestHelper.PostAsync("api/user/register", json);
             Stream stream = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };

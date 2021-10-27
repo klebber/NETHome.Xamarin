@@ -11,6 +11,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.CommunityToolkit.Extensions;
 using NetHome.Views.Popups;
+using NetHome.Common;
 
 namespace NetHome.ViewModels
 {
@@ -57,7 +58,7 @@ namespace NetHome.ViewModels
                 await Shell.Current.ShowPopupAsync(new Alert("No server url!", "You must set an address of the server first.", "Ok", true));
                 return;
             }
-            LoginModel loginModel = new()
+            LoginRequest loginRequest = new()
             {
                 Username = Username,
                 Password = Password
@@ -65,7 +66,7 @@ namespace NetHome.ViewModels
 
             try
             {
-                await _userService.Login(loginModel);
+                await _userService.Login(loginRequest);
                 await _signalRConnection.Connect();
                 await GoToHomePage();
             }

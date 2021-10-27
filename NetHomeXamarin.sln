@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetHome.Android", "NetHome\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetHome", "NetHome\NetHome\NetHome.csproj", "{F6BA3D37-9B40-4A49-85FE-BB19B02FDC2D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetHome.Common", "NetHome.Common\NetHome.Common.csproj", "{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,18 +53,6 @@ Global
 		{F6BA3D37-9B40-4A49-85FE-BB19B02FDC2D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{F6BA3D37-9B40-4A49-85FE-BB19B02FDC2D}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{F6BA3D37-9B40-4A49-85FE-BB19B02FDC2D}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Release|iPhone.Build.0 = Release|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{D3CE8D40-D523-4E1D-B57E-F98A3326D9DE}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
