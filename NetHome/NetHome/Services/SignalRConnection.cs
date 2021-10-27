@@ -16,11 +16,13 @@ namespace NetHome.Services
         private HubConnection hubConnection;
         public async Task Connect()
         {
-            if (hubConnection != null && hubConnection.State == HubConnectionState.Connected)
+            if (hubConnection is not null && hubConnection.State == HubConnectionState.Connected)
                 return;
-
+            string uri = Preferences.Get("ServerAddress", null);
+            if (uri is null) throw new ServerException("Server adress not found!", "Please enter valid server adress and try again.");
+            uri = new Uri(uri).AbsoluteUri;
             hubConnection = new HubConnectionBuilder()
-                .WithUrl("http://192.168.0.100:58332/nethomehub", options =>
+                .WithUrl(uri + "nethomehub", options =>
                 {
                     options.AccessTokenProvider = () => SecureStorage.GetAsync("AuthorizationToken");
                 })
@@ -33,10 +35,10 @@ namespace NetHome.Services
             hubConnection.Reconnected += HubReconnected;
             hubConnection.Closed += HubClosed;
 
-            hubConnection.On<bool>("Switched", (ison) =>
-            {
-                MessagingCenter.Send<object, bool>(this, "Switched", ison);
-            });
+            //hubConnection.On<bool>("Switched", (ison) =>
+            //{
+            //    MessagingCenter.Send<object, bool>(this, "Switched", ison);
+            //});
 
             try
             {

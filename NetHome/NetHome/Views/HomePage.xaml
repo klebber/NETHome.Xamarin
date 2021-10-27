@@ -12,30 +12,20 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                <ContentView Padding="0,10,0,10" VerticalOptions="FillAndExpand">
-                    <Image Source="nethome_logo.png" VerticalOptions="Center" HeightRequest="64" />
-                </ContentView>
-            </StackLayout>
-        </StackLayout>
+        <Frame Padding="0,0,0,10" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
+            <Label Text="Dashboard" FontSize="20" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+        </Frame>
 
-        <ScrollView Grid.Row="1">
-            <StackLayout Padding="10" Margin="5">
-                
-                <Frame IsClippedToBounds="True" HasShadow="True" Padding="0" Margin="0" CornerRadius="10" BackgroundColor="{StaticResource Secondary}" >
-                    <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="80">
-                        <StackLayout HorizontalOptions="FillAndExpand" Orientation="Vertical" Padding="20,5,20,10" VerticalOptions="Center">
-                            <Label FontSize = "25" Text="Light Switch" TextColor="White"/>
-                            <!--<Label Text="Card description" FontSize = "16" Padding="5,0,0,0"/>-->
-                        </StackLayout>
-                        <Button x:Name="LSwitch" Text="ON" Clicked="LSwitch_Clicked"/>
-
-                        <!--<Switch VerticalOptions="Center" x:Name="lightSwitch" Toggled="OnSwitchToggled" Scale="1.4" OnColor="LightGray"/>-->
-                    </StackLayout>
-                </Frame>
-                
-            </StackLayout>
-        </ScrollView>
+        <RefreshView Grid.Row="1" Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}" Margin="0,2,0,2">
+            <ScrollView>
+                <StackLayout BindableLayout.ItemsSource="{Binding DeviceControls}" BindableLayout.EmptyView="No devices currently available.">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Padding="0" Margin="0" BackgroundColor="{StaticResource Secondary}" Content="{Binding}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </StackLayout>
+            </ScrollView>
+        </RefreshView>
     </Grid>
 </ContentPage>

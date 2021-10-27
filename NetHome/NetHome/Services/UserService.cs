@@ -39,7 +39,7 @@ namespace NetHome.Services
         public async Task Validate()
         {
             string token = await SecureStorage.GetAsync("AuthorizationToken");
-            if (token == null) return;
+            if (token is null) return;
             HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/user/validate", token);
             Stream stream = await response.Content.ReadAsStreamAsync();
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -92,8 +92,8 @@ namespace NetHome.Services
 
         public UserModel GetUserData()
         {
-            var json = Preferences.Get("UserDataJSON", null);
-            return json == null ? null : JsonSerializer.Deserialize<UserModel>(json);
+            string json = Preferences.Get("UserDataJSON", null);
+            return json is not null ? JsonSerializer.Deserialize<UserModel>(json) : null;
         }
 
         public void ClearUserData()

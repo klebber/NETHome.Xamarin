@@ -101,7 +101,7 @@ namespace NetHome.ViewModels
             string result = await Shell.Current.ShowPopupAsync(new Propmpt(
                 "Server Adress", "You can set url address of a server here:",
                 "URL", current, "Save", true, true, keyboard: Keyboard.Url));
-            if (result == null) return;
+            if (result is null) return;
             if (string.IsNullOrWhiteSpace(result))
             {
                 Preferences.Remove("ServerAddress");
@@ -122,7 +122,7 @@ namespace NetHome.ViewModels
 
         private async Task ValidateExistingToken()
         {
-            if (await SecureStorage.GetAsync("AuthorizationToken") == null) return;
+            if (await SecureStorage.GetAsync("AuthorizationToken") is null) return;
             IsLoading = true;
             try
             {
