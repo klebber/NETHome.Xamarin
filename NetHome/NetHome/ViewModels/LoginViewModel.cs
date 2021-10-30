@@ -142,6 +142,10 @@ namespace NetHome.ViewModels
                     "Ok",
                     true));
             }
+            //finally // zasto ovo daje exception?
+            //{
+            //    _userService.ClearUserData();
+            //}
             IsLoading = false;
         }
 

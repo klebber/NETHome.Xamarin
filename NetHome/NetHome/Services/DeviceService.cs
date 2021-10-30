@@ -19,15 +19,14 @@ namespace NetHome.Services
             if (token is null) throw new Exception(); // TODO napravi exception koji pokriva ovaj i slicne slucajeve
             HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/devices/getall", token);
             Stream stream = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            options.Converters.Add(new DeviceConverter());
+            string rez = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
                 string message;
                 string reason = response.ReasonPhrase;
                 try
                 {
-                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, options))["Message"];
+                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
                 }
                 catch (JsonException)
                 {
@@ -35,7 +34,7 @@ namespace NetHome.Services
                 }
                 throw new ServerException(reason, message);
             }
-            return await JsonSerializer.DeserializeAsync<List<DeviceModel>>(stream, options);
+            return await JsonSerializer.DeserializeAsync<List<DeviceModel>>(stream, JsonHelper.GetOptions());
         }
     }
 }

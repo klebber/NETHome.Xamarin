@@ -7,21 +7,21 @@
     <ContentPage.BindingContext>
         <local:HomeViewModel/>
     </ContentPage.BindingContext>
-    <Grid>
+    <Grid ColumnSpacing="0" RowSpacing="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Frame Padding="0,0,0,10" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
+        <Frame Padding="0,0,0,10" Margin="0" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
             <Label Text="Dashboard" FontSize="20" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
         </Frame>
 
-        <RefreshView Grid.Row="1" Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}" Margin="0,2,0,2">
+        <RefreshView Grid.Row="1" Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}" Margin="0,0,0,2">
             <ScrollView>
                 <StackLayout BindableLayout.ItemsSource="{Binding DeviceControls}" BindableLayout.EmptyView="No devices currently available.">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Frame CornerRadius="10" Padding="0" Margin="0" BackgroundColor="{StaticResource Secondary}" Content="{Binding}" />
+                            <Frame Padding="0" Margin="0" BackgroundColor="Transparent" Content="{Binding}" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:NetHome.Views.Controls" 
+             x:DataType="controls:DefaultControl"
+             x:Class="NetHome.Views.Controls.DefaultControl">
+  <ContentView.Content>
+        <Frame x:Name="frame" CornerRadius="15" HasShadow="True" Margin="12,0,12,5" BackgroundColor="{StaticResource Secondary}" Padding="0">
+            <Grid ColumnDefinitions="90, *" ColumnSpacing="0" VerticalOptions="Start" HeightRequest="90">
+                <Image Source="device_default.png" Aspect="AspectFit" Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Label Grid.Column="1" Text="{Binding Device.Name}" FontSize="16" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

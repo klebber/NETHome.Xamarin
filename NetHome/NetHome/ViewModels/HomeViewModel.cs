@@ -1,13 +1,17 @@
 ﻿using NetHome.Common.Models;
+using NetHome.Common.Models.Devices;
 using NetHome.Helpers;
 using NetHome.Services;
+using NetHome.Views.Controls;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -30,7 +34,7 @@ namespace NetHome.ViewModels
         public bool IsRefreshing { get => isRefreshing; set => SetProperty(ref isRefreshing, value); }
 
         private Command onRefreshed;
-        public ICommand OnRefreshed => onRefreshed ??= new Command(async () => await PopulateDeviceControls());
+        public ICommand OnRefreshed => onRefreshed ??= new Command(async () => await Task.Run(async () => await PopulateDeviceControls()));
 
         public HomeViewModel()
         {
@@ -72,13 +76,29 @@ namespace NetHome.ViewModels
         private async Task PopulateDeviceControls()
         {
             ICollection<DeviceModel> devices = await _deviceService.GetAll();
-            MainThread.BeginInvokeOnMainThread(() =>
+
+            MainThread.BeginInvokeOnMainThread(() => DeviceControls = new ObservableCollection<View>());
+
+            ICollection<DeviceModel> sensors = devices.Where(d => d.Type == "Sensor").ToList();
+            devices = devices.Except(sensors).ToList();
+
+            MainThread.BeginInvokeOnMainThread(() => DeviceControls.Add(new SensorsControl(sensors)));
+
+            foreach (DeviceModel device in devices)
             {
-                DeviceControls.Clear();
-                // TODO generate controls
-                IsRefreshing = false;
-            });
+                View view = device.GetType().Name switch
+                {
+                    nameof(AirConditionerModel) => new AirConditionerControl(device),
+                    nameof(RGBLightModel) => new RGBLightControl(device),
+                    nameof(RollerShutterModel) => new RollerShutterControl(device),
+                    nameof(SmartSwitchModel) => new SmartSwitchControl(device),
+                    _ => new DefaultControl(device)
+                };
+                MainThread.BeginInvokeOnMainThread(() => DeviceControls.Add(view));
+            }
+            MainThread.BeginInvokeOnMainThread(() => IsRefreshing = false);
         }
+
 
         protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {

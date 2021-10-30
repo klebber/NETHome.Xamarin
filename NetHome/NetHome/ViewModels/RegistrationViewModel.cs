@@ -1,4 +1,5 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common;
+using NetHome.Common.Models;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views;
@@ -49,7 +50,7 @@ namespace NetHome.ViewModels
                 IsLoading = false;
                 return;
             }
-            RegisterModel reg = new()
+            RegisterRequest reg = new()
             {
                 Username = Username,
                 Password = Password,

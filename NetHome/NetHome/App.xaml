@@ -1,65 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:converters="clr-namespace:NetHome"
              x:Class="NetHome.App">
     <Application.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Primary">#26272c</Color>
-            <Color x:Key="Secondary">#313139</Color>
-            <Color x:Key="Accent">#119664</Color>
-            <Color x:Key="AccentSecondary">#1fd38f</Color>
-            <Color x:Key="Warning">#a63733</Color>
-            <Color x:Key="Neutral">Gray</Color>
-            <Color x:Key="DisabledTextColor">Gray</Color>
-            <Color x:Key="TabBarBackground">#313139</Color>
-            <Style TargetType="Entry">
-                <Setter Property="TextColor" Value="Black"></Setter>
-                <Setter Property="BackgroundColor" Value="White"></Setter>
-                <Setter Property="PlaceholderColor" Value="Gray"></Setter>
-                <Setter Property="Margin" Value="5,0,5,0"></Setter>
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="TextColor" Value="Black" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Disabled">
-                                <VisualState.Setters>
-                                    <Setter Property="TextColor" Value="{StaticResource DisabledTextColor}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-            <Style TargetType="Picker">
-                <Setter Property="TextColor" Value="Black"></Setter>
-                <Setter Property="BackgroundColor" Value="White"></Setter>
-                <Setter Property="Margin" Value="5,0,5,0"></Setter>
-            </Style>
-            <Style TargetType="Button">
-                <Setter Property="TextColor" Value="White"></Setter>
-                <Setter Property="FontSize" Value="16"></Setter>
-                <Setter Property="CornerRadius" Value="10"></Setter>
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Disabled">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#2f5949" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-        </ResourceDictionary>        
+        <Color x:Key="Primary">#26272c</Color>
+        <Color x:Key="Secondary">#313139</Color>
+        <Color x:Key="Accent">#119664</Color>
+        <Color x:Key="AccentSecondary">#1fd38f</Color>
+        <Color x:Key="Warning">#a63733</Color>
+        <Color x:Key="Neutral">Gray</Color>
+        <Color x:Key="DisabledTextColor">Gray</Color>
+        <Color x:Key="TabBarBackground">#313139</Color>
+        <Color x:Key="White">White</Color>
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="Black"></Setter>
+            <Setter Property="BackgroundColor" Value="White"></Setter>
+            <Setter Property="PlaceholderColor" Value="Gray"></Setter>
+            <Setter Property="Margin" Value="5,0,5,0"></Setter>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="Black" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="TextColor" Value="{StaticResource DisabledTextColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Picker">
+            <Setter Property="TextColor" Value="Black"></Setter>
+            <Setter Property="BackgroundColor" Value="White"></Setter>
+            <Setter Property="Margin" Value="5,0,5,0"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="TextColor" Value="White"></Setter>
+            <Setter Property="FontSize" Value="16"></Setter>
+            <Setter Property="CornerRadius" Value="10"></Setter>
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#2f5949" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <xct:BoolToObjectConverter x:Key="SwitchColorConverter" TrueObject="{StaticResource Accent}" FalseObject="{StaticResource Neutral}" />
     </Application.Resources>
 </Application>

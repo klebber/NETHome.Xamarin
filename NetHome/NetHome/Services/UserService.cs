@@ -17,14 +17,13 @@ namespace NetHome.Services
             string json = JsonSerializer.Serialize(loginRequest);
             HttpResponseMessage response = await HttpRequestHelper.PostAsync("api/user/login", json);
             Stream stream = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             if (!response.IsSuccessStatusCode)
             {
                 string message;
                 string reason = response.ReasonPhrase;
                 try
                 {
-                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, options))["Message"];
+                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
                 }
                 catch (JsonException)
                 {
@@ -32,7 +31,7 @@ namespace NetHome.Services
                 }
                 throw new ServerException(reason, message);
             }
-            LoginResponse loginResponse = await JsonSerializer.DeserializeAsync<LoginResponse>(stream, options);
+            LoginResponse loginResponse = await JsonSerializer.DeserializeAsync<LoginResponse>(stream, JsonHelper.GetOptions());
             SaveUserInfo(loginResponse.User);
             await SecureStorage.SetAsync("AuthorizationToken", loginResponse.Token);
         }
@@ -43,7 +42,6 @@ namespace NetHome.Services
             if (token is null) return;
             HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/user/validate", token);
             Stream stream = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             if (!response.IsSuccessStatusCode)
             {
                 ClearUserData();
@@ -51,7 +49,7 @@ namespace NetHome.Services
                 string reason = response.ReasonPhrase;
                 try
                 {
-                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, options))["Message"];
+                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
                 }
                 catch (JsonException)
                 {
@@ -59,7 +57,7 @@ namespace NetHome.Services
                 }
                 throw new ServerException(reason, message);
             }
-            UserModel userData = await JsonSerializer.DeserializeAsync<UserModel>(stream, options);
+            UserModel userData = await JsonSerializer.DeserializeAsync<UserModel>(stream, JsonHelper.GetOptions());
             SaveUserInfo(userData);
         }
         
@@ -68,14 +66,13 @@ namespace NetHome.Services
             var json = JsonSerializer.Serialize(registerRequest);
             HttpResponseMessage response = await HttpRequestHelper.PostAsync("api/user/register", json);
             Stream stream = await response.Content.ReadAsStreamAsync();
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             if (!response.IsSuccessStatusCode)
             {
                 string message;
                 string reason = response.ReasonPhrase;
                 try
                 {
-                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, options))["Message"];
+                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
                 }
                 catch (JsonException)
                 {

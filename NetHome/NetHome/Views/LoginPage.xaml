@@ -7,7 +7,6 @@
              Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <xct:BoolToObjectConverter x:Key="HyperlinkColor" TrueObject="{StaticResource DisabledTextColor}" FalseObject="{StaticResource Accent}" />
         </ResourceDictionary>
     </ContentPage.Resources>
