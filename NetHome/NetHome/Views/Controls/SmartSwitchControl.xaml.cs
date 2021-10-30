@@ -40,6 +40,7 @@ namespace NetHome.Views.Controls
         }
         private async Task PerformQuickAction()
         {
+            if (isWaiting) return;
             IsWaiting = true;
             await Task.Delay(500);
             SmartSwitchModel d = device;

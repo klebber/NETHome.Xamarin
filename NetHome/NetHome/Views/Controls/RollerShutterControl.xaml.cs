@@ -32,6 +32,7 @@ namespace NetHome.Views.Controls
 
         private async Task PerformQuickAction(int percent)
         {
+            if (isWaiting) return;
             IsWaiting = true;
             await Task.Delay(500);
             RollerShutterModel d = device;
