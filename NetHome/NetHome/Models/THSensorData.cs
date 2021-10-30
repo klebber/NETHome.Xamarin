@@ -10,12 +10,6 @@ namespace NetHome.Models
         public double Temperature { get; set; }
         public double Humidity { get; set; }
         public THSensorData() { }
-        public THSensorData(DeviceModel dm)
-        {
-            THSensorModel thsm = (THSensorModel)dm;
-            Temperature = thsm.Temperature;
-            Humidity = thsm.Humidity;
-        }
         public THSensorData(IEnumerable<DeviceModel> iedm)
         {
             Temperature = iedm.Select(dm => ((THSensorModel)dm).Temperature).ToList().Average();

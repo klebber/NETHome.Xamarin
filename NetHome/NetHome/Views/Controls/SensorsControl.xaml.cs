@@ -3,6 +3,7 @@ using NetHome.Common.Models.Devices;
 using NetHome.Models;
 using NetHome.Views.Popups;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,43 +20,26 @@ namespace NetHome.Views.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SensorsControl : ContentView
     {
-        public List<SensorValues> sensors;
-        public List<SensorValues> Sensors { get => sensors; set => SetProperty(ref sensors, value); }
-        public THSensorData Temp { get; set; }
+        private IEnumerable<DeviceModel> thsensors;
+
+        private THSensorData temp;
+        public THSensorData Temp { get => temp; set => SetProperty(ref temp, value); }
 
         public SensorsControl(ICollection<DeviceModel> sensors)
         {
             InitializeComponent();
-            Sensors = new List<SensorValues>();
-            IEnumerable<DeviceModel> ths = sensors.Where(s => s.GetType().Name == "THSensorModel");
-            Temp = ths.Count() switch
+            thsensors = sensors.Where(s => s.GetType().Name == nameof(THSensorModel));
+            LoadTemperatureAndHumidityValues();
+            foreach (DeviceModel sensor in sensors)
             {
-                <= 0 => null,
-                1 => new THSensorData(ths.First()),
-                > 1 => new THSensorData(ths)
-            };
-            foreach (DeviceModel sensor in sensors.Except(ths))
-            {
-                (string value, string image) = GetSensorData(sensor);
-                Sensors.Add(new SensorValues() { Name = sensor.Name, Value = value, ImageSource = image });
-                OnPropertyChanged(nameof(Sensors));
+                Stack.Children.Add(new SensorView(sensor));
             }
         }
 
-        private (string, string) GetSensorData(DeviceModel sensor)
+        private void LoadTemperatureAndHumidityValues()
         {
-            return sensor.GetType().Name switch
-            {
-                "DWSensorModel" => (((DWSensorModel)sensor).IsOpen ? "open" : "closed", ((DWSensorModel)sensor).Placement switch
-                {
-                    "Door" => "door.png",
-                    "Window" => "window.png",
-                    _ => "device_default.png"
-                }),
-                _ => ("", "")
-            };
+            Temp = thsensors.Count() == 0 ? null : new THSensorData(thsensors);
         }
-
 
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
