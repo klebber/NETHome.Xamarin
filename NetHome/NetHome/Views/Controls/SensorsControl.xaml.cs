@@ -1,6 +1,5 @@
 ﻿using NetHome.Common.Models;
 using NetHome.Common.Models.Devices;
-using NetHome.Models;
 using NetHome.Views.Popups;
 using System;
 using System.Collections;
@@ -22,8 +21,11 @@ namespace NetHome.Views.Controls
     {
         private IEnumerable<DeviceModel> thsensors;
 
-        private THSensorData temp;
-        public THSensorData Temp { get => temp; set => SetProperty(ref temp, value); }
+        private double temp;
+        public double Temp { get => temp; set => SetProperty(ref temp, value); }
+
+        private double hum;
+        public double Hum { get => hum; set => SetProperty(ref hum, value); }
 
         public SensorsControl(ICollection<DeviceModel> sensors)
         {
@@ -39,7 +41,8 @@ namespace NetHome.Views.Controls
 
         private void LoadTemperatureAndHumidityValues()
         {
-            Temp = thsensors.Count() == 0 ? null : new THSensorData(thsensors);
+            Temp = thsensors.Select(dm => ((THSensorModel)dm).Temperature).ToList().Average();
+            Hum = thsensors.Select(dm => ((THSensorModel)dm).Humidity).ToList().Average();
         }
 
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
