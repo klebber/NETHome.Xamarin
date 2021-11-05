@@ -31,8 +31,8 @@ namespace NetHome.Views.Controls
             switch (Sensor.GetType().Name)
             {
                 case nameof(THSensorModel):
-                    stack.Children.Add(MakeView("temperature.png", Sensor.Room + " temperature:",((THSensorModel)Sensor).Temperature.ToString()));
-                    stack.Children.Add(MakeView("humidity.png", Sensor.Room + " humidity:", ((THSensorModel)Sensor).Humidity.ToString()));
+                    stack.Children.Add(MakeView("temperature.png", Sensor.Room + " temperature:",((THSensorModel)Sensor).Temperature.ToString() + "°C"));
+                    stack.Children.Add(MakeView("humidity.png", Sensor.Room + " humidity:", ((THSensorModel)Sensor).Humidity.ToString() + "%"));
                     break;
 
                 case nameof(DWSensorModel):
@@ -65,6 +65,7 @@ namespace NetHome.Views.Controls
                     new StackLayout
                     {
                         Orientation = StackOrientation.Horizontal,
+                        Spacing = 0,
                         HeightRequest = 50,
                         Children =
                         {

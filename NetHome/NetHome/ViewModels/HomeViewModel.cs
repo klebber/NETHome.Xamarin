@@ -88,10 +88,10 @@ namespace NetHome.ViewModels
             {
                 View view = device.GetType().Name switch
                 {
-                    nameof(AirConditionerModel) => new AirConditionerControl(device),
-                    nameof(RGBLightModel) => new RGBLightControl(device),
+                    nameof(AirConditionerModel) => new ToggleControl(device),
+                    nameof(RGBLightModel) => new ToggleControl(device),
                     nameof(RollerShutterModel) => new RollerShutterControl(device),
-                    nameof(SmartSwitchModel) => new SmartSwitchControl(device),
+                    nameof(SmartSwitchModel) => new ToggleControl(device),
                     _ => new DefaultControl(device)
                 };
                 MainThread.BeginInvokeOnMainThread(() => DeviceControls.Add(view));

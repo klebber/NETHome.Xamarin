@@ -3,20 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:controls="clr-namespace:NetHome.Views.Controls" 
-             x:DataType="controls:SmartSwitchControl"
-             x:Class="NetHome.Views.Controls.SmartSwitchControl">
-    <ContentView.Content>
+             x:DataType="controls:ToggleControl"
+             x:Class="NetHome.Views.Controls.ToggleControl">
+  <ContentView.Content>
         <Frame x:Name="frame" CornerRadius="15" HasShadow="True" Margin="12,0,12,5" BackgroundColor="{StaticResource Secondary}" Padding="0">
-            <Grid ColumnDefinitions="90, *" ColumnSpacing="0" VerticalOptions="Start" HeightRequest="90">
-                <Image Source="{Binding ImageSource}" Aspect="AspectFit" Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
-                <Label Grid.Column="1" Text="{Binding Device.Name}" FontSize="16" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+            <Grid ColumnDefinitions="90, *, 90" ColumnSpacing="0" VerticalOptions="Start" HeightRequest="90">
+                <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToFullView}" />
+                    </Frame.GestureRecognizers>
+                    <Image Source="{Binding ImageSource}" Aspect="AspectFit" Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
+                </Frame>
+                <Frame Grid.Column="1" Padding="0" BackgroundColor="Transparent" VerticalOptions="Fill" HorizontalOptions="Fill">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToFullView}" />
+                    </Frame.GestureRecognizers>
+                    <Label Text="{Binding Device.Name}" FontSize="16" VerticalOptions="Center" HorizontalOptions="Start"/>
+                </Frame>
                 <Frame Grid.Column="2" Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding QuickAction}" />
                     </Frame.GestureRecognizers>
                     <Grid>
                         <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="20" BackgroundColor="Transparent" BorderColor="{StaticResource Neutral}" CornerRadius="100">
-                            <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding Device.Ison, Converter={StaticResource SwitchColorConverter}}" />
+                            <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding SwitchState, Converter={StaticResource SwitchColorConverter}}" />
                         </Frame>
                         <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
                                            HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Neutral}" Margin="20"/>

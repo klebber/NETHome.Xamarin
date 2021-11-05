@@ -40,21 +40,7 @@
                         </Frame>
                     </Grid>
                 </xct:Expander.Header>
-                <StackLayout x:Name="Stack" Margin="0,0,0,10">
-                    <!--<BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            --><!--<Frame Padding="0" Margin="0" BackgroundColor="Transparent" Content="{Binding}" />--><!--
-                            <StackLayout Spacing="0">
-                                <BoxView Color="{StaticResource Neutral}" HeightRequest="1" HorizontalOptions="FillAndExpand" />
-                                <StackLayout Orientation="Horizontal" HeightRequest="50">
-                                    <Label Text="gsdfgsdf" HorizontalOptions="StartAndExpand" VerticalOptions="Center" Margin="10,0,0,0" />
-                                    <Label Text="dsfgdfsg" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,30,0" />
-                                    <Frame Padding="0" Margin="0" BackgroundColor="Transparent" Content="{Binding}" />
-                                </StackLayout>
-                            </StackLayout>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>-->
-                </StackLayout>
+                <StackLayout x:Name="Stack" Margin="0,0,0,10" Spacing="0" />
             </xct:Expander>
         </controls:CustomCornerFrame>
   </ContentView.Content>

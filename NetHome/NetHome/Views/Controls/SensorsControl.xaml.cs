@@ -30,6 +30,7 @@ namespace NetHome.Views.Controls
             InitializeComponent();
             thsensors = sensors.Where(s => s.GetType().Name == nameof(THSensorModel));
             LoadTemperatureAndHumidityValues();
+            sensors = sensors.OrderBy(s => s.GetType().Name).ToList();
             foreach (DeviceModel sensor in sensors)
             {
                 Stack.Children.Add(new SensorView(sensor));
