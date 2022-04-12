@@ -19,7 +19,6 @@ namespace NetHome.ViewModels
     {
         private readonly IUserService _userService;
         private readonly IEnvironment _uiSettings;
-        private readonly ISignalRConnection _signalRConnection;
 
         private string username;
         public string Username { get => username; set => SetProperty(ref username, value); }
@@ -46,7 +45,6 @@ namespace NetHome.ViewModels
         {
             _userService = DependencyService.Get<IUserService>();
             _uiSettings = DependencyService.Get<IEnvironment>();
-            _signalRConnection = DependencyService.Get<ISignalRConnection>();
         }
 
         private async Task LoginAsync()
@@ -67,7 +65,6 @@ namespace NetHome.ViewModels
             try
             {
                 await _userService.Login(loginRequest);
-                await _signalRConnection.Connect();
                 await GoToHomePage();
             }
             catch (ServerException e)
@@ -128,7 +125,6 @@ namespace NetHome.ViewModels
             try
             {
                 await _userService.Validate();
-                await _signalRConnection.Connect();
                 await GoToHomePage();
             }
             catch (ServerException e)

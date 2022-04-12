@@ -21,7 +21,6 @@ namespace NetHome.ViewModels
 {
     public class HomeViewModel : INotifyPropertyChanged
     {
-        private readonly ISignalRConnection _signalRConnection;
         private readonly IEnvironment _uiSettings;
         private readonly IDeviceService _deviceService;
 
@@ -40,7 +39,6 @@ namespace NetHome.ViewModels
         {
             DeviceControls = new ObservableCollection<View>();
             BindingBase.EnableCollectionSynchronization(DeviceControls, null, ObservableCollectionCallback);
-            _signalRConnection = DependencyService.Get<ISignalRConnection>();
             _uiSettings = DependencyService.Get<IEnvironment>();
             _deviceService = DependencyService.Get<IDeviceService>();
         }
@@ -63,14 +61,8 @@ namespace NetHome.ViewModels
         {
         }
 
-        internal void DisconnectSignalR()
-        {
-            _signalRConnection.Disconnect();
-        }
-
         internal void OnBackButtonPressed()
         {
-            DisconnectSignalR();
         }
 
         private async Task PopulateDeviceControls()
