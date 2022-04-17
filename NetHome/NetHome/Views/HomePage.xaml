@@ -7,25 +7,23 @@
     <ContentPage.BindingContext>
         <local:HomeViewModel/>
     </ContentPage.BindingContext>
-    <Grid ColumnSpacing="0" RowSpacing="0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Frame Padding="0,0,0,10" Margin="0" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
+    <StackLayout Spacing="0">
+        <Frame Padding="0" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
             <Label Text="Dashboard" FontSize="20" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
         </Frame>
-
-        <RefreshView Grid.Row="1" Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}" Margin="0,0,0,2">
+        <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}">
             <ScrollView>
-                <StackLayout BindableLayout.ItemsSource="{Binding DeviceControls}" BindableLayout.EmptyView="No devices currently available.">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Padding="0" Margin="0" BackgroundColor="Transparent" Content="{Binding}" />
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
+                <StackLayout Margin="0">
+                    <Frame Content="{Binding SensorsControl}" BackgroundColor="Transparent" Padding="0" Margin="0"/>
+                    <StackLayout BindableLayout.ItemsSource="{Binding DeviceControls}" BindableLayout.EmptyView="No devices currently available."  Margin="10,0">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Frame CornerRadius="15" HasShadow="True" BackgroundColor="Transparent" Content="{Binding}" Padding="0" Margin="0"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
                 </StackLayout>
             </ScrollView>
         </RefreshView>
-    </Grid>
+    </StackLayout>
 </ContentPage>

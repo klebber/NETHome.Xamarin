@@ -3,19 +3,23 @@ using NetHome.Common.Models.Devices;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views.Controls;
+using NetHome.Views.Popups;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace NetHome.ViewModels
 {
@@ -26,7 +30,10 @@ namespace NetHome.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private ObservableCollection<View> deviceControls;
+        private SensorsControl sensorsControl;
+        public SensorsControl SensorsControl { get => sensorsControl; set => SetProperty(ref sensorsControl, value); }
+
+        private ObservableCollection<View> deviceControls = new();
         public ObservableCollection<View> DeviceControls { get => deviceControls; set => SetProperty(ref deviceControls, value); }
 
         private bool isRefreshing;
@@ -37,7 +44,6 @@ namespace NetHome.ViewModels
 
         public HomeViewModel()
         {
-            DeviceControls = new ObservableCollection<View>();
             BindingBase.EnableCollectionSynchronization(DeviceControls, null, ObservableCollectionCallback);
             _uiSettings = DependencyService.Get<IEnvironment>();
             _deviceService = DependencyService.Get<IDeviceService>();
@@ -67,28 +73,26 @@ namespace NetHome.ViewModels
 
         private async Task PopulateDeviceControls()
         {
-            ICollection<DeviceModel> devices = await _deviceService.GetAll();
-
-            MainThread.BeginInvokeOnMainThread(() => DeviceControls = new ObservableCollection<View>());
-
-            ICollection<DeviceModel> sensors = devices.Where(d => d.Type == "Sensor").ToList();
-            devices = devices.Except(sensors).ToList();
-
-            MainThread.BeginInvokeOnMainThread(() => DeviceControls.Add(new SensorsControl(sensors)));
-
-            foreach (DeviceModel device in devices)
+            try
             {
-                View view = device.GetType().Name switch
+                await _deviceService.FetchAllDevices();
+                ICollection<DeviceModel> devices = DeviceManager.GetNonSensorDevices();
+                ICollection<DeviceModel> sensors = DeviceManager.GetSensors();
+                MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    nameof(AirConditionerModel) => new ToggleControl(device),
-                    nameof(RGBLightModel) => new ToggleControl(device),
-                    nameof(RollerShutterModel) => new RollerShutterControl(device),
-                    nameof(SmartSwitchModel) => new ToggleControl(device),
-                    _ => new DefaultControl(device)
-                };
-                MainThread.BeginInvokeOnMainThread(() => DeviceControls.Add(view));
+                    SensorsControl = new SensorsControl(sensors);
+                    DeviceControls.Clear();
+                    foreach (DeviceModel device in devices)
+                    {
+                        DeviceControls.Add(await ViewHelper.GetViewForDevice(device));
+                    }
+                    IsRefreshing = false;
+                });
             }
-            MainThread.BeginInvokeOnMainThread(() => IsRefreshing = false);
+            catch (ServerCommunicationException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+            }
         }
 
 

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NetHome.Services
 {
-    public interface IDeviceService
+    public interface IDeviceStateService
     {
-        Task FetchAllDevices();
+        Task ChangeDeviceState(DeviceModel device);
     }
 }

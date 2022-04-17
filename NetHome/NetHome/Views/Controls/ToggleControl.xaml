@@ -6,33 +6,28 @@
              x:DataType="controls:ToggleControl"
              x:Class="NetHome.Views.Controls.ToggleControl">
   <ContentView.Content>
-        <Frame x:Name="frame" CornerRadius="15" HasShadow="True" Margin="12,0,12,5" BackgroundColor="{StaticResource Secondary}" Padding="0">
-            <Grid ColumnDefinitions="90, *, 90" ColumnSpacing="0" VerticalOptions="Start" HeightRequest="90">
-                <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToFullView}" />
-                    </Frame.GestureRecognizers>
-                    <Image Source="{Binding ImageSource}" Aspect="AspectFit" Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
-                </Frame>
-                <Frame Grid.Column="1" Padding="0" BackgroundColor="Transparent" VerticalOptions="Fill" HorizontalOptions="Fill">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding GoToFullView}" />
-                    </Frame.GestureRecognizers>
-                    <Label Text="{Binding Device.Name}" FontSize="16" VerticalOptions="Center" HorizontalOptions="Start"/>
-                </Frame>
-                <Frame Grid.Column="2" Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding QuickAction}" />
-                    </Frame.GestureRecognizers>
-                    <Grid>
-                        <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="20" BackgroundColor="Transparent" BorderColor="{StaticResource Neutral}" CornerRadius="100">
-                            <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding SwitchState, Converter={StaticResource SwitchColorConverter}}" />
-                        </Frame>
-                        <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
+        <StackLayout Spacing="0" Orientation="Horizontal" HeightRequest="80" BackgroundColor="{StaticResource Secondary}">
+            <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToFullView}" />
+                </Frame.GestureRecognizers>
+                <StackLayout Orientation="Horizontal" Spacing="0">
+                    <Image Source="{Binding ImageSource}" Aspect="AspectFit" Margin="15" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="70"/>
+                    <Label Text="{Binding Device.Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Start"/>
+                </StackLayout>
+            </Frame>
+            <Frame Padding="0" Margin="0,0,10,0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End" WidthRequest="80">
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding QuickAction}" />
+                </Frame.GestureRecognizers>
+                <Grid>
+                    <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="15" BackgroundColor="Transparent" BorderColor="{StaticResource Neutral}" CornerRadius="100">
+                        <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding SwitchState, Converter={StaticResource SwitchColorConverter}}" />
+                    </Frame>
+                    <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
                                            HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Neutral}" Margin="20"/>
-                    </Grid>
-                </Frame>
-            </Grid>
-        </Frame>
+                </Grid>
+            </Frame>
+        </StackLayout>
     </ContentView.Content>
 </ContentView>

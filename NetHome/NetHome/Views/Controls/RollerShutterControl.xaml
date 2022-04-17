@@ -29,39 +29,33 @@
         </Style>
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame x:Name="frame" CornerRadius="15" HasShadow="True" Margin="12,0,12,5" BackgroundColor="{StaticResource Secondary}" Padding="0">
-            <StackLayout Spacing="0">
-                <Grid ColumnDefinitions="90, *" ColumnSpacing="0" VerticalOptions="Start" HeightRequest="90">
-                    <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToFullView}" />
-                        </Frame.GestureRecognizers>
-                        <Image Source="roller_shutter.png" Aspect="AspectFit" Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
-                    </Frame>
-                    <Frame Grid.Column="1" Padding="0" BackgroundColor="Transparent" VerticalOptions="Fill" HorizontalOptions="Fill">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoToFullView}" />
-                        </Frame.GestureRecognizers>
-                        <Label Text="{Binding RollerShutter.Name}" FontSize="16" VerticalOptions="Center" HorizontalOptions="Start"/>
-                    </Frame>
-                    <Frame Grid.Column="2" Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End">
-                        <Grid>
-                            <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="20,20,30,20" BackgroundColor="Transparent" >
-                                <Label Text="{Binding RollerShutter.CurrentPercentage, StringFormat='{0}%'}" TextColor="{StaticResource Accent}" VerticalOptions="Center" HorizontalOptions="Center" FontAttributes="Bold" FontSize="30" />
-                            </Frame>
-                            <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
+        <StackLayout Spacing="0" BackgroundColor="{StaticResource Secondary}">
+            <StackLayout Spacing="0" VerticalOptions="Start" HeightRequest="80" Orientation="Horizontal">
+                <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToFullView}" />
+                    </Frame.GestureRecognizers>
+                    <StackLayout Orientation="Horizontal" Spacing="0">
+                        <Image Source="roller_shutter.png" Aspect="AspectFit" Margin="15" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="70"/>
+                        <Label Text="{Binding RollerShutter.Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Start"/>
+                    </StackLayout>
+                </Frame>
+                <Frame Grid.Column="2" Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End">
+                    <Grid>
+                        <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="20" BackgroundColor="Transparent" >
+                            <Label Text="{Binding RollerShutter.CurrentPercentage, StringFormat='{0}%'}" TextColor="{StaticResource Accent}" VerticalOptions="Center" HorizontalOptions="Center" FontAttributes="Bold" FontSize="30" />
+                        </Frame>
+                        <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
                                     HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Neutral}" Margin="20"/>
-                        </Grid>
-                    </Frame>
-                </Grid>
-                <!--<BoxView Color="{StaticResource Primary}" HeightRequest="2" HorizontalOptions="FillAndExpand" VerticalOptions="Start" Margin="0,0,0,0" />-->
-                <Grid ColumnSpacing="2" HeightRequest="45" Padding="0,2,0,0" BackgroundColor="{StaticResource Primary}">
-                    <Button Text="{Binding RollerShutter.FavPos1, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos1}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" />
-                    <Button Text="{Binding RollerShutter.FavPos2, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos2}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" Grid.Column="1" />
-                    <Button Text="{Binding RollerShutter.FavPos3, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos3}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" Grid.Column="2" />
-                    <Button Text="{Binding RollerShutter.FavPos4, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos4}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" Grid.Column="3" />
-                </Grid>
+                    </Grid>
+                </Frame>
             </StackLayout>
-        </Frame>
+            <Grid ColumnSpacing="2" HeightRequest="45" Padding="0,2,0,0" BackgroundColor="{StaticResource Primary}">
+                <Button Text="{Binding RollerShutter.FavPos1, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos1}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" />
+                <Button Text="{Binding RollerShutter.FavPos2, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos2}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" Grid.Column="1" />
+                <Button Text="{Binding RollerShutter.FavPos3, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos3}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" Grid.Column="2" />
+                <Button Text="{Binding RollerShutter.FavPos4, StringFormat='{0}%'}" Command="{Binding QuickAction}" CommandParameter="{Binding RollerShutter.FavPos4}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Style="{StaticResource bottomControlButton}" Grid.Column="3" />
+            </Grid>
+        </StackLayout>
     </ContentView.Content>
 </ContentView>

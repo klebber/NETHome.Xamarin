@@ -1,5 +1,6 @@
 ﻿using NetHome.Common.JsonConverters;
 using NetHome.Common.Models;
+using NetHome.Exceptions;
 using NetHome.Helpers;
 using System;
 using System.Collections.Generic;
@@ -13,28 +14,14 @@ namespace NetHome.Services
 {
     public class DeviceService : IDeviceService
     {
-        public async Task<ICollection<DeviceModel>> GetAll()
+        public async Task FetchAllDevices()
         {
             string token = await SecureStorage.GetAsync("AuthorizationToken");
-            if (token is null) throw new Exception(); // TODO napravi exception koji pokriva ovaj i slicne slucajeve
+            if (token is null) throw new InvalidTokenException("Token not found!");
             HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/devices/getall", token);
             Stream stream = await response.Content.ReadAsStreamAsync();
-            string rez = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                string message;
-                string reason = response.ReasonPhrase;
-                try
-                {
-                    message = (await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
-                }
-                catch (JsonException)
-                {
-                    message = "Unable to load devices from server.";
-                }
-                throw new ServerException(reason, message);
-            }
-            return await JsonSerializer.DeserializeAsync<List<DeviceModel>>(stream, JsonHelper.GetOptions());
+            var devices = await JsonSerializer.DeserializeAsync<List<DeviceModel>>(stream, JsonHelper.GetOptions());
+            DeviceManager.SetList(devices);
         }
     }
 }

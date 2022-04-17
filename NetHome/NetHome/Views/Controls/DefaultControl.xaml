@@ -4,12 +4,15 @@
              xmlns:controls="clr-namespace:NetHome.Views.Controls" 
              x:DataType="controls:DefaultControl"
              x:Class="NetHome.Views.Controls.DefaultControl">
-  <ContentView.Content>
-        <Frame x:Name="frame" CornerRadius="15" HasShadow="True" Margin="12,0,12,5" BackgroundColor="{StaticResource Secondary}" Padding="0">
-            <Grid ColumnDefinitions="90, *" ColumnSpacing="0" VerticalOptions="Start" HeightRequest="90">
-                <Image Source="device_default.png" Aspect="AspectFit" Margin="20" VerticalOptions="Center" HorizontalOptions="Center"/>
-                <Label Grid.Column="1" Text="{Binding Device.Name}" FontSize="16" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
-            </Grid>
+    <ContentView.Content>
+        <Frame Padding="0" BackgroundColor="{StaticResource Secondary}" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoToFullView}" />
+            </Frame.GestureRecognizers>
+            <StackLayout Orientation="Horizontal" Spacing="0">
+                <Image Source="device_default.png" Aspect="AspectFit" Margin="15" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="70"/>
+                <Label Text="{Binding Device.Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Start"/>
+            </StackLayout>
         </Frame>
     </ContentView.Content>
 </ContentView>

@@ -67,16 +67,9 @@ namespace NetHome.ViewModels
                 await _userService.Login(loginRequest);
                 await GoToHomePage();
             }
-            catch (ServerException e)
+            catch (ServerCommunicationException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (OperationCanceledException)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert("Server unreachable!",
-                    "Http request has timed out. Check if server address is correct and if server is running.",
-                    "Ok",
-                    true));
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
             }
             IsLoading = false;
         }
@@ -120,23 +113,16 @@ namespace NetHome.ViewModels
 
         private async Task ValidateExistingToken()
         {
-            if (await SecureStorage.GetAsync("AuthorizationToken") is null) return;
             IsLoading = true;
             try
             {
+                Username = _userService.GetUserData().Username;
                 await _userService.Validate();
                 await GoToHomePage();
             }
-            catch (ServerException e)
+            catch (ServerCommunicationException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (OperationCanceledException)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert("Server unreachable!",
-                    "Http request has timed out. Check if server address is correct and if server is running.",
-                    "Ok",
-                    true));
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
             }
             //finally // zasto ovo daje exception?
             //{
@@ -156,7 +142,8 @@ namespace NetHome.ViewModels
             Password = string.Empty;
             _uiSettings.SetStatusBarColor((Color)Application.Current.Resources["Primary"], false);
             _uiSettings.SetNavBarColor((Color)Application.Current.Resources["Primary"]);
-            await ValidateExistingToken();
+            if (await SecureStorage.GetAsync("AuthorizationToken") is not null)
+                await ValidateExistingToken();
         }
 
         private bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)

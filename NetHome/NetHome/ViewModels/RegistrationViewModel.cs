@@ -66,16 +66,9 @@ namespace NetHome.ViewModels
                 await Shell.Current.ShowPopupAsync(new Alert("Registration successful!", "You can now use your credentials to login.", "Ok", true));
                 await Shell.Current.GoToAsync("..");
             }
-            catch (ServerException e)
+            catch (ServerCommunicationException e)
             {
                 await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (OperationCanceledException)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert("Server unreachable!",
-                    "Http request has timed out. Check if server address is correct and if server is running.",
-                    "Ok",
-                    true));
             }
             IsLoading = false;
         }
