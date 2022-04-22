@@ -1,17 +1,17 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common;
+using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views;
+using NetHome.Views.Popups;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.CommunityToolkit.Extensions;
-using NetHome.Views.Popups;
-using NetHome.Common;
 
 namespace NetHome.ViewModels
 {
@@ -67,11 +67,18 @@ namespace NetHome.ViewModels
                 await _userService.Login(loginRequest);
                 await GoToHomePage();
             }
-            catch (ServerCommunicationException e)
+            catch (BadResponseException e)
             {
                 await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
             }
-            IsLoading = false;
+            catch (ServerCommunicationException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private async Task RegisterAsync()
@@ -120,15 +127,24 @@ namespace NetHome.ViewModels
                 await _userService.Validate();
                 await GoToHomePage();
             }
-            catch (ServerCommunicationException e)
+            catch (BadResponseException e)
             {
                 await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+                _userService.ClearUserData();
             }
-            //finally // zasto ovo daje exception?
-            //{
-            //    _userService.ClearUserData();
-            //}
-            IsLoading = false;
+            catch (ServerCommunicationException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
+            }
+            catch (ServerAuthorizationException)
+            {
+                _userService.ClearUserData();
+                await Shell.Current.ShowPopupAsync(new Alert("Authorization error", "Your token has expired. Please login again.", "Ok", true));
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private async Task GoToHomePage()

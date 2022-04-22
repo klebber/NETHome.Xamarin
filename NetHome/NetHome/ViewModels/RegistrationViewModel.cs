@@ -1,5 +1,6 @@
 ﻿using NetHome.Common;
 using NetHome.Common.Models;
+using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views;
@@ -66,11 +67,22 @@ namespace NetHome.ViewModels
                 await Shell.Current.ShowPopupAsync(new Alert("Registration successful!", "You can now use your credentials to login.", "Ok", true));
                 await Shell.Current.GoToAsync("..");
             }
+            catch (BadResponseException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+            }
             catch (ServerCommunicationException e)
             {
                 await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
             }
-            IsLoading = false;
+            catch (ServerAuthorizationException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert("Authorization error", e.Message, "Ok", true));
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private async Task<bool> Validate()

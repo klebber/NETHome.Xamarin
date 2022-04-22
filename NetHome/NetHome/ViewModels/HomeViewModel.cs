@@ -1,25 +1,20 @@
 ﻿using NetHome.Common.Models;
-using NetHome.Common.Models.Devices;
+using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views.Controls;
 using NetHome.Views.Popups;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace NetHome.ViewModels
 {
@@ -27,6 +22,7 @@ namespace NetHome.ViewModels
     {
         private readonly IEnvironment _uiSettings;
         private readonly IDeviceService _deviceService;
+        private readonly IDeviceManager _deviceManager;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -47,6 +43,7 @@ namespace NetHome.ViewModels
             BindingBase.EnableCollectionSynchronization(DeviceControls, null, ObservableCollectionCallback);
             _uiSettings = DependencyService.Get<IEnvironment>();
             _deviceService = DependencyService.Get<IDeviceService>();
+            _deviceManager = DependencyService.Get<IDeviceManager>();
         }
 
         private void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
@@ -76,8 +73,8 @@ namespace NetHome.ViewModels
             try
             {
                 await _deviceService.FetchAllDevices();
-                ICollection<DeviceModel> devices = DeviceManager.GetNonSensorDevices();
-                ICollection<DeviceModel> sensors = DeviceManager.GetSensors();
+                ICollection<DeviceModel> devices = _deviceManager.GetNonSensorDevices();
+                ICollection<DeviceModel> sensors = _deviceManager.GetSensors();
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     SensorsControl = new SensorsControl(sensors);
@@ -89,9 +86,17 @@ namespace NetHome.ViewModels
                     IsRefreshing = false;
                 });
             }
-            catch (ServerCommunicationException e)
+            catch (BadResponseException e)
             {
                 await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+            }
+            catch (ServerCommunicationException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
+            }
+            catch (ServerAuthorizationException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert("Authorization error", e.Message, "Ok", true));
             }
         }
 

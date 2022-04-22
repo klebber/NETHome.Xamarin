@@ -1,11 +1,10 @@
 ﻿using NetHome.Common.Models;
 using NetHome.Common.Models.Devices;
+using NetHome.Exceptions;
+using NetHome.Services;
 using NetHome.Views.Popups;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.Extensions;
@@ -17,6 +16,9 @@ namespace NetHome.Views.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ToggleControl : ContentView
     {
+        private readonly IDeviceManager _deviceManager;
+        private readonly IDeviceStateService _deviceStateService;
+
         private Command quickAction;
         public ICommand QuickAction => quickAction ??= new Command(async () => await PerformQuickAction());
 
@@ -26,8 +28,7 @@ namespace NetHome.Views.Controls
         private bool isWaiting;
         public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
 
-        private bool switchState;
-        public bool SwitchState { get => switchState = GetSwitchState(); set => SetSwitchState(ref switchState, value); }
+        public bool SwitchState { get => GetSwitchState(); set => SetSwitchState(device, value); }
 
         private DeviceModel device;
         public DeviceModel Device { get => device; set => SetProperty(ref device, value); }
@@ -40,16 +41,38 @@ namespace NetHome.Views.Controls
             Device = device;
             ImageSource = GetImage();
             InitializeComponent();
+            _deviceManager = DependencyService.Get<IDeviceManager>();
+            _deviceStateService = DependencyService.Get<IDeviceStateService>();
+            _deviceManager.DeviceChanged += StateChangedCallback;
+        }
+
+        private void StateChangedCallback(object sender, DeviceModel newValue)
+        {
+            if (newValue is null || newValue.Id != Device.Id)
+                return;
+            Device = newValue;
+            SwitchState = GetSwitchState();
         }
 
         private async Task PerformQuickAction()
         {
-            if (isWaiting) return;
+            if (IsWaiting) return;
             IsWaiting = true;
-            await Task.Delay(500);
-            var x = SwitchState;
+            var tempState = SwitchState;
             SwitchState = !SwitchState;
-            IsWaiting = false;
+            try
+            {
+                await _deviceStateService.ChangeDeviceState(Device);
+            }
+            catch (BadResponseException e)
+            {
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+                SwitchState = tempState;
+            }
+            finally
+            {
+                IsWaiting = false;
+            }
         }
 
         private async Task PerformGoToFullView()
@@ -83,23 +106,28 @@ namespace NetHome.Views.Controls
             };
         }
 
-        private void SetSwitchState(ref bool field, bool newValue, [CallerMemberName] string propertyName = null)
+        private void SetSwitchState(DeviceModel device, bool newValue, [CallerMemberName] string propertyName = null)
         {
-            switch (Device.GetType().Name)
+            SetIsonValue(device, newValue);
+            OnPropertyChanged(propertyName);
+        }
+
+        private static void SetIsonValue(DeviceModel device, bool newValue)
+        {
+            switch (device.GetType().Name)
             {
                 case nameof(AirConditionerModel):
-                    ((AirConditionerModel)Device).Ison = newValue;
+                    ((AirConditionerModel)device).Ison = newValue;
                     break;
                 case nameof(RGBLightModel):
-                    ((RGBLightModel)Device).Ison = newValue;
+                    ((RGBLightModel)device).Ison = newValue;
                     break;
                 case nameof(SmartSwitchModel):
-                    ((SmartSwitchModel)Device).Ison = newValue;
+                    ((SmartSwitchModel)device).Ison = newValue;
                     break;
                 default:
                     throw new InvalidOperationException();
             };
-            SetProperty(ref field, newValue, propertyName);
         }
 
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)

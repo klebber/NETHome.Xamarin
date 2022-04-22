@@ -1,7 +1,6 @@
 ﻿using NetHome.Common;
 using NetHome.Common.Models;
 using NetHome.Helpers;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -15,33 +14,42 @@ namespace NetHome.Services
         public async Task Login(LoginRequest loginRequest)
         {
             string json = JsonSerializer.Serialize(loginRequest);
-            HttpResponseMessage response = await HttpRequestHelper.PostAsync("api/user/login", json);
+            HttpResponseMessage response = await HttpRequestHelper.PostUnauthorizedAsync("api/user/login", json);
             Stream stream = await response.Content.ReadAsStreamAsync();
             LoginResponse loginResponse = await JsonSerializer.DeserializeAsync<LoginResponse>(stream, JsonHelper.GetOptions());
-            SaveUserInfo(loginResponse.User);
-            await SecureStorage.SetAsync("AuthorizationToken", loginResponse.Token);
+            SaveUserData(loginResponse.User);
+            await SaveAuthorizationToken(loginResponse.Token);
         }
 
         public async Task Validate()
         {
-            string token = await SecureStorage.GetAsync("AuthorizationToken");
-            if (token is null) return;
-            HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/user/validate", token);
+            if (await GetAuthorizationToken() is null) return;
+            HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/user/validate");
             Stream stream = await response.Content.ReadAsStreamAsync();
             UserModel userData = await JsonSerializer.DeserializeAsync<UserModel>(stream, JsonHelper.GetOptions());
-            SaveUserInfo(userData);
+            SaveUserData(userData);
         }
-        
+
         public async Task Register(RegisterRequest registerRequest)
         {
             var json = JsonSerializer.Serialize(registerRequest);
-            _ = await HttpRequestHelper.PostAsync("api/user/register", json);
+            await HttpRequestHelper.PostAsync("api/user/register", json);
         }
 
-        private void SaveUserInfo(UserModel user)
+        private void SaveUserData(UserModel user)
         {
             Preferences.Remove("UserDataJSON");
             Preferences.Set("UserDataJSON", JsonSerializer.Serialize(user));
+        }
+
+        private async Task SaveAuthorizationToken(string token)
+        {
+            await SecureStorage.SetAsync("AuthorizationToken", "Bearer " + token);
+        }
+
+        public static async Task<string> GetAuthorizationToken()
+        {
+            return await SecureStorage.GetAsync("AuthorizationToken");
         }
 
         public UserModel GetUserData()

@@ -1,24 +1,31 @@
 ﻿using NetHome.Common.Models;
+using NetHome.Exceptions;
 using NetHome.Helpers;
-using NetHome.Services;
-using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+using Xamarin.Forms;
 
-namespace NetHome.Exceptions
+namespace NetHome.Services
 {
     public class DeviceStateService : IDeviceStateService
     {
+        private readonly IDeviceManager _deviceManager;
+        public DeviceStateService()
+        {
+            _deviceManager = DependencyService.Get<IDeviceManager>();
+        }
+
         public async Task ChangeDeviceState(DeviceModel device)
         {
-            var token = await SecureStorage.GetAsync("AuthorizationToken");
-            if (token is null) throw new InvalidTokenException("Token not found!");
             var json = JsonSerializer.Serialize(device, JsonHelper.GetOptions());
-            var response = await HttpRequestHelper.PostAsync("api/state/change", json, token);
+            var response = await HttpRequestHelper.PostAsync("api/state/change", json);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new BadResponseException(response);
+            }
             var stream = await response.Content.ReadAsStreamAsync();
             var newValue = await JsonSerializer.DeserializeAsync<DeviceModel>(stream, JsonHelper.GetOptions());
-            DeviceManager.Updated(newValue);
+            _deviceManager.Updated(newValue);
         }
     }
 }

@@ -11,6 +11,9 @@ namespace NetHome
             InitializeComponent();
             DependencyService.Register<IUserService, UserService>();
             DependencyService.Register<IDeviceService, DeviceService>();
+            DependencyService.Register<IDeviceStateService, DeviceStateService>();
+            DependencyService.RegisterSingleton<IDeviceManager>(DeviceManager.Instance);
+
             MainPage = new AppShell();
         }
 
