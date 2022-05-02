@@ -38,6 +38,7 @@ namespace NetHome.Views.Controls
         public RollerShutterControl(DeviceModel device)
         {
             InitializeComponent();
+            BindingContext = this;
             _deviceManager = DependencyService.Get<IDeviceManager>();
             _deviceStateService = DependencyService.Get<IDeviceStateService>();
             _deviceManager.DeviceChanged += StateChangedCallback;
@@ -48,7 +49,10 @@ namespace NetHome.Views.Controls
         {
             if (newValue is null || newValue.Id != RollerShutter.Id) 
                 return;
-            RollerShutter = (RollerShutterModel)newValue;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                RollerShutter = (RollerShutterModel)newValue;
+            });
         }
 
         private async Task PerformQuickAction(int percent)

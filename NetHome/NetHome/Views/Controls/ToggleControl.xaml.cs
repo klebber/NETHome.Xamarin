@@ -41,6 +41,7 @@ namespace NetHome.Views.Controls
             Device = device;
             ImageSource = GetImage();
             InitializeComponent();
+            BindingContext = this;
             _deviceManager = DependencyService.Get<IDeviceManager>();
             _deviceStateService = DependencyService.Get<IDeviceStateService>();
             _deviceManager.DeviceChanged += StateChangedCallback;
@@ -50,8 +51,12 @@ namespace NetHome.Views.Controls
         {
             if (newValue is null || newValue.Id != Device.Id)
                 return;
-            Device = newValue;
-            SwitchState = GetSwitchState();
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                Device = newValue;
+                SwitchState = GetSwitchState();
+            });
+            
         }
 
         private async Task PerformQuickAction()

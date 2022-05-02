@@ -24,18 +24,17 @@ namespace NetHome.Views.Controls
         private List<DeviceModel> sensors;
         private readonly IDeviceManager _deviceManager;
 
-        private double temp;
-        public double Temp { get => temp; set => SetProperty(ref temp, value); }
+        private string temp;
+        public string Temp { get => temp; set => SetProperty(ref temp, value); }
 
-        private double hum;
-        public double Hum { get => hum; set => SetProperty(ref hum, value); }
+        private string hum;
+        public string Hum { get => hum; set => SetProperty(ref hum, value); }
 
-        private readonly IDeviceStateService _deviceStateService;
 
         public SensorsControl(ICollection<DeviceModel> sensors)
         {
             InitializeComponent();
-            _deviceStateService = DependencyService.Get<IDeviceStateService>();
+            BindingContext = this;
             _deviceManager = DependencyService.Get<IDeviceManager>();
             _deviceManager.DeviceChanged += StateChangedCallback;
             RenderComponents(sensors);
@@ -48,7 +47,10 @@ namespace NetHome.Views.Controls
             {
                 sensors.Remove(sensors.Single(s => s.Id == e.Id));
                 sensors.Add(e);
-                RenderComponents(sensors);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    RenderComponents(sensors);
+                });
             }
 
         }
@@ -57,8 +59,16 @@ namespace NetHome.Views.Controls
         {
             sensors = newValue.OrderBy(s => s.GetType().Name).ToList();
             List<DeviceModel> thsensors = sensors.Where(s => s.GetType().Name == nameof(THSensorModel)).ToList();
-            Temp = thsensors.Select(dm => ((THSensorModel)dm).Temperature).ToList().Average();
-            Hum = thsensors.Select(dm => ((THSensorModel)dm).Humidity).ToList().Average();
+            if (thsensors.Count > 0)
+            {
+                Temp = thsensors.Select(dm => ((THSensorModel)dm).Temperature).ToList().Average().ToString();
+                Hum = thsensors.Select(dm => ((THSensorModel)dm).Humidity).ToList().Average().ToString();
+            }
+            else
+            {
+                Temp = null;
+                Hum = null;
+            }
             Stack.Children.Clear();
             foreach (DeviceModel sensor in sensors)
             {

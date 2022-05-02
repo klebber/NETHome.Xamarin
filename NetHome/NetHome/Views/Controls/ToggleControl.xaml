@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:NetHome.Views.Controls" 
              x:DataType="controls:ToggleControl"
              x:Class="NetHome.Views.Controls.ToggleControl">
-  <ContentView.Content>
+    <ContentView.Content>
         <StackLayout Spacing="0" Orientation="Horizontal" HeightRequest="80" BackgroundColor="{StaticResource Secondary}">
             <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
                 <Frame.GestureRecognizers>

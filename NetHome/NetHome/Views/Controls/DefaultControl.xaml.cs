@@ -22,6 +22,7 @@ namespace NetHome.Views.Controls
         public DefaultControl(DeviceModel device)
         {
             InitializeComponent();
+            BindingContext = this;
             this.device = device;
         }
 

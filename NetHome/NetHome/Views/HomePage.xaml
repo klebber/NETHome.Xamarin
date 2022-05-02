@@ -8,8 +8,9 @@
         <local:HomeViewModel/>
     </ContentPage.BindingContext>
     <StackLayout Spacing="0">
-        <Frame Padding="0" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
-            <Label Text="Dashboard" FontSize="20" TextColor="White" FontAttributes="Bold" HorizontalOptions="Center" />
+        <Frame Padding="0,0,0,5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Secondary}">
+            <!--<Label Text="NetHome" FontSize="20" TextColor="White" FontAttributes="None" HorizontalOptions="Center" />-->
+            <Image Source="nethome_logo.png" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="36" />
         </Frame>
         <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}">
             <ScrollView>

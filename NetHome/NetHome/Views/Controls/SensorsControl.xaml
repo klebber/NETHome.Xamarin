@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:NetHome.Views.Controls"
              x:DataType="controls:SensorsControl"
              x:Class="NetHome.Views.Controls.SensorsControl">
-  <ContentView.Content>
+    <ContentView.Content>
         <controls:CustomCornerFrame BackgroundColor="{StaticResource Secondary}"
                                     CornerRadius="0,0,25,25"
                                     Margin="0,0,0,5">
@@ -21,12 +21,12 @@
                         <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center">
                             <Image Source="temperature.png" Aspect="AspectFit" Margin="10" />
                             <Label Text="Temperature: " VerticalOptions="Center" />
-                            <Label Text="{Binding Temp, StringFormat='{0}°C', FallbackValue='N/A'}" VerticalOptions="Center" />
+                            <Label Text="{Binding Temp, StringFormat='{0:N1}°C', FallbackValue='N/A'}" VerticalOptions="Center" />
                         </StackLayout>
                         <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,10,0">
                             <Image Source="humidity.png" Aspect="AspectFit" Margin="10" />
                             <Label Text="Humidity: " VerticalOptions="Center" />
-                            <Label Text="{Binding Hum, StringFormat='{0}%', FallbackValue='N/A'}" VerticalOptions="Center" />
+                            <Label Text="{Binding Hum, StringFormat='{0:N0}%', FallbackValue='N/A'}" VerticalOptions="Center" />
                         </StackLayout>
                         <Frame Grid.Column="2" BackgroundColor="Transparent" Padding="0" HorizontalOptions="End" VerticalOptions="Center">
                             <Image Source="down_arrow.png" Aspect="AspectFit" Margin="0" WidthRequest="25">
