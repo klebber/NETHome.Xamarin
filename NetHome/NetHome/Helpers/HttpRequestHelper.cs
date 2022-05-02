@@ -20,16 +20,8 @@ namespace NetHome.Helpers
             var token = await UserService.GetAuthorizationToken();
             if (token is null) throw new ServerAuthorizationException("Authorization token not found!");
             client.DefaultRequestHeaders.Add("Authorization", token);
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync(new Uri(uri).AbsoluteUri + route);
-                return CheckResponse(response);
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServerCommunicationException("Server unreachable!",
-                    "Check if server address is correct and if server is running.");
-            }
+            HttpResponseMessage response = await client.GetAsync(new Uri(uri).AbsoluteUri + route);
+            return CheckResponse(response);
         }
 
         public static async Task<HttpResponseMessage> PostAsync(string route, string json)
@@ -42,16 +34,8 @@ namespace NetHome.Helpers
             var token = await UserService.GetAuthorizationToken();
             if (token is null) throw new ServerAuthorizationException("Authorization token not found!");
             client.DefaultRequestHeaders.Add("Authorization", token);
-            try
-            {
-                HttpResponseMessage response = await client.PostAsync(new Uri(uri).AbsoluteUri + route, data);
-                return CheckResponse(response);
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServerCommunicationException("Server unreachable!",
-                    "Http request has timed out. Check if server address is correct and if server is running.");
-            }
+            HttpResponseMessage response = await client.PostAsync(new Uri(uri).AbsoluteUri + route, data);
+            return CheckResponse(response);
         }
 
         public static async Task<HttpResponseMessage> PostUnauthorizedAsync(string route, string json)
@@ -61,16 +45,8 @@ namespace NetHome.Helpers
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             using var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(15);
-            try
-            {
-                HttpResponseMessage response = await client.PostAsync(new Uri(uri).AbsoluteUri + route, data); 
-                return CheckResponse(response);
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServerCommunicationException("Server unreachable!",
-                    "Http request has timed out. Check if server address is correct and if server is running.");
-            }
+            HttpResponseMessage response = await client.PostAsync(new Uri(uri).AbsoluteUri + route, data);
+            return CheckResponse(response);
         }
 
         private static HttpResponseMessage CheckResponse(HttpResponseMessage response)

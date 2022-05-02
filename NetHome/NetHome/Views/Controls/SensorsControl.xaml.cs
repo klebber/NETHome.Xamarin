@@ -21,7 +21,6 @@ namespace NetHome.Views.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SensorsControl : ContentView
     {
-        private List<DeviceModel> sensors;
         private readonly IDeviceManager _deviceManager;
 
         private string temp;
@@ -31,34 +30,33 @@ namespace NetHome.Views.Controls
         public string Hum { get => hum; set => SetProperty(ref hum, value); }
 
 
-        public SensorsControl(ICollection<DeviceModel> sensors)
+        public SensorsControl()
         {
             InitializeComponent();
             BindingContext = this;
             _deviceManager = DependencyService.Get<IDeviceManager>();
             _deviceManager.DeviceChanged += StateChangedCallback;
-            RenderComponents(sensors);
+            SetValues();
+            RenderChildren();
         }
 
         private void StateChangedCallback(object sender, DeviceModel e)
         {
             if (e is null) return;
-            if (sensors.Any(s => s.Id == e.Id))
+            if (e.Type == "Sensor")
             {
-                sensors.Remove(sensors.Single(s => s.Id == e.Id));
-                sensors.Add(e);
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    RenderComponents(sensors);
+                    SetValues();
+                    RenderChildren();
                 });
             }
 
         }
 
-        private void RenderComponents(ICollection<DeviceModel> newValue)
+        private void SetValues()
         {
-            sensors = newValue.OrderBy(s => s.GetType().Name).ToList();
-            List<DeviceModel> thsensors = sensors.Where(s => s.GetType().Name == nameof(THSensorModel)).ToList();
+            List<DeviceModel> thsensors = _deviceManager.GetSensors().Where(s => s.GetType().Name == nameof(THSensorModel)).ToList();
             if (thsensors.Count > 0)
             {
                 Temp = thsensors.Select(dm => ((THSensorModel)dm).Temperature).ToList().Average().ToString();
@@ -69,6 +67,11 @@ namespace NetHome.Views.Controls
                 Temp = null;
                 Hum = null;
             }
+        }
+
+        private void RenderChildren()
+        {
+            var sensors = _deviceManager.GetSensors().OrderBy(s => s.GetType().Name).ToList();
             Stack.Children.Clear();
             foreach (DeviceModel sensor in sensors)
             {

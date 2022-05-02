@@ -74,10 +74,9 @@ namespace NetHome.ViewModels
             {
                 await _deviceService.FetchAllDevices();
                 ICollection<DeviceModel> devices = _deviceManager.GetNonSensorDevices();
-                ICollection<DeviceModel> sensors = _deviceManager.GetSensors();
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    SensorsControl = new SensorsControl(sensors);
+                    SensorsControl = new SensorsControl();
                     DeviceControls.Clear();
                     foreach (DeviceModel device in devices)
                     {
