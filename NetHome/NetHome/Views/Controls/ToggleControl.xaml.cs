@@ -1,6 +1,7 @@
 ﻿using NetHome.Common.Models;
 using NetHome.Common.Models.Devices;
 using NetHome.Exceptions;
+using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views.Popups;
 using System;
@@ -28,18 +29,20 @@ namespace NetHome.Views.Controls
         private bool isWaiting;
         public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
 
-        public bool SwitchState { get => GetSwitchState(); set => SetSwitchState(device, value); }
+        private ToggleControlState state;
+        internal ToggleControlState State { get => state; set => SetProperty(ref state, value); }
 
-        private DeviceModel device;
-        public DeviceModel Device { get => device; set => SetProperty(ref device, value); }
+        public bool CurrentState { get => State.GetState(); set => SetState(value); }
+
+        public DeviceModel Device { get => State.Device; set => SetDevice(value); }
 
         private ImageSource imageSource;
         public ImageSource ImageSource { get => imageSource; set => SetProperty(ref imageSource, value); }
 
         public ToggleControl(DeviceModel device)
         {
-            Device = device;
-            ImageSource = GetImage();
+            State = CreateState(device);
+            ImageSource = State.GetImage();
             InitializeComponent();
             BindingContext = this;
             _deviceManager = DependencyService.Get<IDeviceManager>();
@@ -54,7 +57,7 @@ namespace NetHome.Views.Controls
             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
             {
                 Device = newValue;
-                SwitchState = GetSwitchState();
+                OnPropertyChanged(nameof(CurrentState));
             });
             
         }
@@ -63,16 +66,16 @@ namespace NetHome.Views.Controls
         {
             if (IsWaiting) return;
             IsWaiting = true;
-            var tempState = SwitchState;
-            SwitchState = !SwitchState;
+            var tempState = CurrentState;
+            CurrentState = !tempState;
             try
             {
-                await _deviceStateService.ChangeDeviceState(Device);
+                await _deviceStateService.ChangeDeviceState(state.Device);
             }
             catch (BadResponseException e)
             {
                 await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
-                SwitchState = tempState;
+                CurrentState = tempState;
             }
             finally
             {
@@ -84,55 +87,27 @@ namespace NetHome.Views.Controls
         {
         }
 
-        private string GetImage()
+        private ToggleControlState CreateState(DeviceModel device)
         {
-            return Device.GetType().Name switch
+            return device.GetType().Name switch
             {
-                nameof(AirConditionerModel) => "air_conditioner.png",
-                nameof(RGBLightModel) => "light_bulb.png",
-                nameof(SmartSwitchModel) => Device.Type switch
-                {
-                    "Boiler" => "boiler.png",
-                    "Light" => "light_bulb.png",
-                    _ => "switch_default.png"
-                },
-                _ => "switch_default.png"
-            };
-        }
-
-        private bool GetSwitchState()
-        {
-            return Device.GetType().Name switch
-            {
-                nameof(AirConditionerModel) => ((AirConditionerModel)Device).Ison,
-                nameof(RGBLightModel) => ((RGBLightModel)Device).Ison,
-                nameof(SmartSwitchModel) => ((SmartSwitchModel)Device).Ison,
+                nameof(AirConditionerModel) => new AirConditionerState(device),
+                nameof(RGBLightModel) => new RgbLightState(device),
+                nameof(SmartSwitchModel) => new SmartSwitchState(device),
                 _ => throw new InvalidOperationException()
             };
         }
 
-        private void SetSwitchState(DeviceModel device, bool newValue, [CallerMemberName] string propertyName = null)
+        private void SetState(bool value)
         {
-            SetIsonValue(device, newValue);
-            OnPropertyChanged(propertyName);
+            State.SetState(value);
+            OnPropertyChanged(nameof(CurrentState));
         }
 
-        private static void SetIsonValue(DeviceModel device, bool newValue)
+        private void SetDevice(DeviceModel value)
         {
-            switch (device.GetType().Name)
-            {
-                case nameof(AirConditionerModel):
-                    ((AirConditionerModel)device).Ison = newValue;
-                    break;
-                case nameof(RGBLightModel):
-                    ((RGBLightModel)device).Ison = newValue;
-                    break;
-                case nameof(SmartSwitchModel):
-                    ((SmartSwitchModel)device).Ison = newValue;
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            };
+            state.Device = value;
+            OnPropertyChanged(nameof(State));
         }
 
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)

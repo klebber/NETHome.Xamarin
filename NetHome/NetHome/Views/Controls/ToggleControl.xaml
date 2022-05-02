@@ -22,7 +22,7 @@
                 </Frame.GestureRecognizers>
                 <Grid>
                     <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="15" BackgroundColor="Transparent" BorderColor="{StaticResource Neutral}" CornerRadius="100">
-                        <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding SwitchState, Converter={StaticResource SwitchColorConverter}}" />
+                        <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding CurrentState, Converter={StaticResource SwitchColorConverter}}" />
                     </Frame>
                     <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
                                            HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Neutral}" Margin="20"/>
