@@ -19,6 +19,7 @@ namespace NetHome.ViewModels
     {
         private readonly IUserService _userService;
         private readonly IEnvironment _uiSettings;
+        private readonly IWebSocketService _websocketService;
 
         private string username;
         public string Username { get => username; set => SetProperty(ref username, value); }
@@ -45,6 +46,7 @@ namespace NetHome.ViewModels
         {
             _userService = DependencyService.Get<IUserService>();
             _uiSettings = DependencyService.Get<IEnvironment>();
+            _websocketService = DependencyService.Get<IWebSocketService>();
         }
 
         private async Task LoginAsync()
@@ -65,11 +67,11 @@ namespace NetHome.ViewModels
             try
             {
                 await _userService.Login(loginRequest);
-                await GoToHomePage();
+                await GoToHomePageAsync();
             }
             catch (BadResponseException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
             }
             catch (ServerCommunicationException e)
             {
@@ -95,19 +97,19 @@ namespace NetHome.ViewModels
         private async Task AddressSetup()
         {
             if (IsLoading) return;
-            string current = Preferences.Get("ServerAddress", string.Empty);
+            string current = UserDataManager.GetUri();
             string result = await Shell.Current.ShowPopupAsync(new Propmpt(
                 "Server Adress", "You can set url address of a server here:",
                 "URL", current, "Save", true, true, keyboard: Keyboard.Url));
             if (result is null) return;
             if (string.IsNullOrWhiteSpace(result))
             {
-                Preferences.Remove("ServerAddress");
+                UserDataManager.RemoveUri();
                 return;
             }
             else if (Uri.IsWellFormedUriString(result, UriKind.Absolute))
             {
-                Preferences.Set("ServerAddress", result);
+                UserDataManager.SetUri(result);
             }
             else
             {
@@ -123,14 +125,14 @@ namespace NetHome.ViewModels
             IsLoading = true;
             try
             {
-                Username = _userService.GetUserData().Username;
+                Username = UserDataManager.GetUserData().Username;
                 await _userService.Validate();
-                await GoToHomePage();
+                await GoToHomePageAsync();
             }
             catch (BadResponseException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
-                _userService.ClearUserData();
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
+                UserDataManager.ClearUserData();
             }
             catch (ServerCommunicationException e)
             {
@@ -138,7 +140,7 @@ namespace NetHome.ViewModels
             }
             catch (ServerAuthorizationException)
             {
-                _userService.ClearUserData();
+                UserDataManager.ClearUserData();
                 await Shell.Current.ShowPopupAsync(new Alert("Authorization error", "Your token has expired. Please login again.", "Ok", true));
             }
             finally
@@ -147,7 +149,7 @@ namespace NetHome.ViewModels
             }
         }
 
-        private async Task GoToHomePage()
+        private async Task GoToHomePageAsync()
         {
             await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
         }

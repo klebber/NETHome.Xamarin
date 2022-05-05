@@ -12,18 +12,18 @@ namespace NetHome.Exceptions
     {
         public string Reason { get; set; }
         public int StatusCode { get; set; }
-        public string DetailedMessage { get; set; }
-        public BadResponseException(HttpResponseMessage response)
+        new public string Message { get; set; }
+        public BadResponseException(HttpResponseMessage response) : base()
         {
             Reason = response.ReasonPhrase;
             Stream stream = response.Content.ReadAsStreamAsync().Result;
             try
             {
-                DetailedMessage = (JsonSerializer.Deserialize<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
+                Message = (JsonSerializer.Deserialize<Dictionary<string, string>>(stream, JsonHelper.GetOptions()))["Message"];
             }
             catch (Exception)
             {
-                DetailedMessage = "Unknown error has occurred. No message recieved from server.";
+                Message = "Unknown error has occurred. No message recieved from server.";
             }
         }
     }

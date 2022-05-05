@@ -9,5 +9,6 @@ namespace NetHome.Services
     public interface IDeviceStateService
     {
         Task ChangeDeviceState(DeviceModel device);
+        void DeviceStateChanged(DeviceModel device);
     }
 }

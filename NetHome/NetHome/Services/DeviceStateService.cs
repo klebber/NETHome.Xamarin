@@ -27,5 +27,10 @@ namespace NetHome.Services
             var newValue = await JsonSerializer.DeserializeAsync<DeviceModel>(stream, JsonHelper.GetOptions());
             _deviceManager.Updated(newValue);
         }
+
+        public void DeviceStateChanged(DeviceModel device)
+        {
+            _deviceManager.Updated(device);
+        }
     }
 }

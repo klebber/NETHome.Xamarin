@@ -9,10 +9,11 @@ namespace NetHome
         public App()
         {
             InitializeComponent();
+            DependencyService.RegisterSingleton<IDeviceManager>(new DeviceManager());
+            DependencyService.Register<IDeviceStateService, DeviceStateService>();
+            DependencyService.RegisterSingleton<IWebSocketService>(new WebSocketService());
             DependencyService.Register<IUserService, UserService>();
             DependencyService.Register<IDeviceService, DeviceService>();
-            DependencyService.Register<IDeviceStateService, DeviceStateService>();
-            DependencyService.RegisterSingleton<IDeviceManager>(DeviceManager.Instance);
 
             MainPage = new AppShell();
         }

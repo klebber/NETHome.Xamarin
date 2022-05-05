@@ -24,9 +24,9 @@ namespace NetHome.ViewModels
 
         private async Task LogoutAsync()
         {
-            _userService.ClearUserData();
-            SecureStorage.Remove("AuthorizationToken");
-            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            var logout = _userService.Logout();
+            var view = Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
+            await Task.WhenAll(logout, view);
         }
     }
 }

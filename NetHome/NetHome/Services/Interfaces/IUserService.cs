@@ -9,7 +9,6 @@ namespace NetHome.Services
         Task Login(LoginRequest loginRequest);
         Task Validate();
         Task Register(RegisterRequest registerRequest);
-        UserModel GetUserData();
-        void ClearUserData();
+        Task Logout();
     }
 }

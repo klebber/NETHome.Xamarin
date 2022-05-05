@@ -69,7 +69,7 @@ namespace NetHome.ViewModels
             }
             catch (BadResponseException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
             }
             catch (ServerCommunicationException e)
             {

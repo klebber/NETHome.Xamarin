@@ -10,9 +10,6 @@ namespace NetHome.Services
 {
     public class DeviceManager : IDeviceManager
     {
-        private static DeviceManager _instance;
-        public static DeviceManager Instance => _instance ??= new DeviceManager();
-
         private readonly DeviceList<DeviceModel> _devices;
         private readonly WeakEventManager<DeviceModel> _eventManager;
 
@@ -22,7 +19,7 @@ namespace NetHome.Services
             remove => _eventManager.RemoveEventHandler(value);
         }
 
-        private DeviceManager()
+        public DeviceManager()
         {
             _devices = new DeviceList<DeviceModel>();
             _eventManager = new WeakEventManager<DeviceModel>();

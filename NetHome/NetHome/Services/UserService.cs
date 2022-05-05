@@ -6,62 +6,51 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace NetHome.Services
 {
     public class UserService : IUserService
     {
+        private readonly IWebSocketService _webSocketService;
+
+        public UserService()
+        {
+            _webSocketService = DependencyService.Get<IWebSocketService>();
+        }
+
         public async Task Login(LoginRequest loginRequest)
         {
             string json = JsonSerializer.Serialize(loginRequest);
             HttpResponseMessage response = await HttpRequestHelper.PostUnauthorizedAsync("api/user/login", json);
             Stream stream = await response.Content.ReadAsStreamAsync();
             LoginResponse loginResponse = await JsonSerializer.DeserializeAsync<LoginResponse>(stream, JsonHelper.GetOptions());
-            SaveUserData(loginResponse.User);
-            await SaveAuthorizationToken(loginResponse.Token);
+            UserDataManager.SaveUserData(loginResponse.User);
+            await UserDataManager.SaveAuthorizationToken(loginResponse.Token);
+            await _webSocketService.ConnectAsync();
         }
 
         public async Task Validate()
         {
-            if (await GetAuthorizationToken() is null) return;
+            if (await UserDataManager.GetAuthorizationToken() is null) return;
             HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/user/validate");
             Stream stream = await response.Content.ReadAsStreamAsync();
             UserModel userData = await JsonSerializer.DeserializeAsync<UserModel>(stream, JsonHelper.GetOptions());
-            SaveUserData(userData);
+            UserDataManager.SaveUserData(userData);
+            await _webSocketService.ConnectAsync();
         }
 
         public async Task Register(RegisterRequest registerRequest)
         {
             var json = JsonSerializer.Serialize(registerRequest);
-            await HttpRequestHelper.PostAsync("api/user/register", json);
+            await HttpRequestHelper.PostUnauthorizedAsync("api/user/register", json);
         }
 
-        private void SaveUserData(UserModel user)
+        public async Task Logout()
         {
-            Preferences.Remove("UserDataJSON");
-            Preferences.Set("UserDataJSON", JsonSerializer.Serialize(user));
-        }
-
-        private async Task SaveAuthorizationToken(string token)
-        {
-            await SecureStorage.SetAsync("AuthorizationToken", "Bearer " + token);
-        }
-
-        public static async Task<string> GetAuthorizationToken()
-        {
-            return await SecureStorage.GetAsync("AuthorizationToken");
-        }
-
-        public UserModel GetUserData()
-        {
-            string json = Preferences.Get("UserDataJSON", null);
-            return json is not null ? JsonSerializer.Deserialize<UserModel>(json) : null;
-        }
-
-        public void ClearUserData()
-        {
-            SecureStorage.Remove("AuthorizationToken");
-            Preferences.Remove("UserDataJSON");
+            UserDataManager.ClearUserData();
+            UserDataManager.ClearAuthorizationToken();
+            await _webSocketService.CloseAsync();
         }
     }
 }

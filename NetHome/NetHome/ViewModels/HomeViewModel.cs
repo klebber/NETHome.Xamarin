@@ -23,6 +23,7 @@ namespace NetHome.ViewModels
         private readonly IEnvironment _uiSettings;
         private readonly IDeviceService _deviceService;
         private readonly IDeviceManager _deviceManager;
+        private readonly IWebSocketService _websocketService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -44,6 +45,7 @@ namespace NetHome.ViewModels
             _uiSettings = DependencyService.Get<IEnvironment>();
             _deviceService = DependencyService.Get<IDeviceService>();
             _deviceManager = DependencyService.Get<IDeviceManager>();
+            _websocketService = DependencyService.Get<IWebSocketService>();
         }
 
         private void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
@@ -66,6 +68,7 @@ namespace NetHome.ViewModels
 
         internal void OnBackButtonPressed()
         {
+            _websocketService.CloseAsync();
         }
 
         private async Task PopulateDeviceControls()
@@ -87,7 +90,7 @@ namespace NetHome.ViewModels
             }
             catch (BadResponseException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
             }
             catch (ServerCommunicationException e)
             {

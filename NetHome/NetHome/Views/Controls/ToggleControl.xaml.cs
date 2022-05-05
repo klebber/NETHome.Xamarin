@@ -74,7 +74,7 @@ namespace NetHome.Views.Controls
             }
             catch (BadResponseException e)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.DetailedMessage, "Ok", true));
+                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
                 CurrentState = tempState;
             }
             finally

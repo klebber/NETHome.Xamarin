@@ -17,7 +17,7 @@ namespace NetHome.Helpers
             if (uri is null) throw new ServerCommunicationException("Server adress not found!", "Please enter valid server adress and try again.");
             using var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(15);
-            var token = await UserService.GetAuthorizationToken();
+            var token = await UserDataManager.GetAuthorizationToken();
             if (token is null) throw new ServerAuthorizationException("Authorization token not found!");
             client.DefaultRequestHeaders.Add("Authorization", token);
             HttpResponseMessage response = await client.GetAsync(new Uri(uri).AbsoluteUri + route);
@@ -31,7 +31,7 @@ namespace NetHome.Helpers
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             using var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(15);
-            var token = await UserService.GetAuthorizationToken();
+            var token = await UserDataManager.GetAuthorizationToken();
             if (token is null) throw new ServerAuthorizationException("Authorization token not found!");
             client.DefaultRequestHeaders.Add("Authorization", token);
             HttpResponseMessage response = await client.PostAsync(new Uri(uri).AbsoluteUri + route, data);
