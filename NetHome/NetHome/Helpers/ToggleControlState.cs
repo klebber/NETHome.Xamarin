@@ -1,8 +1,5 @@
-﻿using NetHome.Common.Models;
-using NetHome.Common.Models.Devices;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using NetHome.Common;
+using NetHome.Views.DevicePages;
 
 namespace NetHome.Helpers
 {
@@ -16,6 +13,7 @@ namespace NetHome.Helpers
         public abstract bool GetState();
         public abstract void SetState(bool value);
         public abstract string GetImage();
+        public abstract string GetPageName();
     }
 
     internal class SmartSwitchState : ToggleControlState
@@ -34,12 +32,12 @@ namespace NetHome.Helpers
 
         public override string GetImage()
         {
-            return Device.Type switch
-            {
-                "Boiler" => "boiler.png",
-                "Light" => "light_bulb.png",
-                _ => "switch_default.png"
-            };
+            return ((SmartSwitchModel)Device).GetImage();
+        }
+
+        public override string GetPageName()
+        {
+            return nameof(SmartSwitchPage);
         }
     }
 
@@ -59,7 +57,12 @@ namespace NetHome.Helpers
 
         public override string GetImage()
         {
-            return "light_bulb.png";
+            return ((RGBLightModel)Device).GetImage();
+        }
+
+        public override string GetPageName()
+        {
+            return nameof(RgbLightPage);
         }
     }
 
@@ -79,7 +82,12 @@ namespace NetHome.Helpers
 
         public override string GetImage()
         {
-            return "air_conditioner.png";
+            return ((AirConditionerModel)Device).GetImage();
+        }
+
+        public override string GetPageName()
+        {
+            return nameof(AirConditionerPage);
         }
     }
 }

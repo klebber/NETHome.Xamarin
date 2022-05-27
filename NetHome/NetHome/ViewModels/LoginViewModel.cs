@@ -20,26 +20,19 @@ namespace NetHome.ViewModels
         private readonly IUserService _userService;
         private readonly IEnvironment _uiSettings;
         private readonly IWebSocketService _websocketService;
-
         private string username;
-        public string Username { get => username; set => SetProperty(ref username, value); }
-
         private string password;
-        public string Password { get => password; set => SetProperty(ref password, value); }
-
         private bool isLoading = false;
-        public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
         public event PropertyChangedEventHandler PropertyChanged;
-
         private Command loginCommand;
-
-        public ICommand LoginCommand => loginCommand ??= new Command(async () => await LoginAsync());
-
         private Command registerCommand;
-
-        public ICommand RegisterCommand => registerCommand ??= new Command(async () => await RegisterAsync());
-
         private Command addressSetupCommand;
+
+        public string Username { get => username; set => SetProperty(ref username, value); }
+        public string Password { get => password; set => SetProperty(ref password, value); }
+        public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
+        public ICommand LoginCommand => loginCommand ??= new Command(async () => await LoginAsync());
+        public ICommand RegisterCommand => registerCommand ??= new Command(async () => await RegisterAsync());
         public ICommand AddressSetupCommand => addressSetupCommand ??= new Command(async () => await AddressSetup());
 
         public LoginViewModel()

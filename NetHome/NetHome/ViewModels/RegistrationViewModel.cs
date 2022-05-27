@@ -1,18 +1,12 @@
-﻿using NetHome.Common;
-using NetHome.Common.Models;
-using NetHome.Exceptions;
-using NetHome.Helpers;
-using NetHome.Services;
-using NetHome.Views;
-using NetHome.Views.Popups;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using NetHome.Common;
+using NetHome.Exceptions;
+using NetHome.Services;
+using NetHome.Views.Popups;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 

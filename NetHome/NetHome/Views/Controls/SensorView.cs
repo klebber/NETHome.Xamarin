@@ -1,5 +1,4 @@
-﻿using NetHome.Common.Models;
-using NetHome.Common.Models.Devices;
+﻿using NetHome.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

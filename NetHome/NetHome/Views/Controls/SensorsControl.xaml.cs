@@ -1,18 +1,8 @@
-﻿using NetHome.Common.Models;
-using NetHome.Common.Models.Devices;
-using NetHome.Helpers;
-using NetHome.Services;
-using NetHome.Views.Popups;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.CommunityToolkit.Extensions;
+using NetHome.Common;
+using NetHome.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -22,11 +12,10 @@ namespace NetHome.Views.Controls
     public partial class SensorsControl : ContentView
     {
         private readonly IDeviceManager _deviceManager;
-
         private string temp;
-        public string Temp { get => temp; set => SetProperty(ref temp, value); }
-
         private string hum;
+
+        public string Temp { get => temp; set => SetProperty(ref temp, value); }
         public string Hum { get => hum; set => SetProperty(ref hum, value); }
 
 

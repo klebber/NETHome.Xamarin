@@ -1,8 +1,8 @@
-﻿using NetHome.Common.Models;
-using NetHome.Common.Models.Devices;
+﻿using NetHome.Common;
 using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
+using NetHome.Views.DevicePages;
 using NetHome.Views.Popups;
 using System;
 using System.Collections.Generic;
@@ -22,17 +22,14 @@ namespace NetHome.Views.Controls
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IDeviceStateService _deviceStateService;
-
         private Command quickAction;
-        public ICommand QuickAction => quickAction ??= new Command<int>(async (percent) => await PerformQuickAction(percent));
-
         private Command goToFullView;
-        public ICommand GoToFullView => goToFullView ??= new Command(async () => await PerformGoToFullView());
-
         private bool isWaiting;
-        public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
-
         private RollerShutterModel rollerShutter;
+
+        public ICommand QuickAction => quickAction ??= new Command<int>(async (percent) => await PerformQuickAction(percent));
+        public ICommand GoToFullView => goToFullView ??= new Command(async () => await PerformGoToFullView());
+        public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
         public RollerShutterModel RollerShutter { get => rollerShutter; set => SetProperty(ref rollerShutter, value); }
 
         public RollerShutterControl(DeviceModel device)
@@ -79,6 +76,8 @@ namespace NetHome.Views.Controls
 
         private async Task PerformGoToFullView()
         {
+            var route = nameof(RollerShutterPage) + "?DeviceId=" + RollerShutter.Id;
+            await Shell.Current.GoToAsync(route);
         }
 
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)

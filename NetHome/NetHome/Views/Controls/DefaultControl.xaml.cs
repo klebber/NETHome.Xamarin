@@ -1,4 +1,4 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace NetHome.Views.Controls
     public partial class DefaultControl : ContentView
     {
         private Command goToFullView;
-        public ICommand GoToFullView => goToFullView ??= new Command(async () => await PerformGoToFullView());
-
         private DeviceModel device;
+
+        public ICommand GoToFullView => goToFullView ??= new Command(async () => await PerformGoToFullView());
         public DeviceModel Device { get => device; set => SetProperty(ref device, value); }
         public DefaultControl(DeviceModel device)
         {

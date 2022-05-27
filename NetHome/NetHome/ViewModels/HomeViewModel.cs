@@ -1,4 +1,4 @@
-﻿using NetHome.Common.Models;
+﻿using NetHome.Common;
 using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
@@ -26,17 +26,14 @@ namespace NetHome.ViewModels
         private readonly IWebSocketService _websocketService;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         private SensorsControl sensorsControl;
-        public SensorsControl SensorsControl { get => sensorsControl; set => SetProperty(ref sensorsControl, value); }
-
         private ObservableCollection<View> deviceControls = new();
-        public ObservableCollection<View> DeviceControls { get => deviceControls; set => SetProperty(ref deviceControls, value); }
-
         private bool isRefreshing;
-        public bool IsRefreshing { get => isRefreshing; set => SetProperty(ref isRefreshing, value); }
-
         private Command onRefreshed;
+
+        public SensorsControl SensorsControl { get => sensorsControl; set => SetProperty(ref sensorsControl, value); }
+        public ObservableCollection<View> DeviceControls { get => deviceControls; set => SetProperty(ref deviceControls, value); }
+        public bool IsRefreshing { get => isRefreshing; set => SetProperty(ref isRefreshing, value); }
         public ICommand OnRefreshed => onRefreshed ??= new Command(async () => await Task.Run(async () => await PopulateDeviceControls()));
 
         public HomeViewModel()
@@ -83,7 +80,7 @@ namespace NetHome.ViewModels
                     DeviceControls.Clear();
                     foreach (DeviceModel device in devices)
                     {
-                        DeviceControls.Add(await ViewHelper.GetViewForDevice(device));
+                        DeviceControls.Add(await device.GetView());
                     }
                     IsRefreshing = false;
                 });

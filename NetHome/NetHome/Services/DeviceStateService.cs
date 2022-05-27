@@ -1,8 +1,8 @@
-﻿using NetHome.Common.Models;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+using NetHome.Common;
 using NetHome.Exceptions;
 using NetHome.Helpers;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace NetHome.Services

@@ -1,8 +1,5 @@
 ﻿using NetHome.Common.JsonConverters;
-using NetHome.Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using NetHome.Common;
 using System.Text.Json;
 
 namespace NetHome.Helpers
@@ -13,7 +10,7 @@ namespace NetHome.Helpers
         {
             JsonSerializerOptions options = new();
             options.PropertyNameCaseInsensitive = true;
-            options.Converters.Add(new RuntimeTypeConverter<DeviceModel>("NetHome.Common.Models.Devices.", "NetHome.Common"));
+            options.Converters.Add(new RuntimeTypeConverter<DeviceModel>());
             return options;
         }
     }

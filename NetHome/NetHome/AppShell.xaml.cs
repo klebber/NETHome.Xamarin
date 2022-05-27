@@ -1,4 +1,5 @@
 ﻿using NetHome.Views;
+using NetHome.Views.DevicePages;
 using Xamarin.Forms;
 
 namespace NetHome
@@ -16,6 +17,10 @@ namespace NetHome
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
             Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
+            Routing.RegisterRoute(nameof(AirConditionerPage), typeof(AirConditionerPage));
+            Routing.RegisterRoute(nameof(RgbLightPage), typeof(RgbLightPage));
+            Routing.RegisterRoute(nameof(RollerShutterPage), typeof(RollerShutterPage));
+            Routing.RegisterRoute(nameof(SmartSwitchPage), typeof(SmartSwitchPage));
         }
     }
 }

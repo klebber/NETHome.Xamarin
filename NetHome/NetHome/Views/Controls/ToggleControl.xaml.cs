@@ -1,13 +1,12 @@
-﻿using NetHome.Common.Models;
-using NetHome.Common.Models.Devices;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using NetHome.Common;
 using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views.Popups;
-using System;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -19,24 +18,17 @@ namespace NetHome.Views.Controls
     {
         private readonly IDeviceManager _deviceManager;
         private readonly IDeviceStateService _deviceStateService;
-
-        private Command quickAction;
-        public ICommand QuickAction => quickAction ??= new Command(async () => await PerformQuickAction());
-
-        private Command goToFullView;
-        public ICommand GoToFullView => goToFullView ??= new Command(async () => await PerformGoToFullView());
-
         private bool isWaiting;
-        public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
-
+        private Command quickAction;
+        private Command goToFullView;
         private ToggleControlState state;
-        internal ToggleControlState State { get => state; set => SetProperty(ref state, value); }
-
-        public bool CurrentState { get => State.GetState(); set => SetState(value); }
-
-        public DeviceModel Device { get => State.Device; set => SetDevice(value); }
-
         private ImageSource imageSource;
+        public ICommand QuickAction => quickAction ??= new Command(async () => await PerformQuickAction());
+        public ICommand GoToFullView => goToFullView ??= new Command(async () => await PerformGoToFullView());
+        public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
+        internal ToggleControlState State { get => state; set => SetProperty(ref state, value); }
+        public bool CurrentState { get => State.GetState(); set => SetState(value); }
+        public DeviceModel Device { get => State.Device; set => SetDevice(value); }
         public ImageSource ImageSource { get => imageSource; set => SetProperty(ref imageSource, value); }
 
         public ToggleControl(DeviceModel device)
@@ -54,12 +46,8 @@ namespace NetHome.Views.Controls
         {
             if (newValue is null || newValue.Id != Device.Id)
                 return;
-            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-            {
-                Device = newValue;
-                OnPropertyChanged(nameof(CurrentState));
-            });
-            
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() => Device = newValue);
+
         }
 
         private async Task PerformQuickAction()
@@ -85,6 +73,8 @@ namespace NetHome.Views.Controls
 
         private async Task PerformGoToFullView()
         {
+            var route = State.GetPageName() + "?DeviceId=" + Device.Id;
+            await Shell.Current.GoToAsync(route);
         }
 
         private ToggleControlState CreateState(DeviceModel device)
@@ -108,6 +98,7 @@ namespace NetHome.Views.Controls
         {
             state.Device = value;
             OnPropertyChanged(nameof(State));
+            OnPropertyChanged(nameof(CurrentState));
         }
 
         protected void SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)

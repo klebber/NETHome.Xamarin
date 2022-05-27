@@ -31,7 +31,7 @@
     <ContentView.Content>
         <StackLayout Spacing="0" BackgroundColor="{StaticResource Secondary}">
             <StackLayout Spacing="0" VerticalOptions="Start" HeightRequest="80" Orientation="Horizontal">
-                <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                <Frame Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding GoToFullView}" />
                     </Frame.GestureRecognizers>
