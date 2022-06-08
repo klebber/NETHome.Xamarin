@@ -19,9 +19,9 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center">
-                            <Image Source="temperature.png" Aspect="AspectFit" Margin="10" />
-                            <Label Text="Temperature: " VerticalOptions="Center" />
-                            <Label Text="{Binding Temp, StringFormat='{0:N1}°C', FallbackValue='N/A'}" VerticalOptions="Center" />
+                            <Image Source="temperature.png" Margin="10" />
+                            <Label Text="Temperature: " />
+                            <Label Text="{Binding Temp, StringFormat='{0:N1}°C', FallbackValue='N/A'}" />
                         </StackLayout>
                         <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,10,0">
                             <Image Source="humidity.png" Aspect="AspectFit" Margin="10" />

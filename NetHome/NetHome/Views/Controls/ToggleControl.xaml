@@ -12,8 +12,8 @@
                     <TapGestureRecognizer Command="{Binding GoToFullView}" />
                 </Frame.GestureRecognizers>
                 <StackLayout Orientation="Horizontal" Spacing="0">
-                    <Image Source="{Binding ImageSource}" Aspect="AspectFit" Margin="15" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="70"/>
-                    <Label Text="{Binding Device.Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Start"/>
+                    <Image Source="{Binding ImageSource}" Margin="15" WidthRequest="70"/>
+                    <Label Text="{Binding Device.Name}" FontSize="18"/>
                 </StackLayout>
             </Frame>
             <Frame Padding="0" Margin="0,0,10,0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End" WidthRequest="80">
@@ -22,7 +22,7 @@
                 </Frame.GestureRecognizers>
                 <Grid>
                     <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="15" BackgroundColor="Transparent" BorderColor="{StaticResource Neutral}" CornerRadius="100">
-                        <Image Source="power.png" Aspect="AspectFit" Margin="10" xct:IconTintColorEffect.TintColor="{Binding CurrentState, Converter={StaticResource SwitchColorConverter}}" />
+                        <Image Source="power.png" Margin="10" xct:IconTintColorEffect.TintColor="{Binding CurrentState, Converter={StaticResource SwitchColorConverter}}" />
                     </Frame>
                     <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
                                            HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Neutral}" Margin="20"/>

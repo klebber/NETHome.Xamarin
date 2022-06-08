@@ -36,14 +36,14 @@
                         <TapGestureRecognizer Command="{Binding GoToFullView}" />
                     </Frame.GestureRecognizers>
                     <StackLayout Orientation="Horizontal" Spacing="0">
-                        <Image Source="roller_shutter.png" Aspect="AspectFit" Margin="15" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="70"/>
-                        <Label Text="{Binding RollerShutter.Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="Start"/>
+                        <Image Source="roller_shutter.png" Margin="15" WidthRequest="70"/>
+                        <Label Text="{Binding RollerShutter.Name}" FontSize="18"/>
                     </StackLayout>
                 </Frame>
                 <Frame Grid.Column="2" Padding="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="End">
                     <Grid>
                         <Frame IsVisible="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" Padding="0" Margin="20" BackgroundColor="Transparent" >
-                            <Label Text="{Binding RollerShutter.CurrentPercentage, StringFormat='{0}%'}" TextColor="{StaticResource Accent}" VerticalOptions="Center" HorizontalOptions="Center" FontAttributes="Bold" FontSize="30" />
+                            <Label Text="{Binding RollerShutter.CurrentPercentage, StringFormat='{0}%'}" TextColor="{StaticResource Accent}" FontAttributes="Bold" FontSize="30" />
                         </Frame>
                         <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" IsRunning="True" 
                                     HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource Neutral}" Margin="20"/>

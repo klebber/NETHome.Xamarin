@@ -25,6 +25,15 @@
                 <Setter Property="Shell.TabBarTitleColor" Value="White"/>
             </Style>
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+            <Style TargetType="Label" BasedOn="{StaticResource BaseStyle}">
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+            </Style>
+            <Style TargetType="Image" BasedOn="{StaticResource BaseStyle}">
+                <Setter Property="Aspect" Value="AspectFit"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="HorizontalOptions" Value="Center"/>
+            </Style>
 
         </ResourceDictionary>
     </Shell.Resources>
