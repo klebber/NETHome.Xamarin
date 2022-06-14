@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:devices="clr-namespace:NetHome.ViewModels.Devices" 
+      x:DataType="devices:BaseDeviceViewModel"
+      x:Class="NetHome.Views.Components.DeviceInfoTemplate"
+      Padding="10" 
+      BackgroundColor="{DynamicResource Primary}">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="70" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Image Source="{Binding Image}" Margin="15" WidthRequest="70"/>
+    <StackLayout Grid.Column="1">
+        <Label Text="Room:"/>
+        <Label Text="Type:"/>
+        <Label Text="Model:"/>
+    </StackLayout>
+    <StackLayout Grid.Column="2">
+        <Label Text="{Binding DeviceClone.Room}" TextColor="White"/>
+        <Label Text="{Binding DeviceClone.Type}" TextColor="White"/>
+        <Label Text="{Binding DeviceClone.Model}" TextColor="White"/>
+    </StackLayout>
+</Grid>

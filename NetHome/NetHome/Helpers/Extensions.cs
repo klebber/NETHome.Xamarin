@@ -49,5 +49,17 @@ namespace NetHome.Helpers
                 _ => "switch_default.png"
             };
         }
+
+        public static Color GetRGB(this RGBLightModel rgb)
+        {
+            return Color.FromRgb(rgb.Red, rgb.Green, rgb.Blue);
+        }
+        
+        public static void SetRGB(this RGBLightModel rgb, Color color)
+        {
+            rgb.Red = (int)color.R;
+            rgb.Green = (int)color.G;
+            rgb.Blue = (int)color.B;
+        }
     }
 }

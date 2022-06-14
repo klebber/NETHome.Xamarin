@@ -1,12 +1,14 @@
 ﻿using NetHome.Common;
+using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.ViewModels.Devices;
+using NetHome.Views.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -29,6 +31,11 @@ namespace NetHome.Views.DevicePages
         {
             _viewModel.OnAppearing(DeviceId);
             base.OnAppearing();
+        }
+
+        private void TabView_SelectionChanged(object sender, TabSelectionChangedEventArgs e)
+        {
+            _viewModel.TabView_SelectionChanged();
         }
     }
 }

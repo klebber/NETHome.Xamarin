@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:devices="clr-namespace:NetHome.ViewModels.Devices" 
-             xmlns:template="clr-namespace:NetHome.Views.DevicePages"
+             xmlns:components="clr-namespace:NetHome.Views.Components" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:DataType="devices:RgbLightViewModel"
              x:Class="NetHome.Views.DevicePages.RgbLightPage"
              Title="{Binding DeviceClone.Name}"
@@ -11,14 +12,97 @@
              Shell.TabBarIsVisible="False">
     <ContentPage.Content>
         <StackLayout>
-            <template:DeviceInfoTemplate/>
+            <components:DeviceInfoTemplate/>
             <Grid VerticalOptions="FillAndExpand">
                 <BoxView CornerRadius="35,35,0,0" BackgroundColor="{DynamicResource Secondary}" VerticalOptions="FillAndExpand"/>
-                <ScrollView>
-                    <StackLayout>
+                <StackLayout>
+                    <components:PowerButtonWithIndicator
+                        ControlTemplate="{StaticResource PowerButtonWithIndicatorTemplate}"
+                        ClickCommand="{Binding PowerToggleCommand}"
+                        IsWaiting="{Binding IsWaiting}"
+                        CurrentState="{Binding RgbLight.Ison}"/>
+                    <xct:TabView SelectedIndex="{Binding SelectedTab}"
+                        SelectionChanged="TabView_SelectionChanged"
+                        TabStripPlacement="Bottom">
+                        <xct:TabViewItem
+                            Text="White"
+                            TextColor="White"
+                            TextColorSelected="{StaticResource Accent}"
+                            FontSize="16">
+                            <StackLayout Padding="20">
+                                <Label Text="Brightness:" FontSize="18"/>
+                                <Slider x:Name="brightnessSlider" 
+                                    Maximum="100" 
+                                    DragCompletedCommand="{Binding BaseStateChangeCommand}" 
+                                    Value="{Binding RgbLight.Brightness}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                                <Label Text="{Binding Source={x:Reference brightnessSlider}, 
+                                    Path=Value,
+                                    StringFormat='{0:F0}'}" 
+                                   HorizontalOptions="Center"/>
+                            </StackLayout>
+                        </xct:TabViewItem>
 
-                    </StackLayout>
-                </ScrollView>
+                        <xct:TabViewItem
+                            Text="Color"
+                            TextColor="White"
+                            TextColorSelected="{StaticResource Accent}"
+                            FontSize="16">
+                            <StackLayout Padding="20">
+                                <Label Text="Gain:" FontSize="18"/>
+                                <Slider x:Name="gainSlider" 
+                                    Maximum="100" 
+                                    DragCompletedCommand="{Binding BaseStateChangeCommand}" 
+                                    Value="{Binding RgbLight.Gain}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                                <Label Text="{Binding Source={x:Reference gainSlider}, 
+                                    Path=Value,
+                                    StringFormat='{0:F0}'}" 
+                                   HorizontalOptions="Center"/>
+                                <Label Text="Red:" FontSize="18"/>
+                                <Slider x:Name="redSlider" 
+                                    Maximum="255" 
+                                    DragCompletedCommand="{Binding BaseStateChangeCommand}" 
+                                    Value="{Binding RgbLight.Red}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                                <Label Text="{Binding Source={x:Reference redSlider}, 
+                                    Path=Value,
+                                    StringFormat='{0:F0}'}" 
+                                   HorizontalOptions="Center"/>
+                                <Label Text="Green:" FontSize="18"/>
+                                <Slider x:Name="greenSlider" 
+                                    Maximum="255" 
+                                    DragCompletedCommand="{Binding BaseStateChangeCommand}" 
+                                    Value="{Binding RgbLight.Green}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                                <Label Text="{Binding Source={x:Reference greenSlider}, 
+                                    Path=Value,
+                                    StringFormat='{0:F0}'}" 
+                                   HorizontalOptions="Center"/>
+                                <Label Text="Blue:" FontSize="18"/>
+                                <Slider x:Name="blueSlider" 
+                                    Maximum="255" 
+                                    DragCompletedCommand="{Binding BaseStateChangeCommand}" 
+                                    Value="{Binding RgbLight.Blue}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                                <Label Text="{Binding Source={x:Reference blueSlider}, 
+                                    Path=Value,
+                                    StringFormat='{0:F0}'}" 
+                                   HorizontalOptions="Center"/>
+                                <Label Text="White:" FontSize="18"/>
+                                <Slider x:Name="whiteSlider" 
+                                    Maximum="255" 
+                                    DragCompletedCommand="{Binding BaseStateChangeCommand}" 
+                                    Value="{Binding RgbLight.White}"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                                <Label Text="{Binding Source={x:Reference whiteSlider}, 
+                                    Path=Value,
+                                    StringFormat='{0:F0}'}" 
+                                   HorizontalOptions="Center"/>
+                            </StackLayout>
+                        </xct:TabViewItem>
+                    </xct:TabView>
+                </StackLayout>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

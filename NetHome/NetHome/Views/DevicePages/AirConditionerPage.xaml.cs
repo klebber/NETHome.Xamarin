@@ -30,5 +30,15 @@ namespace NetHome.Views.DevicePages
             _viewModel.OnAppearing(DeviceId);
             base.OnAppearing();
         }
+
+        void OnSwitchToggled(object sender, ToggledEventArgs e)
+        {
+            _viewModel.OnSwitchToggled(sender, e);
+        }
+
+        void OnStepperValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            _viewModel.OnStepperValueChanged(sender, e);
+        }
     }
 }

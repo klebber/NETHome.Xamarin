@@ -1,5 +1,8 @@
-﻿using NetHome.Common;
+﻿using System;
+using System.Windows.Input;
+using NetHome.Common;
 using NetHome.Helpers;
+using Xamarin.Forms;
 
 namespace NetHome.ViewModels.Devices
 {
@@ -7,10 +10,14 @@ namespace NetHome.ViewModels.Devices
     {
         public RollerShutterModel RollerShutter { get => (RollerShutterModel)DeviceClone; set => DeviceClone = value; }
 
-        internal void OnAppearing(int deviceId)
+        protected override void SetImage()
         {
-            DeviceClone = _deviceManager.GetDeviceById(deviceId).Clone();
             Image = RollerShutter.GetImage();
+        }
+
+        protected override void OnDeviceChanged()
+        {
+            OnPropertyChanged(nameof(RollerShutter));
         }
     }
 }
