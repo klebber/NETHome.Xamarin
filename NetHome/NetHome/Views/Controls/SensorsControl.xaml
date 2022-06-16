@@ -6,41 +6,42 @@
              x:DataType="controls:SensorsControl"
              x:Class="NetHome.Views.Controls.SensorsControl">
     <ContentView.Content>
-        <controls:CustomCornerFrame BackgroundColor="{StaticResource Secondary}"
-                                    CornerRadius="0,0,25,25"
-                                    Margin="0,0,0,5">
-            <xct:Expander ExpandAnimationEasing="{x:Static Easing.SpringOut}"
+        <Grid>
+            <BoxView CornerRadius="0,0,25,25" BackgroundColor="{DynamicResource Secondary}"/>
+            <Frame Padding="0" BackgroundColor="Transparent" Margin="0,0,0,5">
+                <xct:Expander ExpandAnimationEasing="{x:Static Easing.SpringOut}"
                           CollapseAnimationEasing="{x:Static Easing.SpringIn}">
-                <xct:Expander.Header>
-                    <Grid Margin="0" HeightRequest="50" HorizontalOptions="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center">
-                            <Image Source="temperature.png" Margin="10" />
-                            <Label Text="Temperature: " />
-                            <Label Text="{Binding Temp, StringFormat='{0:N1}°C', FallbackValue='N/A'}" />
-                        </StackLayout>
-                        <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,10,0">
-                            <Image Source="humidity.png" Aspect="AspectFit" Margin="10" />
-                            <Label Text="Humidity: " VerticalOptions="Center" />
-                            <Label Text="{Binding Hum, StringFormat='{0:N0}%', FallbackValue='N/A'}" VerticalOptions="Center" />
-                        </StackLayout>
-                        <Frame Grid.Column="2" BackgroundColor="Transparent" Padding="0" HorizontalOptions="End" VerticalOptions="Center">
-                            <Image Source="down_arrow.png" Aspect="AspectFit" Margin="0" WidthRequest="25">
-                                <Image.Triggers>
-                                    <DataTrigger TargetType="Image" Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}" Value="True">
-                                        <Setter Property="Source" Value="up_arrow.png" />
-                                    </DataTrigger>
-                                </Image.Triggers>
-                            </Image>
-                        </Frame>
-                    </Grid>
-                </xct:Expander.Header>
-                <StackLayout x:Name="Stack" Margin="0" Spacing="0" />
-            </xct:Expander>
-        </controls:CustomCornerFrame>
-  </ContentView.Content>
+                    <xct:Expander.Header>
+                        <Grid Margin="0" HeightRequest="50" HorizontalOptions="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center">
+                                <Image Source="temperature.png" Margin="10" />
+                                <Label Text="Temperature: " />
+                                <Label Text="{Binding Temp, StringFormat='{0:N1}°C', FallbackValue='N/A'}" />
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="0,0,10,0">
+                                <Image Source="humidity.png" Aspect="AspectFit" Margin="10" />
+                                <Label Text="Humidity: " VerticalOptions="Center" />
+                                <Label Text="{Binding Hum, StringFormat='{0:N0}%', FallbackValue='N/A'}" VerticalOptions="Center" />
+                            </StackLayout>
+                            <Frame Grid.Column="2" BackgroundColor="Transparent" Padding="0" HorizontalOptions="End" VerticalOptions="Center">
+                                <Image Source="down_arrow.png" Aspect="AspectFit" Margin="0" WidthRequest="25">
+                                    <Image.Triggers>
+                                        <DataTrigger TargetType="Image" Binding="{Binding Source={RelativeSource AncestorType={x:Type xct:Expander}}, Path=IsExpanded}" Value="True">
+                                            <Setter Property="Source" Value="up_arrow.png" />
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </Frame>
+                        </Grid>
+                    </xct:Expander.Header>
+                    <StackLayout x:Name="Stack" Margin="0" Spacing="0" />
+                </xct:Expander>
+            </Frame>
+        </Grid>
+    </ContentView.Content>
 </ContentView>
