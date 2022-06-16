@@ -11,6 +11,7 @@ namespace NetHome.ViewModels.Devices
         private Command buttonClickCommand;
         public AirConditionerModel AirConditioner { get => (AirConditionerModel)DeviceClone; set => DeviceClone = value; }
         public ICommand ButtonClickCommand => buttonClickCommand ??= new Command(async () => await PerformChangeState(SetPowerValue));
+        public AirConditionerSpeed ACSpeed { get => (AirConditionerSpeed)AirConditioner.FanSpeed; }
 
         private void SetPowerValue()
         {
@@ -35,6 +36,7 @@ namespace NetHome.ViewModels.Devices
         protected override void OnDeviceChanged()
         {
             OnPropertyChanged(nameof(AirConditioner));
+            OnPropertyChanged(nameof(ACSpeed));
         }
     }
 }
