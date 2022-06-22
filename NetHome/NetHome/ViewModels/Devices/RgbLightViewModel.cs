@@ -13,7 +13,7 @@ namespace NetHome.ViewModels.Devices
         private Command powerToggleCommand;
         public RGBLightModel RgbLight { get => (RGBLightModel)DeviceClone; set => DeviceClone = value; }
         public ICommand PowerToggleCommand => powerToggleCommand ??= new Command(async () => await PerformChangeState(SetPowerValue));
-        public int SelectedTab { get => (int)Enum.Parse(typeof(RgbLightMode), RgbLight.Mode); set => RgbLight.Mode = ((RgbLightMode)value).ToString(); }
+        public int? SelectedTab { get => RgbLight is not null ? (int)Enum.Parse(typeof(RgbLightMode), RgbLight.Mode) : null; set => RgbLight.Mode = ((RgbLightMode)value).ToString(); }
 
         protected override void SetImage()
         {

@@ -11,7 +11,7 @@ namespace NetHome.ViewModels.Devices
         private Command buttonClickCommand;
         public AirConditionerModel AirConditioner { get => (AirConditionerModel)DeviceClone; set => DeviceClone = value; }
         public ICommand ButtonClickCommand => buttonClickCommand ??= new Command(async () => await PerformChangeState(SetPowerValue));
-        public AirConditionerSpeed ACSpeed { get => (AirConditionerSpeed)AirConditioner.FanSpeed; }
+        public AirConditionerSpeed? ACSpeed => AirConditioner is not null ? (AirConditionerSpeed?)AirConditioner.FanSpeed : null;
 
         private void SetPowerValue()
         {
