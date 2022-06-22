@@ -29,6 +29,7 @@ namespace NetHome.ViewModels
         private SensorsControl sensorsControl;
         private ObservableCollection<View> deviceControls = new();
         private bool isRefreshing;
+        private bool refreshFlag;
         private Command onRefreshed;
 
         public SensorsControl SensorsControl { get => sensorsControl; set => SetProperty(ref sensorsControl, value); }
@@ -43,6 +44,7 @@ namespace NetHome.ViewModels
             _deviceService = DependencyService.Get<IDeviceService>();
             _deviceManager = DependencyService.Get<IDeviceManager>();
             _websocketService = DependencyService.Get<IWebSocketService>();
+            _deviceManager.ActionPerformed += ActionPerformedCallback;
         }
 
         private void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess)
@@ -57,6 +59,7 @@ namespace NetHome.ViewModels
         {
             _uiSettings.SetStatusBarColor((Color)Application.Current.Resources["Secondary"], false);
             _uiSettings.SetNavBarColor((Color)Application.Current.Resources["TabBarBackground"]);
+            if (refreshFlag) IsRefreshing = true;
         }
 
         internal void OnDisappearing()
@@ -99,6 +102,14 @@ namespace NetHome.ViewModels
             }
         }
 
+        protected void ActionPerformedCallback(object sender, Actions action)
+        {
+            if (action == Actions.Logout)
+            {
+                Device.BeginInvokeOnMainThread(() => DeviceControls.Clear());
+                refreshFlag = true;
+            }
+        }
 
         protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {

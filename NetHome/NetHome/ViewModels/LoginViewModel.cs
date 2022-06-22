@@ -118,7 +118,6 @@ namespace NetHome.ViewModels
             IsLoading = true;
             try
             {
-                Username = UserDataManager.GetUserData().Username;
                 await _userService.Validate();
                 await GoToHomePageAsync();
             }
