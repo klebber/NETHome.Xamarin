@@ -1,17 +1,13 @@
-﻿using NetHome.Helpers;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
+using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NetHome.ViewModels
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : BaseViewModel
     {
         private readonly IUserService _userService;
         private readonly IDeviceManager _deviceManager;

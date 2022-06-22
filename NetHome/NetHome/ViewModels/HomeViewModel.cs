@@ -1,31 +1,28 @@
-﻿using NetHome.Common;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using NetHome.Common;
 using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views.Controls;
 using NetHome.Views.Popups;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NetHome.ViewModels
 {
-    public class HomeViewModel : INotifyPropertyChanged
+    public class HomeViewModel : BaseViewModel
     {
         private readonly IEnvironment _uiSettings;
         private readonly IDeviceService _deviceService;
         private readonly IDeviceManager _deviceManager;
         private readonly IWebSocketService _websocketService;
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private SensorsControl sensorsControl;
         private ObservableCollection<View> deviceControls = new();
         private bool isRefreshing;
@@ -109,18 +106,6 @@ namespace NetHome.ViewModels
                 Device.BeginInvokeOnMainThread(() => DeviceControls.Clear());
                 refreshFlag = true;
             }
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-
-            return false;
         }
 
     }

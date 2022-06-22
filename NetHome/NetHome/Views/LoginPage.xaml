@@ -29,19 +29,19 @@
             <StackLayout Padding="10,0,10,0" VerticalOptions="Center" Grid.Row="1">
                 <Frame CornerRadius="10" Margin="10,5,10,5" Padding="0">
                     <Entry x:Name="UsernameEntry" ReturnType="Next" Placeholder="Username" Text="{Binding Username}"
-                        IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+                        IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
                 </Frame>
                 <Frame CornerRadius="10" Margin="10,5,10,5" Padding="0">
                     <Entry x:Name="PasswordEntry" Placeholder="Password" IsPassword="True" Text="{Binding Password}"
-                        IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
+                        IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
                 </Frame>
                 <Button x:Name="LoginButton" Margin="10,20,10,0" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}" 
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"/>
+                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
                 <Label HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Margin="0,10,0,0">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Dont have an account? " />
-                            <Span Text="Register" TextColor="{Binding IsLoading, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
+                            <Span Text="Register" TextColor="{Binding IsWaiting, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
                                 </Span.GestureRecognizers>
@@ -54,7 +54,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="You can change server address " />
-                            <Span Text="here" TextColor="{Binding IsLoading, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
+                            <Span Text="here" TextColor="{Binding IsWaiting, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
                                 <Span.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding AddressSetupCommand}"/>
                                 </Span.GestureRecognizers>
@@ -64,7 +64,7 @@
                     </Label.FormattedText>
                 </Label>
                 <AbsoluteLayout VerticalOptions="Center" HorizontalOptions="Center">
-                    <ActivityIndicator IsVisible="{Binding IsLoading}" Opacity="100" x:Name="ActivityIndicator" IsRunning="True" 
+                    <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" x:Name="ActivityIndicator" IsRunning="True" 
                                 HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Color="White"/>
                 </AbsoluteLayout>
             </StackLayout>

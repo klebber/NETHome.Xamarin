@@ -1,36 +1,31 @@
-﻿using NetHome.Common;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using NetHome.Common;
 using NetHome.Exceptions;
 using NetHome.Helpers;
 using NetHome.Services;
 using NetHome.Views;
 using NetHome.Views.Popups;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace NetHome.ViewModels
 {
-    public class LoginViewModel : INotifyPropertyChanged
+    public class LoginViewModel : BaseViewModel
     {
         private readonly IUserService _userService;
         private readonly IEnvironment _uiSettings;
         private readonly IWebSocketService _websocketService;
         private string username;
         private string password;
-        private bool isLoading = false;
-        public event PropertyChangedEventHandler PropertyChanged;
         private Command loginCommand;
         private Command registerCommand;
         private Command addressSetupCommand;
 
         public string Username { get => username; set => SetProperty(ref username, value); }
         public string Password { get => password; set => SetProperty(ref password, value); }
-        public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
         public ICommand LoginCommand => loginCommand ??= new Command(async () => await LoginAsync());
         public ICommand RegisterCommand => registerCommand ??= new Command(async () => await RegisterAsync());
         public ICommand AddressSetupCommand => addressSetupCommand ??= new Command(async () => await AddressSetup());
@@ -44,10 +39,10 @@ namespace NetHome.ViewModels
 
         private async Task LoginAsync()
         {
-            IsLoading = true;
+            IsWaiting = true;
             if (!Preferences.ContainsKey("ServerAddress") || string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty)))
             {
-                IsLoading = false;
+                IsWaiting = false;
                 await Shell.Current.ShowPopupAsync(new Alert("No server url!", "You must set an address of the server first.", "Ok", true));
                 return;
             }
@@ -72,13 +67,13 @@ namespace NetHome.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                IsWaiting = false;
             }
         }
 
         private async Task RegisterAsync()
         {
-            if (IsLoading) return;
+            if (IsWaiting) return;
             if (!Preferences.ContainsKey("ServerAddress") || string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty)))
             {
                 await Shell.Current.ShowPopupAsync(new Alert("Server address not set!", "You must set an address of the server first.", "Ok", true));
@@ -89,7 +84,7 @@ namespace NetHome.ViewModels
 
         private async Task AddressSetup()
         {
-            if (IsLoading) return;
+            if (IsWaiting) return;
             string current = UserDataManager.GetUri();
             string result = await Shell.Current.ShowPopupAsync(new Propmpt(
                 "Server Adress", "You can set url address of a server here:",
@@ -115,7 +110,7 @@ namespace NetHome.ViewModels
 
         private async Task ValidateExistingToken()
         {
-            IsLoading = true;
+            IsWaiting = true;
             try
             {
                 await _userService.Validate();
@@ -137,7 +132,7 @@ namespace NetHome.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                IsWaiting = false;
             }
         }
 
@@ -154,18 +149,6 @@ namespace NetHome.ViewModels
             _uiSettings.SetNavBarColor((Color)Application.Current.Resources["Primary"]);
             if (await SecureStorage.GetAsync("AuthorizationToken") is not null)
                 await ValidateExistingToken();
-        }
-
-        private bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-
-            return false;
         }
 
     }

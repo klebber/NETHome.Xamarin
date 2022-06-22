@@ -34,7 +34,8 @@
                                      Maximum="32"
                                      HorizontalOptions="Center"
                                      Value="{Binding AirConditioner.Temperature}"
-                                     ValueChanged="OnStepperValueChanged"/>
+                                     ValueChanged="OnStepperValueChanged"
+                                     IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
                             <Label Grid.Column="2"
                                    Text="{Binding Source={x:Reference tempStepper}, 
                                     Path=Value,
@@ -48,17 +49,19 @@
                                      Maximum="4"
                                      HorizontalOptions="Center"
                                      Value="{Binding AirConditioner.FanSpeed}"
-                                     ValueChanged="OnStepperValueChanged"/>
+                                     ValueChanged="OnStepperValueChanged"
+                                     IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
                             <Label Grid.Row="1" 
                                    Grid.Column="2"
                                    Text="{Binding ACSpeed}" 
                                    HorizontalOptions="Center"/>
                             <Label Grid.Row="2" Text="Swing:"/>
                             <Switch Grid.Row="2" 
-                                      Grid.Column="2" 
-                                      IsToggled="{Binding AirConditioner.Swing}"
-                                      Toggled="OnSwitchToggled"
-                                      HorizontalOptions="Center"/>
+                                    Grid.Column="2" 
+                                    IsToggled="{Binding AirConditioner.Swing}"
+                                    Toggled="OnSwitchToggled"
+                                    HorizontalOptions="Center"
+                                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
                         </Grid>
                     </StackLayout>
                 </ScrollView>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NetHome.Common;
@@ -12,16 +11,14 @@ using Xamarin.Forms;
 
 namespace NetHome.ViewModels.Devices
 {
-    public abstract class BaseDeviceViewModel : BindableObject
+    public abstract class BaseDeviceViewModel : BaseViewModel
     {
         protected readonly IDeviceManager _deviceManager;
         protected readonly IDeviceStateService _deviceStateService;
-        private bool isWaiting;
         private ImageSource image;
         private DeviceModel deviceClone;
         private Command baseChangeState;
 
-        public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
         public ImageSource Image { get => image; set => SetProperty(ref image, value); }
         public DeviceModel DeviceClone { get => deviceClone; set => SetProperty(ref deviceClone, value); }
         public ICommand BaseStateChangeCommand => baseChangeState ??= new Command(async () => await PerformChangeState());
@@ -29,7 +26,6 @@ namespace NetHome.ViewModels.Devices
 
         public BaseDeviceViewModel()
         {
-            IsWaiting = true;
             _deviceManager = DependencyService.Get<IDeviceManager>();
             _deviceStateService = DependencyService.Get<IDeviceStateService>();
             _deviceManager.DeviceChanged += StateChangedCallback;
@@ -84,18 +80,6 @@ namespace NetHome.ViewModels.Devices
             if (newValue is null || newValue.Id != DeviceClone.Id)
                 return;
             Device.BeginInvokeOnMainThread(() => FetchDeviceClone());
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                OnPropertyChanged(propertyName);
-                return true;
-            }
-
-            return false;
         }
     }
 }

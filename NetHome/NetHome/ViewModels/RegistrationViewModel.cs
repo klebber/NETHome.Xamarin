@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Net.Mail;
-using System.Runtime.CompilerServices;
+﻿using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NetHome.Common;
@@ -12,7 +10,7 @@ using Xamarin.Forms;
 
 namespace NetHome.ViewModels
 {
-    public class RegistrationViewModel : INotifyPropertyChanged
+    public class RegistrationViewModel : BaseViewModel
     {
         private readonly IUserService _userService;
         public string Username { get; set; }
@@ -24,10 +22,6 @@ namespace NetHome.ViewModels
         public string Age { get; set; }
         public string Gender { get; set; }
 
-        private bool isLoading = false;
-        public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private Command registerCommand;
 
@@ -39,10 +33,10 @@ namespace NetHome.ViewModels
         }
         private async Task RegisterAsync()
         {
-            IsLoading = true;
+            IsWaiting = true;
             if (!await Validate())
             {
-                IsLoading = false;
+                IsWaiting = false;
                 return;
             }
             RegisterRequest reg = new()
@@ -75,7 +69,7 @@ namespace NetHome.ViewModels
             }
             finally
             {
-                IsLoading = false;
+                IsWaiting = false;
             }
         }
 
@@ -130,18 +124,6 @@ namespace NetHome.ViewModels
             {
                 return false;
             }
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-
-            return false;
         }
     }
 }

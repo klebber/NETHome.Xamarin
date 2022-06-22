@@ -15,15 +15,29 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Margin="10,10,10,10">
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="UsernameEntry" ReturnType="Next" Placeholder="Username" Text="{Binding Username}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="PasswordEntry" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding Password}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="PasswordRepeatEntry" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding PasswordRepeat}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="EmailEntry" ReturnType="Next" Placeholder="Email" Keyboard="Email" Text="{Binding Email}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="FirstNameEntry" ReturnType="Next" Placeholder="First name" Text="{Binding FirstName}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="LastNameEntry" ReturnType="Next" Placeholder="Last name" Text="{Binding LastName}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
-            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10"><Entry x:Name="AgeEntry" ReturnType="Next" Placeholder="Age" Text="{Binding Age}" Keyboard="Numeric" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" /></Frame>
             <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
-                <Picker x:Name="GenderPicker" Title="Gender" SelectedItem="{Binding Gender}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
+                <Entry x:Name="UsernameEntry" ReturnType="Next" Placeholder="Username" Text="{Binding Username}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Entry x:Name="PasswordEntry" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding Password}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Entry x:Name="PasswordRepeatEntry" ReturnType="Next" Placeholder="Password" IsPassword="True" Text="{Binding PasswordRepeat}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Entry x:Name="EmailEntry" ReturnType="Next" Placeholder="Email" Keyboard="Email" Text="{Binding Email}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Entry x:Name="FirstNameEntry" ReturnType="Next" Placeholder="First name" Text="{Binding FirstName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Entry x:Name="LastNameEntry" ReturnType="Next" Placeholder="Last name" Text="{Binding LastName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Entry x:Name="AgeEntry" ReturnType="Next" Placeholder="Age" Text="{Binding Age}" Keyboard="Numeric" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+            </Frame>
+            <Frame Padding="0" Margin="10,5,10,5" CornerRadius="10">
+                <Picker x:Name="GenderPicker" Title="Gender" SelectedItem="{Binding Gender}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}">
                     <Picker.Items>
                         <x:String>Male</x:String>
                         <x:String>Female</x:String>
@@ -34,7 +48,7 @@
             <Button x:Name="RegisterButton" Margin="10,20,10,0" VerticalOptions="Center" Text="Register" Command="{Binding RegisterCommand}"
                         IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}" />
             <AbsoluteLayout VerticalOptions="Center" HorizontalOptions="Center">
-                <ActivityIndicator IsVisible="{Binding IsLoading}" Opacity="100" x:Name="ActivityIndicator" IsRunning="True" 
+                <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" x:Name="ActivityIndicator" IsRunning="True" 
                                    HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Color="White"/>
             </AbsoluteLayout>
         </StackLayout>
