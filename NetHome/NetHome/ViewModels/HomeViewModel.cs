@@ -25,13 +25,11 @@ namespace NetHome.ViewModels
 
         private SensorsControl sensorsControl;
         private ObservableCollection<View> deviceControls = new();
-        private bool isRefreshing;
         private bool refreshFlag;
         private Command onRefreshed;
 
         public SensorsControl SensorsControl { get => sensorsControl; set => SetProperty(ref sensorsControl, value); }
         public ObservableCollection<View> DeviceControls { get => deviceControls; set => SetProperty(ref deviceControls, value); }
-        public bool IsRefreshing { get => isRefreshing; set => SetProperty(ref isRefreshing, value); }
         public ICommand OnRefreshed => onRefreshed ??= new Command(async () => await Task.Run(async () => await PopulateDeviceControls()));
 
         public HomeViewModel()
@@ -56,7 +54,7 @@ namespace NetHome.ViewModels
         {
             _uiSettings.SetStatusBarColor((Color)Application.Current.Resources["Secondary"], false);
             _uiSettings.SetNavBarColor((Color)Application.Current.Resources["TabBarBackground"]);
-            if (refreshFlag) IsRefreshing = true;
+            if (refreshFlag) IsWaiting = true;
         }
 
         internal void OnDisappearing()
@@ -82,7 +80,7 @@ namespace NetHome.ViewModels
                     {
                         DeviceControls.Add(await device.GetView());
                     }
-                    IsRefreshing = false;
+                    IsWaiting = false;
                 });
             }
             catch (BadResponseException e)

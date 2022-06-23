@@ -15,7 +15,7 @@ namespace NetHome.Views
         {
             InitializeComponent();
             BindingContext = _viewModel = new HomeViewModel();
-            _viewModel.IsRefreshing = true;
+            _viewModel.IsWaiting = true;
         }
 
         protected override void OnAppearing()

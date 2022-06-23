@@ -1,8 +1,10 @@
 ﻿using NetHome.Common;
+using NetHome.Exceptions;
 using NetHome.Helpers;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -25,7 +27,6 @@ namespace NetHome.Services
         public async Task Logout()
         {
             UserDataManager.ClearUserData();
-            UserDataManager.ClearAuthorizationToken();
             await _webSocketService.CloseAsync();
         }
 
@@ -43,13 +44,6 @@ namespace NetHome.Services
 
         private async Task<RequestResult> ValidateFunc()
         {
-            if (await UserDataManager.GetAuthorizationToken() is null)
-            {
-                return new RequestResult(false)
-                {
-                    ShowMessage = false
-                };
-            }
             HttpResponseMessage response = await HttpRequestHelper.GetAsync("api/user/validate");
             Stream stream = await response.Content.ReadAsStreamAsync();
             UserModel userData = await JsonSerializer.DeserializeAsync<UserModel>(stream, JsonHelper.GetOptions());
@@ -81,12 +75,20 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                if (e is OperationCanceledException)
+                if (e is OperationCanceledException || e is SocketException)
                 {
                     return new RequestResult(false)
                     {
                         ErrorType = "Server unreachable!",
                         ErrorMessage = "Could not reach server. Check if server is running and if uri is correct!"
+                    };
+                }
+                if (e is ServerAuthorizationException)
+                {
+                    return new RequestResult(false)
+                    {
+                        ErrorType = "Invalid token!",
+                        ErrorMessage = "Your token may have expired. Please try logging in again."
                     };
                 }
                 return new RequestResult(false)

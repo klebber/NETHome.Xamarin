@@ -17,16 +17,16 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                    <ContentView Padding="0,150,0,100" VerticalOptions="FillAndExpand">
-                        <Image Source="nethome_logo.png" VerticalOptions="Center" HeightRequest="64" />
-                    </ContentView>
-                </StackLayout>
-            </StackLayout>
-            <StackLayout Padding="10,0,10,0" VerticalOptions="Center" Grid.Row="1">
+            <ContentView VerticalOptions="FillAndExpand" HorizontalOptions="Fill" Padding="0,150,0,100">
+                <Image Source="nethome_logo.png" VerticalOptions="Center" HeightRequest="64" />
+            </ContentView>
+            <ActivityIndicator Grid.Row="1" Opacity="100" x:Name="ActivityIndicator" IsRunning="{Binding IsWaiting}" 
+                                HorizontalOptions="CenterAndExpand" VerticalOptions="Start" Color="White" Margin="0"/>
+            <StackLayout Padding="10,0,10,50" VerticalOptions="Center" Grid.Row="2" 
+                         IsVisible="{Binding IsUserSaved, Converter={StaticResource InvertedBoolConverter}}">
                 <Frame CornerRadius="10" Margin="10,5,10,5" Padding="0">
                     <Entry x:Name="UsernameEntry" ReturnType="Next" Placeholder="Username" Text="{Binding Username}"
                         IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
@@ -63,10 +63,27 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <AbsoluteLayout VerticalOptions="Center" HorizontalOptions="Center">
-                    <ActivityIndicator IsVisible="{Binding IsWaiting}" Opacity="100" x:Name="ActivityIndicator" IsRunning="True" 
-                                HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Color="White"/>
-                </AbsoluteLayout>
+            </StackLayout>
+            <StackLayout Padding="10,0,10,50" VerticalOptions="Center" Grid.Row="2" 
+                         IsVisible="{Binding IsUserSaved}">
+                <Label HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Text="{Binding ValidateText, FallbackValue='Username not found!'}"/>
+                <Button x:Name="ValidateButton" Margin="10,20,10,0" VerticalOptions="Center" Text="Connect" Command="{Binding ValidateCommand}" 
+                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                <Button x:Name="SwitchAccountButton" Margin="10,20,10,0" VerticalOptions="Center" Text="Switch Account" Command="{Binding SwitchAccountCommand}" 
+                    IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"/>
+                <Label HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Margin="0,10,0,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="You can change server address " />
+                            <Span Text="here" TextColor="{Binding IsWaiting, Converter={StaticResource HyperlinkColor}}" TextDecorations="Underline">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding AddressSetupCommand}"/>
+                                </Span.GestureRecognizers>
+                            </Span>
+                            <Span Text="." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

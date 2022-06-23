@@ -28,16 +28,17 @@ namespace NetHome.Services
             return await SecureStorage.GetAsync("Username");
         }
 
-        public static async Task<bool> UserDataExists()
-        {
-            return userData is not null
-                && !string.IsNullOrWhiteSpace(await SecureStorage.GetAsync("Username"));
-        }
-
         public static void ClearUserData()
         {
             userData = null;
             SecureStorage.Remove("Username");
+            SecureStorage.Remove("AuthorizationToken");
+        }
+
+        public static async Task<bool> IsUserDataSaved()
+        {
+            return !string.IsNullOrWhiteSpace(await SecureStorage.GetAsync("AuthorizationToken"))
+                && !string.IsNullOrWhiteSpace(await SecureStorage.GetAsync("Username"));
         }
 
         public static async Task SetAuthorizationToken(string token)
@@ -48,11 +49,6 @@ namespace NetHome.Services
         public static async Task<string> GetAuthorizationToken()
         {
             return await SecureStorage.GetAsync("AuthorizationToken");
-        }
-        
-        public static void ClearAuthorizationToken()
-        {
-            SecureStorage.Remove("AuthorizationToken");
         }
 
         public static void SetUri(string uri)

@@ -60,7 +60,7 @@ namespace NetHome.ViewModels
                 await Shell.Current.ShowPopupAsync(new Alert("Registration successful!", "You can now use your credentials to login.", "Ok", true));
                 await Shell.Current.GoToAsync("..");
             }
-            else if (response.ShowMessage)
+            else
             {
                 await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
             }

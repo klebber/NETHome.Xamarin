@@ -12,7 +12,7 @@
             <!--<Label Text="NetHome" FontSize="20" TextColor="White" FontAttributes="None" HorizontalOptions="Center" />-->
             <Image Source="nethome_logo.png" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="36" />
         </Frame>
-        <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsRefreshing}">
+        <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsWaiting}">
             <ScrollView>
                 <StackLayout Margin="0">
                     <Frame Content="{Binding SensorsControl}" BackgroundColor="Transparent" Padding="0" Margin="0"/>

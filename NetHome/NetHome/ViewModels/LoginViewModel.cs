@@ -21,14 +21,20 @@ namespace NetHome.ViewModels
         private string username;
         private string password;
         private Command loginCommand;
+        private Command validateCommand;
+        private Command switchAccountCommand;
         private Command registerCommand;
         private Command addressSetupCommand;
 
         public string Username { get => username; set => SetProperty(ref username, value); }
         public string Password { get => password; set => SetProperty(ref password, value); }
         public ICommand LoginCommand => loginCommand ??= new Command(async () => await LoginAsync());
+        public ICommand ValidateCommand => validateCommand ??= new Command(async () => await ValidateAsync());
+        public ICommand SwitchAccountCommand => switchAccountCommand ??= new Command(() => SwitchAccount());
         public ICommand RegisterCommand => registerCommand ??= new Command(async () => await RegisterAsync());
         public ICommand AddressSetupCommand => addressSetupCommand ??= new Command(async () => await AddressSetup());
+        public bool IsUserSaved { get => UserDataManager.IsUserDataSaved().Result; }
+        public string ValidateText => IsUserSaved ? "Logged in as: " + UserDataManager.GetUsername().Result : null;
 
         public LoginViewModel()
         {
@@ -48,26 +54,43 @@ namespace NetHome.ViewModels
                 Password = Password
             });
 
-            IsWaiting = false;
-
             if (response.IsSuccessful)
+            {
                 await GoToHomePageAsync();
-            else if (response.ShowMessage)
+                IsWaiting = false;
+            }
+            else
+            {
+                IsWaiting = false;
                 await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
+            }
         }
 
-        private async Task ValidateExistingToken()
+        private async Task ValidateAsync()
         {
             if (IsWaiting) return;
             IsWaiting = true;
             var response = await _userService.Validate();
 
-            IsWaiting = false;
-
             if (response.IsSuccessful)
+            {
                 await GoToHomePageAsync();
-            else if (response.ShowMessage)
+                IsWaiting = false;
+            }
+            else
+            {
+                IsWaiting = false;
+                if (response.ErrorType.Equals("Invalid token!"))
+                    SwitchAccount();
                 await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
+            }
+        }
+        
+        private void SwitchAccount()
+        {
+            UserDataManager.ClearUserData();
+            OnPropertyChanged(nameof(IsUserSaved));
+            OnPropertyChanged(nameof(ValidateText));
         }
 
         private async Task RegisterAsync()
@@ -114,11 +137,16 @@ namespace NetHome.ViewModels
 
         internal async Task OnAppearing()
         {
+            OnPropertyChanged(nameof(IsUserSaved));
+            OnPropertyChanged(nameof(ValidateText));
             Username = string.Empty;
             Password = string.Empty;
             _uiSettings.SetStatusBarColor((Color)Application.Current.Resources["Primary"], false);
             _uiSettings.SetNavBarColor((Color)Application.Current.Resources["Primary"]);
-            await ValidateExistingToken();
+            if (IsUserSaved)
+            {
+                await ValidateAsync();
+            }
         }
 
     }
