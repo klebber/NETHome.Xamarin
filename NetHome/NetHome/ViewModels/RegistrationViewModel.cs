@@ -33,13 +33,16 @@ namespace NetHome.ViewModels
         }
         private async Task RegisterAsync()
         {
+            if (IsWaiting) return;
             IsWaiting = true;
+
             if (!await Validate())
             {
                 IsWaiting = false;
                 return;
             }
-            RegisterRequest reg = new()
+
+            var response = await _userService.Register(new RegisterRequest()
             {
                 Username = Username,
                 Password = Password,
@@ -48,28 +51,18 @@ namespace NetHome.ViewModels
                 LastName = LastName,
                 Age = int.Parse(Age),
                 Gender = Gender
-            };
-            try
+            });
+
+            IsWaiting = false;
+
+            if (response.IsSuccessful)
             {
-                await _userService.Register(reg);
                 await Shell.Current.ShowPopupAsync(new Alert("Registration successful!", "You can now use your credentials to login.", "Ok", true));
                 await Shell.Current.GoToAsync("..");
             }
-            catch (BadResponseException e)
+            else if (response.ShowMessage)
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (ServerCommunicationException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (ServerAuthorizationException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert("Authorization error", e.Message, "Ok", true));
-            }
-            finally
-            {
-                IsWaiting = false;
+                await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
             }
         }
 

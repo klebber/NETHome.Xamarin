@@ -1,13 +1,14 @@
 ﻿using NetHome.Common;
+using NetHome.Helpers;
 using System.Threading.Tasks;
 
 namespace NetHome.Services
 {
     public interface IUserService
     {
-        Task Login(LoginRequest loginRequest);
-        Task Validate();
-        Task Register(RegisterRequest registerRequest);
+        Task<RequestResult> Login(LoginRequest loginRequest);
+        Task<RequestResult> Validate();
+        Task<RequestResult> Register(RegisterRequest registerRequest);
         Task Logout();
     }
 }

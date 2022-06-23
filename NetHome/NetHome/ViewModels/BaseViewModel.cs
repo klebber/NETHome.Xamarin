@@ -9,11 +9,6 @@ namespace NetHome.ViewModels
 
         public bool IsWaiting { get => isWaiting; set => SetProperty(ref isWaiting, value); }
 
-        public BaseViewModel()
-        {
-            IsWaiting = true;
-        }
-
         protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
         {
             if (!Equals(field, newValue))

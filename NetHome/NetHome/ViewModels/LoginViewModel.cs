@@ -39,44 +39,43 @@ namespace NetHome.ViewModels
 
         private async Task LoginAsync()
         {
+            if (IsWaiting) return;
             IsWaiting = true;
-            if (!Preferences.ContainsKey("ServerAddress") || string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty)))
-            {
-                IsWaiting = false;
-                await Shell.Current.ShowPopupAsync(new Alert("No server url!", "You must set an address of the server first.", "Ok", true));
-                return;
-            }
-            LoginRequest loginRequest = new()
+
+            var response = await _userService.Login(new LoginRequest()
             {
                 Username = Username,
                 Password = Password
-            };
+            });
 
-            try
-            {
-                await _userService.Login(loginRequest);
+            IsWaiting = false;
+
+            if (response.IsSuccessful)
                 await GoToHomePageAsync();
-            }
-            catch (BadResponseException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (ServerCommunicationException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            finally
-            {
-                IsWaiting = false;
-            }
+            else if (response.ShowMessage)
+                await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
+        }
+
+        private async Task ValidateExistingToken()
+        {
+            if (IsWaiting) return;
+            IsWaiting = true;
+            var response = await _userService.Validate();
+
+            IsWaiting = false;
+
+            if (response.IsSuccessful)
+                await GoToHomePageAsync();
+            else if (response.ShowMessage)
+                await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
         }
 
         private async Task RegisterAsync()
         {
             if (IsWaiting) return;
-            if (!Preferences.ContainsKey("ServerAddress") || string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty)))
+            if (!UserDataManager.UriExists())
             {
-                await Shell.Current.ShowPopupAsync(new Alert("Server address not set!", "You must set an address of the server first.", "Ok", true));
+                await Shell.Current.ShowPopupAsync(new Alert("Uri not found!", "Please enter a valid server uri.", "Ok", true));
                 return;
             }
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
@@ -108,34 +107,6 @@ namespace NetHome.ViewModels
             }
         }
 
-        private async Task ValidateExistingToken()
-        {
-            IsWaiting = true;
-            try
-            {
-                await _userService.Validate();
-                await GoToHomePageAsync();
-            }
-            catch (BadResponseException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-                UserDataManager.ClearUserData();
-            }
-            catch (ServerCommunicationException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (ServerAuthorizationException)
-            {
-                UserDataManager.ClearUserData();
-                await Shell.Current.ShowPopupAsync(new Alert("Authorization error", "Your token has expired. Please login again.", "Ok", true));
-            }
-            finally
-            {
-                IsWaiting = false;
-            }
-        }
-
         private async Task GoToHomePageAsync()
         {
             await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
@@ -147,8 +118,7 @@ namespace NetHome.ViewModels
             Password = string.Empty;
             _uiSettings.SetStatusBarColor((Color)Application.Current.Resources["Primary"], false);
             _uiSettings.SetNavBarColor((Color)Application.Current.Resources["Primary"]);
-            if (await SecureStorage.GetAsync("AuthorizationToken") is not null)
-                await ValidateExistingToken();
+            await ValidateExistingToken();
         }
 
     }

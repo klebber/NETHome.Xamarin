@@ -10,24 +10,37 @@ namespace NetHome.Services
 {
     public static class UserDataManager
     {
-        public static void SaveUserData(UserModel user)
+        private static UserModel userData;
+
+        public static async Task SetUserData(UserModel user)
         {
-            Preferences.Remove("UserDataJSON");
-            Preferences.Set("UserDataJSON", JsonSerializer.Serialize(user));
+            userData = user;
+            await SecureStorage.SetAsync("Username", user.Username);
         }
 
         public static UserModel GetUserData()
         {
-            string json = Preferences.Get("UserDataJSON", null);
-            return json is not null ? JsonSerializer.Deserialize<UserModel>(json) : null;
+            return userData;
+        }
+
+        public static async Task<string> GetUsername()
+        {
+            return await SecureStorage.GetAsync("Username");
+        }
+
+        public static async Task<bool> UserDataExists()
+        {
+            return userData is not null
+                && !string.IsNullOrWhiteSpace(await SecureStorage.GetAsync("Username"));
         }
 
         public static void ClearUserData()
         {
-            Preferences.Remove("UserDataJSON");
+            userData = null;
+            SecureStorage.Remove("Username");
         }
 
-        public static async Task SaveAuthorizationToken(string token)
+        public static async Task SetAuthorizationToken(string token)
         {
             await SecureStorage.SetAsync("AuthorizationToken", "Bearer " + token);
         }
@@ -50,6 +63,12 @@ namespace NetHome.Services
         public static string GetUri()
         {
             return Preferences.Get("ServerAddress", string.Empty);
+        }
+
+        public static bool UriExists()
+        {
+            return Preferences.ContainsKey("ServerAddress") 
+                && !string.IsNullOrWhiteSpace(Preferences.Get("ServerAddress", string.Empty));
         }
 
         public static void RemoveUri()
