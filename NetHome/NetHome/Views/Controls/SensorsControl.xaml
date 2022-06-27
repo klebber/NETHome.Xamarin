@@ -8,7 +8,7 @@
     <ContentView.Content>
         <Grid>
             <BoxView CornerRadius="0,0,25,25" BackgroundColor="{DynamicResource Secondary}"/>
-            <Frame Padding="0" BackgroundColor="Transparent" Margin="0,0,0,5">
+            <Frame Padding="0" BackgroundColor="Transparent" Margin="0,0,0,5" IsVisible="{Binding HasDevices}">
                 <xct:Expander ExpandAnimationEasing="{x:Static Easing.SpringOut}"
                           CollapseAnimationEasing="{x:Static Easing.SpringIn}">
                     <xct:Expander.Header>

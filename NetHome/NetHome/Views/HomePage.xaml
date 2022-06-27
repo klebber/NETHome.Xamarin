@@ -16,12 +16,27 @@
             <ScrollView>
                 <StackLayout Margin="0">
                     <Frame Content="{Binding SensorsControl}" BackgroundColor="Transparent" Padding="0" Margin="0"/>
-                    <StackLayout BindableLayout.ItemsSource="{Binding DeviceControls}" BindableLayout.EmptyView="No devices currently available."  Margin="10,0">
+                    <StackLayout BindableLayout.ItemsSource="{Binding DeviceControls}" Margin="10,0">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Frame CornerRadius="15" HasShadow="True" BackgroundColor="Transparent" Content="{Binding}" Padding="0" Margin="0"/>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
+                        <BindableLayout.EmptyView>
+                            <StackLayout>
+                                <Label Text="You don't have access to any devices!"
+                                       Margin="10,25,10,10"
+                                       FontAttributes="Bold"
+                                       FontSize="18"
+                                       HorizontalOptions="Fill"
+                                       HorizontalTextAlignment="Center"/>
+                                <Label Text="Contact owner for more info."
+                                       FontAttributes="Italic"
+                                       FontSize="12"
+                                       HorizontalOptions="Fill"
+                                       HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                        </BindableLayout.EmptyView>
                     </StackLayout>
                 </StackLayout>
             </ScrollView>

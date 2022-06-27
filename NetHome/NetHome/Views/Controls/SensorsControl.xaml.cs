@@ -14,9 +14,11 @@ namespace NetHome.Views.Controls
         private readonly IDeviceManager _deviceManager;
         private string temp;
         private string hum;
+        private bool hasDevices;
 
         public string Temp { get => temp; set => SetProperty(ref temp, value); }
         public string Hum { get => hum; set => SetProperty(ref hum, value); }
+        public bool HasDevices { get => hasDevices; set { SetProperty(ref hasDevices, value); OnPropertyChanged(nameof(HasDevices)); } }
 
 
         public SensorsControl()
@@ -45,6 +47,9 @@ namespace NetHome.Views.Controls
 
         private void SetValues()
         {
+            HasDevices = _deviceManager.GetSensors().Count != 0;
+            if (!HasDevices)
+                return;
             List<DeviceModel> thsensors = _deviceManager.GetSensors().Where(s => s.GetType().Name == nameof(THSensorModel)).ToList();
             if (thsensors.Count > 0)
             {

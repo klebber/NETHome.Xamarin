@@ -68,33 +68,29 @@ namespace NetHome.ViewModels
 
         private async Task PopulateDeviceControls()
         {
-            try
+            var response = await _deviceService.FetchAllDevices();
+            if (!response.IsSuccessful)
             {
-                await _deviceService.FetchAllDevices();
-                ICollection<DeviceModel> devices = _deviceManager.GetNonSensorDevices();
-                MainThread.BeginInvokeOnMainThread(async () =>
+                IsWaiting = false;
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     SensorsControl = new SensorsControl();
                     DeviceControls.Clear();
-                    foreach (DeviceModel device in devices)
-                    {
-                        DeviceControls.Add(await device.GetView());
-                    }
-                    IsWaiting = false;
                 });
+                await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
+                return;
             }
-            catch (BadResponseException e)
+            var devices = _deviceManager.GetNonSensorDevices();
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (ServerCommunicationException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert(e.Reason, e.Message, "Ok", true));
-            }
-            catch (ServerAuthorizationException e)
-            {
-                await Shell.Current.ShowPopupAsync(new Alert("Authorization error", e.Message, "Ok", true));
-            }
+                SensorsControl = new SensorsControl();
+                DeviceControls.Clear();
+                foreach (DeviceModel device in devices)
+                {
+                    DeviceControls.Add(await device.GetView());
+                }
+                IsWaiting = false;
+            });
         }
 
         protected void ActionPerformedCallback(object sender, Actions action)

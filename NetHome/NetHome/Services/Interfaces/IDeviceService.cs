@@ -1,4 +1,5 @@
 ﻿using NetHome.Common;
+using NetHome.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,6 @@ namespace NetHome.Services
 {
     public interface IDeviceService
     {
-        Task FetchAllDevices();
+        Task<RequestResult> FetchAllDevices();
     }
 }
