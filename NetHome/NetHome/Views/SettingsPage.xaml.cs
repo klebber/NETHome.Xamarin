@@ -21,6 +21,12 @@ namespace NetHome.Views
             BindingContext = _viewModel = new SettingsViewModel();
         }
 
+        protected override void OnAppearing()
+        {
+            _viewModel.OnAppearing();
+            base.OnAppearing();
+        }
+
         protected override bool OnBackButtonPressed()
         {
             Shell.Current.GoToAsync($"//{nameof(HomePage)}");

@@ -68,6 +68,7 @@ namespace NetHome.ViewModels
 
         private async Task PopulateDeviceControls()
         {
+            refreshFlag = false;
             var response = await _deviceService.FetchAllDevices();
             if (!response.IsSuccessful)
             {

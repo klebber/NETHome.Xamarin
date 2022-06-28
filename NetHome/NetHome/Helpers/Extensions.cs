@@ -8,10 +8,10 @@ namespace NetHome.Helpers
 {
     public static class Extensions
     {
-        public static DeviceModel Clone(this DeviceModel model)
+        public static T Clone<T>(this T model)
         {
             var json = JsonSerializer.SerializeToDocument(model, JsonHelper.GetOptions());
-            return (DeviceModel)JsonSerializer.Deserialize(json, typeof(DeviceModel), JsonHelper.GetOptions());
+            return (T)JsonSerializer.Deserialize(json, typeof(T), JsonHelper.GetOptions());
         }
 
         public static async Task<View> GetView(this DeviceModel device)

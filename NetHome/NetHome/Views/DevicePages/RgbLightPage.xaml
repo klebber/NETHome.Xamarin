@@ -7,8 +7,6 @@
              x:DataType="devices:RgbLightViewModel"
              x:Class="NetHome.Views.DevicePages.RgbLightPage"
              Title="{Binding DeviceClone.Name}"
-             Shell.ForegroundColor="{DynamicResource Accent}"
-             Shell.BackgroundColor="{DynamicResource Secondary}"
              Shell.TabBarIsVisible="False">
     <ContentPage.Content>
         <StackLayout>

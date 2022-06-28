@@ -6,8 +6,6 @@
              x:DataType="devices:AirConditionerViewModel"
              x:Class="NetHome.Views.DevicePages.AirConditionerPage"
              Title="{Binding DeviceClone.Name}"
-             Shell.ForegroundColor="{DynamicResource Accent}"
-             Shell.BackgroundColor="{DynamicResource Secondary}"
              Shell.TabBarIsVisible="False">
     <ContentPage.Content>
         <StackLayout>

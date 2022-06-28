@@ -9,6 +9,7 @@ namespace NetHome.Services
         Task<RequestResult> Login(LoginRequest loginRequest);
         Task<RequestResult> Validate();
         Task<RequestResult> Register(RegisterRequest registerRequest);
+        Task<RequestResult> Update(UserModel user);
         Task Logout();
     }
 }

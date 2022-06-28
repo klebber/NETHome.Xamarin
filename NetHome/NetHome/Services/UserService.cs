@@ -24,6 +24,7 @@ namespace NetHome.Services
         public async Task<RequestResult> Login(LoginRequest loginRequest) => await ExecuteRequest(() => LoginFunc(loginRequest));
         public async Task<RequestResult> Validate() => await ExecuteRequest(() => ValidateFunc());
         public async Task<RequestResult> Register(RegisterRequest registerRequest) => await ExecuteRequest(() => RegisterFunc(registerRequest));
+        public async Task<RequestResult> Update(UserModel user) => await ExecuteRequest(() => UpdateFunc(user));
         public async Task Logout()
         {
             UserDataManager.ClearUserData();
@@ -56,6 +57,16 @@ namespace NetHome.Services
         {
             var json = JsonSerializer.Serialize(registerRequest);
             await HttpRequestHelper.PostUnauthorizedAsync("api/user/register", json);
+            return new RequestResult(true);
+        }
+
+        public async Task<RequestResult> UpdateFunc(UserModel user)
+        {
+            string json = JsonSerializer.Serialize(user);
+            HttpResponseMessage response = await HttpRequestHelper.PostAsync("api/user/update", json);
+            Stream stream = await response.Content.ReadAsStreamAsync();
+            UserModel userModel = await JsonSerializer.DeserializeAsync<UserModel>(stream, JsonHelper.GetOptions());
+            await UserDataManager.SetUserData(userModel);
             return new RequestResult(true);
         }
 
