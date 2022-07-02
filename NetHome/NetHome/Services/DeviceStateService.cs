@@ -21,7 +21,7 @@ namespace NetHome.Services
             var response = await HttpRequestHelper.PostAsync("api/state/change", json);
             if (!response.IsSuccessStatusCode)
             {
-                throw new BadResponseException(response);
+                throw BadResponseException.Create(response);
             }
             var stream = await response.Content.ReadAsStreamAsync();
             var newValue = await JsonSerializer.DeserializeAsync<DeviceModel>(stream, JsonHelper.GetOptions());

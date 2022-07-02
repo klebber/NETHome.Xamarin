@@ -55,7 +55,7 @@ namespace NetHome.Helpers
             {
                 HttpStatusCode.OK => response,
                 HttpStatusCode.Unauthorized => throw new ServerAuthorizationException("Server returned error 401:Unauthorized!"),
-                _ => throw new BadResponseException(response)
+                _ => throw BadResponseException.Create(response)
             };
         }
     }
