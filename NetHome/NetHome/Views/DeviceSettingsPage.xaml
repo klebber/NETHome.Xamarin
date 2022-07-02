@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:NetHome.ViewModels" xmlns:common="clr-namespace:NetHome.Common;assembly=NetHome.Common"
+             x:DataType="viewmodels:DeviceSettingsViewModel"
+             x:Class="NetHome.Views.DeviceSettingsPage"
+             Title="Device Settings"
+             x:Name="Page"
+             Shell.TabBarIsVisible="False">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="add_icon.png"
+                     Order="Primary"
+                     Priority="0"
+                     Command="{Binding AddCommand}"/>
+        <ToolbarItem Text="Manage Rooms"
+                     Order="Secondary"
+                     Priority="0"
+                     Command="{Binding AddCommand}"/>
+        <ToolbarItem Text="Manage Device Types"
+                     Order="Secondary"
+                     Priority="0"
+                     Command="{Binding AddCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsWaiting}">
+            <CollectionView ItemsSource="{Binding Devices}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="common:DeviceModel">
+                        <StackLayout>
+                            <Frame Padding="0" Margin="30,0" HeightRequest="50" BackgroundColor="{StaticResource Primary}">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.GoToDeviceInfo, Source={x:Reference Page}}"
+                                                          CommandParameter="{Binding Id}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid ColumnDefinitions="*,2,*">
+                                    <Label Text="{Binding Name}" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="|" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Grid.Column="2" Text="{Binding Room}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Frame>
+                            <BoxView HeightRequest="1" BackgroundColor="{StaticResource Neutral}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                             ItemSpacing="0"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.EmptyView>
+                    <StackLayout>
+                        <Label Text="There are no devices yet!"
+                           Margin="10,25,10,10"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center"/>
+                        <Label Text="You can add a device by clicking + sign."
+                           FontAttributes="Italic"
+                           FontSize="12"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

@@ -22,6 +22,8 @@ namespace NetHome
             Routing.RegisterRoute(nameof(RollerShutterPage), typeof(RollerShutterPage));
             Routing.RegisterRoute(nameof(SmartSwitchPage), typeof(SmartSwitchPage));
             Routing.RegisterRoute(nameof(AccountInfoPage), typeof(AccountInfoPage));
+            Routing.RegisterRoute(nameof(DeviceSettingsPage), typeof(DeviceSettingsPage));
+            Routing.RegisterRoute(nameof(DeviceInfoPage), typeof(DeviceInfoPage));
         }
     }
 }

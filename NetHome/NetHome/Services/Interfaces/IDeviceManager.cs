@@ -11,6 +11,7 @@ namespace NetHome.Services
         event EventHandler<DeviceModel> DeviceChanged;
         event EventHandler<Actions> ActionPerformed;
         void SetList(ICollection<DeviceModel> list);
+        List<DeviceModel> GetAllDevices();
         void Updated(DeviceModel device);
         void PerformAction(Actions action);
         List<DeviceModel> GetSensors();

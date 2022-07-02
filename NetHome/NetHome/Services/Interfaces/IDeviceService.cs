@@ -9,6 +9,12 @@ namespace NetHome.Services
 {
     public interface IDeviceService
     {
-        Task<RequestResult> FetchAllDevices();
+        Task<RequestResultPayload<List<DeviceModel>>> GetAllDevices();
+        Task<RequestResultPayload<DeviceModel>> AddDevice(DevicePayload device);
+        Task<RequestResultPayload<DeviceModel>> UpdateDevice(DevicePayload device);
+        Task<RequestResult> DeleteDevice(DeviceModel device);
+        Task<RequestResultPayload<List<string>>> GetAllRooms();
+        Task<RequestResultPayload<List<string>>> GetAllDeviceTypes();
+        Task<RequestResultPayload<DevicePayload>> GetDevicePayload(int deviceId);
     }
 }

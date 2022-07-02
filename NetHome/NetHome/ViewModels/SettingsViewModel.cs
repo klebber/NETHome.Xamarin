@@ -54,6 +54,8 @@ namespace NetHome.ViewModels
 
         private async Task PerformGoToDeviceSettingsPage()
         {
+            var route = $"{nameof(DeviceSettingsPage)}";
+            await Shell.Current.GoToAsync(route);
         }
 
         private async Task PerformGoToUserSettingsPage()

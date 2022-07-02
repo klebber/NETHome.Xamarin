@@ -69,5 +69,10 @@ namespace NetHome.Services
         {
             _devices.Clear();
         }
+
+        public List<DeviceModel> GetAllDevices()
+        {
+            return _devices;
+        }
     }
 }

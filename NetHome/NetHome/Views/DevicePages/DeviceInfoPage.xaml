@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:NetHome.ViewModels.Devices"
+             x:DataType="viewmodels:DeviceInfoViewModel"
+             x:Class="NetHome.Views.DevicePages.DeviceInfoPage"
+             Title="Device Info"
+             Shell.TabBarIsVisible="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="DeviceInfoTemplate">
+                <StackLayout Margin="30,20">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="ID" FontSize="18"/>
+                        <Label Text="{Binding Payload.Device.Id}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" WidthRequest="160" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Name" FontSize="18"/>
+                        <Label Text="{Binding Payload.Device.Name}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Model" FontSize="18"/>
+                        <Label Text="{Binding Payload.Device.Model}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Room" FontSize="18"/>
+                        <Label Text="{Binding Payload.Device.Room}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Type" FontSize="18"/>
+                        <Label Text="{Binding Payload.Device.Type}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Ip Address" FontSize="18"/>
+                        <Label Text="{Binding Payload.IpAdress}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device Username" FontSize="18"/>
+                        <Label Text="{Binding Payload.DeviceUsername}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device Password" FontSize="18"/>
+                        <Label Text="{Binding Payload.DevicePassword}" TextColor="{StaticResource White}" 
+                               HorizontalOptions="EndAndExpand" FontSize="18" HorizontalTextAlignment="End"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="DeviceEditTemplate">
+                <StackLayout Margin="30,20">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Name" FontSize="18" WidthRequest="110"/>
+                        <Entry ReturnType="Next" Placeholder="Name" HorizontalOptions="FillAndExpand" 
+                           Text="{Binding Payload.Device.Name}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Model" FontSize="18" WidthRequest="110"/>
+                        <Entry ReturnType="Next" Placeholder="Model" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.Device.Model}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Room" FontSize="18" WidthRequest="110"/>
+                        <Picker Title="Room" HorizontalOptions="FillAndExpand" 
+                            SelectedItem="{Binding Payload.Device.Room, Mode=TwoWay}" 
+                            IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"
+                            ItemsSource="{Binding Rooms}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Specific Type" FontSize="18" WidthRequest="110"/>
+                        <Picker Title="Type" HorizontalOptions="FillAndExpand"
+                            SelectedItem="{Binding Payload.Device.Type, Mode=TwoWay}"
+                            IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"
+                            ItemsSource="{Binding Types}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Ip Address" FontSize="18" WidthRequest="110"/>
+                        <Entry ReturnType="Next" Placeholder="Ip Address" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.IpAdress}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device Username" FontSize="18" WidthRequest="110"/>
+                        <Entry ReturnType="Next" Placeholder="Username" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.DeviceUsername}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device Password" FontSize="18" WidthRequest="110"/>
+                        <Entry ReturnType="Next" Placeholder="Password" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.DevicePassword}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Margin="5,20" Text="Apply" 
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding ApplyChangesCommand}" CornerRadius="10" 
+                            BackgroundColor="{StaticResource Accent}" />
+                        <Button Margin="5,20" Text="Cancel" 
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding CancelEditingCommand}" CornerRadius="10" 
+                            BackgroundColor="{StaticResource Warning}" />
+                    </StackLayout>
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="DeviceAddTemplate">
+                <StackLayout Margin="30,20">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device General Type" FontSize="18" WidthRequest="100"/>
+                        <Picker Title="General Type" HorizontalOptions="FillAndExpand" 
+                                SelectedItem="{Binding NewGeneralType}">
+                            <Picker.Items>
+                                <x:String>AirConditioner</x:String>
+                                <x:String>DWSensor</x:String>
+                                <x:String>RollerShutter</x:String>
+                                <x:String>SmartSwitch</x:String>
+                                <x:String>THSensor</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Name" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Name" HorizontalOptions="FillAndExpand" 
+                           Text="{Binding NewName}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Model" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Model" HorizontalOptions="FillAndExpand"
+                           Text="{Binding NewModel}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Room" FontSize="18" WidthRequest="100"/>
+                        <Picker Title="Room" HorizontalOptions="FillAndExpand" 
+                            SelectedItem="{Binding NewRoom, Mode=TwoWay}" 
+                            IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"
+                            ItemsSource="{Binding Rooms}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Specific Type" FontSize="18" WidthRequest="100"/>
+                        <Picker Title="Type" HorizontalOptions="FillAndExpand"
+                            SelectedItem="{Binding NewType, Mode=TwoWay}"
+                            IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}"
+                            ItemsSource="{Binding Types}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Ip Address" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Ip Address" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.IpAdress}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device Username" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Username" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.DeviceUsername}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Device Password" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Password" HorizontalOptions="FillAndExpand"
+                           Text="{Binding Payload.DevicePassword}" 
+                           IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Margin="5,20" Text="Add" 
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding AddDeviceCommand}" CornerRadius="10" 
+                            BackgroundColor="{StaticResource Accent}" />
+                        <Button Margin="5,20" Text="Cancel" 
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding CancelAddingCommand}" CornerRadius="10" 
+                            BackgroundColor="{StaticResource Warning}" />
+                    </StackLayout>
+                </StackLayout>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Frame x:Name="PageFrame" Padding="0" BackgroundColor="{StaticResource Primary}"/>
+    </ContentPage.Content>
+</ContentPage>

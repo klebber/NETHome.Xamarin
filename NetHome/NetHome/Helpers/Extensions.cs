@@ -8,6 +8,12 @@ namespace NetHome.Helpers
 {
     public static class Extensions
     {
+        public static T GetValue<T>(this ResourceDictionary dictionary, string key)
+        {
+            dictionary.TryGetValue(key, out object value);
+            return (T)value;
+        }
+
         public static T Clone<T>(this T model)
         {
             var json = JsonSerializer.SerializeToDocument(model, JsonHelper.GetOptions());
