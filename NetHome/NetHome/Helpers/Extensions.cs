@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using NetHome.Common;
+using NetHome.Exceptions;
 using NetHome.Views.Controls;
 using Xamarin.Forms;
 
@@ -8,6 +10,11 @@ namespace NetHome.Helpers
 {
     public static class Extensions
     {
+        public static string GetErrorType(this Exception e)
+        {
+            return e is BadResponseException exception ? exception.Reason : e.GetType().Name;
+        }
+
         public static T GetValue<T>(this ResourceDictionary dictionary, string key)
         {
             dictionary.TryGetValue(key, out object value);

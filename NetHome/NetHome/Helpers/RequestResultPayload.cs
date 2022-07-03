@@ -14,5 +14,6 @@ namespace NetHome.Helpers
         {
             Paylaod = payload;
         }
+        public RequestResultPayload(Exception e) : base(e) { }
     }
 }

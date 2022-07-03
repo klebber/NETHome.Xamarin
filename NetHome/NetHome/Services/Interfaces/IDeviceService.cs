@@ -16,5 +16,9 @@ namespace NetHome.Services
         Task<RequestResultPayload<List<string>>> GetAllRooms();
         Task<RequestResultPayload<List<string>>> GetAllDeviceTypes();
         Task<RequestResultPayload<DevicePayload>> GetDevicePayload(int deviceId);
+        Task<RequestResult> AddRoom(string roomName);
+        Task<RequestResult> DeleteRoom(string roomName);
+        Task<RequestResult> AddType(string typeName);
+        Task<RequestResult> DeleteType(string typeName);
     }
 }

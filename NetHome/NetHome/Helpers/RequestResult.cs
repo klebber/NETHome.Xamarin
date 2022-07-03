@@ -14,5 +14,12 @@ namespace NetHome.Helpers
         {
             IsSuccessful = isSuccessful;
         }
+        
+        public RequestResult(Exception e)
+        {
+            IsSuccessful = false;
+            ErrorType = e.GetErrorType();
+            ErrorMessage = e.Message;
+        }
     }
 }

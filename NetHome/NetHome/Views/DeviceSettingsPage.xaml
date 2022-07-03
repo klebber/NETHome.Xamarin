@@ -12,14 +12,22 @@
                      Order="Primary"
                      Priority="0"
                      Command="{Binding AddCommand}"/>
-        <ToolbarItem Text="Manage Rooms"
+        <ToolbarItem Text="Add Room"
                      Order="Secondary"
                      Priority="0"
-                     Command="{Binding AddCommand}"/>
-        <ToolbarItem Text="Manage Device Types"
+                     Command="{Binding AddRoomCommand}"/>
+        <ToolbarItem Text="Delete Room"
                      Order="Secondary"
                      Priority="0"
-                     Command="{Binding AddCommand}"/>
+                     Command="{Binding DeleteRoomCommand}"/>
+        <ToolbarItem Text="Add Device Type"
+                     Order="Secondary"
+                     Priority="0"
+                     Command="{Binding AddTypeCommand}"/>
+        <ToolbarItem Text="Remove Device Type"
+                     Order="Secondary"
+                     Priority="0"
+                     Command="{Binding DeleteTypeCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsWaiting}">

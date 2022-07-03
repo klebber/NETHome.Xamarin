@@ -31,11 +31,7 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<List<DeviceModel>>(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResultPayload<List<DeviceModel>>(e);
             }
         }
 
@@ -51,11 +47,7 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<DeviceModel>(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResultPayload<DeviceModel>(e);
             }
         }
 
@@ -72,17 +64,12 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<DeviceModel>(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResultPayload<DeviceModel>(e);
             }
         }
 
         public async Task<RequestResult> DeleteDevice(DeviceModel device)
         {
-            
             try
             {
                 var json = JsonSerializer.Serialize(device, JsonHelper.GetOptions());
@@ -91,11 +78,7 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResult(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResult(e);
             }
         }
 
@@ -110,11 +93,7 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<List<string>>(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResultPayload<List<string>>(e);
             }
         }
 
@@ -129,11 +108,7 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<List<string>>(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResultPayload<List<string>>(e);
             }
         }
 
@@ -148,11 +123,63 @@ namespace NetHome.Services
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<DevicePayload>(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResultPayload<DevicePayload>(e);
+            }
+        }
+
+        public async Task<RequestResult> AddRoom(string roomName)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(roomName, JsonHelper.GetOptions());
+                await HttpRequestHelper.PostAsync("api/devices/addroom", json);
+                return new RequestResult(true);
+            }
+            catch (Exception e)
+            {
+                return new RequestResult(e);
+            }
+        }
+
+        public async Task<RequestResult> DeleteRoom(string roomName)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(roomName, JsonHelper.GetOptions());
+                await HttpRequestHelper.PostAsync("api/devices/deleteroom", json);
+                return new RequestResult(true);
+            }
+            catch (Exception e)
+            {
+                return new RequestResult(e);
+            }
+        }
+
+        public async Task<RequestResult> AddType(string typeName)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(typeName, JsonHelper.GetOptions());
+                await HttpRequestHelper.PostAsync("api/devices/addtype", json);
+                return new RequestResult(true);
+            }
+            catch (Exception e)
+            {
+                return new RequestResult(e);
+            }
+        }
+
+        public async Task<RequestResult> DeleteType(string typeName)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(typeName, JsonHelper.GetOptions());
+                await HttpRequestHelper.PostAsync("api/devices/deletetype", json);
+                return new RequestResult(true);
+            }
+            catch (Exception e)
+            {
+                return new RequestResult(e);
             }
         }
     }
