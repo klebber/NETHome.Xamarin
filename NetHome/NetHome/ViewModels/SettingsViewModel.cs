@@ -60,6 +60,8 @@ namespace NetHome.ViewModels
 
         private async Task PerformGoToUserSettingsPage()
         {
+            var route = $"{nameof(UserSettingsPage)}";
+            await Shell.Current.GoToAsync(route);
         }
     }
 }

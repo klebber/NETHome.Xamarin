@@ -12,6 +12,7 @@ using NetHome.Views.Popups;
 using Xamarin.CommunityToolkit.Extensions;
 using NetHome.Views;
 using NetHome.Views.DevicePages;
+using Xamarin.Essentials;
 
 namespace NetHome.ViewModels
 {
@@ -29,7 +30,7 @@ namespace NetHome.ViewModels
         private Command deleteTypeCommand;
 
         public ObservableCollection<DeviceModel> Devices { get => devices; set => SetProperty(ref devices, value); }
-        public ICommand OnRefreshed => onRefreshed ??= new Command(PerformOnRefreshed);
+        public ICommand OnRefreshed => onRefreshed ??= new Command(async () => await PerformOnRefreshed());
         public ICommand GoToDeviceInfo => goToDeviceInfo ??= new Command<int>(async (param) => await PerformGoToDeviceInfo(param));
         public ICommand AddCommand => addCommand ??= new Command(async () => await Add());
         public ICommand AddRoomCommand => addRoomCommand ??= new Command(async () => await AddRoom());
@@ -65,8 +66,16 @@ namespace NetHome.ViewModels
             IsWaiting = false;
         }
 
-        private void PerformOnRefreshed()
+        private async Task PerformOnRefreshed()
         {
+            var response = await _deviceService.GetAllDevices();
+            if (!response.IsSuccessful)
+            {
+                IsWaiting = false;
+                Devices.Clear();
+                await Shell.Current.ShowPopupAsync(new Alert(response.ErrorType, response.ErrorMessage, "Ok", true));
+                return;
+            }
             SetDevices();
         }
 

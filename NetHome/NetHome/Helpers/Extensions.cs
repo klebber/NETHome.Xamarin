@@ -10,6 +10,11 @@ namespace NetHome.Helpers
 {
     public static class Extensions
     {
+        public static bool IsAdminOrOwner(this UserModel user)
+        {
+            return user != null && (user.Roles.Contains("Owner") || user.Roles.Contains("Admin"));
+        }
+
         public static string GetErrorType(this Exception e)
         {
             return e is BadResponseException exception ? exception.Reason : e.GetType().Name;

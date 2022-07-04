@@ -42,7 +42,7 @@
                 </StackLayout>
             </Frame>
             <Frame Grid.Row="3" BackgroundColor="{StaticResource Primary}" HasShadow="False" 
-                   HeightRequest="20" Padding="0" CornerRadius="10" Margin="5,0" IsVisible="{Binding IsAdmin}">
+                   HeightRequest="20" Padding="0" CornerRadius="10" Margin="5,0" IsVisible="{Binding IsOwner}">
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding GoToUserSettingsPage}" />
                 </Frame.GestureRecognizers>

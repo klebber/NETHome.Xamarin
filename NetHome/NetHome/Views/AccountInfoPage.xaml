@@ -1,114 +1,196 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:viewmodels="clr-namespace:NetHome.ViewModels"
+             xmlns:viewmodels="clr-namespace:NetHome.ViewModels" xmlns:common="clr-namespace:NetHome.Common;assembly=NetHome.Common"
              x:DataType="viewmodels:AccountInfoViewModel"
              x:Class="NetHome.Views.AccountInfoPage"
+             x:Name="Page"
              Title="Account Info"
              Shell.TabBarIsVisible="False">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="edit_icon.png"
-                     Order="Primary"
-                     Priority="0"
-                     Command="{Binding EditCommand}"
-                     IsEnabled="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}"/>
-    </ContentPage.ToolbarItems>
-    <ContentPage.Content>
-        <StackLayout>
-            <!--#region Info -->
-            <StackLayout Margin="30,20" IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="User ID" FontSize="18"/>
-                    <Label Text="{Binding User.Id}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" WidthRequest="160"/>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="UserInfoTemplate">
+                <StackLayout Margin="30,20">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="User ID" FontSize="18"/>
+                        <Label Text="{Binding User.Id}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" WidthRequest="160"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Username" FontSize="18"/>
+                        <Label Text="{Binding User.Username}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Email" FontSize="18"/>
+                        <Label Text="{Binding User.Email}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="First Name" FontSize="18"/>
+                        <Label Text="{Binding User.FirstName}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Last Name" FontSize="18"/>
+                        <Label Text="{Binding User.LastName}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Age" FontSize="18"/>
+                        <Label Text="{Binding User.Age}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Gender" FontSize="18"/>
+                        <Label Text="{Binding User.Gender}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Registred At" FontSize="18"/>
+                        <Label Text="{Binding User.DateOfRegistration, StringFormat='{}{0:MMMM dd, yyyy}'}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Roles" FontSize="18"/>
+                        <Label Text="{Binding RoleList}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="White"/>
                 </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Username" FontSize="18"/>
-                    <Label Text="{Binding User.Username}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Email" FontSize="18"/>
-                    <Label Text="{Binding User.Email}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="First Name" FontSize="18"/>
-                    <Label Text="{Binding User.FirstName}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Last Name" FontSize="18"/>
-                    <Label Text="{Binding User.LastName}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Age" FontSize="18"/>
-                    <Label Text="{Binding User.Age}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Gender" FontSize="18"/>
-                    <Label Text="{Binding User.Gender}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Registred At" FontSize="18"/>
-                    <Label Text="{Binding User.DateOfRegistration, StringFormat='{}{0:MMMM dd, yyyy}'}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Roles" FontSize="18"/>
-                    <Label Text="{Binding RoleList}" TextColor="{StaticResource White}" HorizontalOptions="EndAndExpand" FontSize="18"/>
-                </StackLayout>
-                <BoxView HeightRequest="1" BackgroundColor="White"/>
-            </StackLayout>
-            <!--#endregion-->
-
-            <!--#region Edit -->
-            <StackLayout Margin="30,20" IsVisible="{Binding IsEditing}">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Username" FontSize="18" WidthRequest="100"/>
-                    <Entry ReturnType="Next" Placeholder="Username" HorizontalOptions="FillAndExpand" Text="{Binding User.Username}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Email" FontSize="18" WidthRequest="100"/>
-                    <Entry ReturnType="Next" Placeholder="Email" HorizontalOptions="FillAndExpand" Keyboard="Email" Text="{Binding User.Email}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="First Name" FontSize="18" WidthRequest="100"/>
-                    <Entry ReturnType="Next" Placeholder="First Name" HorizontalOptions="FillAndExpand" Text="{Binding User.FirstName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Last Name" FontSize="18" WidthRequest="100"/>
-                    <Entry ReturnType="Next" Placeholder="Last Name" HorizontalOptions="FillAndExpand" Text="{Binding User.LastName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Age" FontSize="18" WidthRequest="100"/>
-                    <Entry ReturnType="Next" Placeholder="Age" HorizontalOptions="FillAndExpand" Text="{Binding User.Age}" Keyboard="Numeric" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Gender" FontSize="18" WidthRequest="100"/>
-                    <Picker x:Name="GenderPicker" Title="Gender" HorizontalOptions="FillAndExpand" SelectedItem="{Binding User.Gender}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}">
-                        <Picker.Items>
-                            <x:String>Male</x:String>
-                            <x:String>Female</x:String>
-                            <x:String>Other</x:String>
-                        </Picker.Items>
-                    </Picker>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Button Margin="5,20" Text="Apply" 
+            </DataTemplate>
+            <DataTemplate x:Key="UserEditingTemplate">
+                <StackLayout Margin="30,20">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Username" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Username" HorizontalOptions="FillAndExpand" Text="{Binding User.Username}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Email" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Email" HorizontalOptions="FillAndExpand" Keyboard="Email" Text="{Binding User.Email}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="First Name" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="First Name" HorizontalOptions="FillAndExpand" Text="{Binding User.FirstName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Last Name" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Last Name" HorizontalOptions="FillAndExpand" Text="{Binding User.LastName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Age" FontSize="18" WidthRequest="100"/>
+                        <Entry ReturnType="Next" Placeholder="Age" HorizontalOptions="FillAndExpand" Text="{Binding User.Age}" Keyboard="Numeric" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Label Text="Gender" FontSize="18" WidthRequest="100"/>
+                        <Picker x:Name="GenderPicker" Title="Gender" HorizontalOptions="FillAndExpand" SelectedItem="{Binding User.Gender}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}">
+                            <Picker.Items>
+                                <x:String>Male</x:String>
+                                <x:String>Female</x:String>
+                                <x:String>Other</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Margin="5,20" Text="Apply" 
                             HorizontalOptions="FillAndExpand"
                             Command="{Binding ApplyChangesCommand}" CornerRadius="10" 
                             BackgroundColor="{StaticResource Accent}" />
-                    <Button Margin="5,20" Text="Cancel" 
+                        <Button Margin="5,20" Text="Cancel" 
                             HorizontalOptions="FillAndExpand"
                             Command="{Binding CancelEditingCommand}" CornerRadius="10" 
                             BackgroundColor="{StaticResource Warning}" />
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
-            <!--#endregion-->
-        </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="OwnerEditingTemplate">
+                <ScrollView>
+                    <StackLayout Margin="30,20">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="Username" FontSize="18" WidthRequest="100"/>
+                            <Entry ReturnType="Next" Placeholder="Username" HorizontalOptions="FillAndExpand" Text="{Binding User.Username}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="Email" FontSize="18" WidthRequest="100"/>
+                            <Entry ReturnType="Next" Placeholder="Email" HorizontalOptions="FillAndExpand" Keyboard="Email" Text="{Binding User.Email}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="First Name" FontSize="18" WidthRequest="100"/>
+                            <Entry ReturnType="Next" Placeholder="First Name" HorizontalOptions="FillAndExpand" Text="{Binding User.FirstName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="Last Name" FontSize="18" WidthRequest="100"/>
+                            <Entry ReturnType="Next" Placeholder="Last Name" HorizontalOptions="FillAndExpand" Text="{Binding User.LastName}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="Age" FontSize="18" WidthRequest="100"/>
+                            <Entry ReturnType="Next" Placeholder="Age" HorizontalOptions="FillAndExpand" Text="{Binding User.Age}" Keyboard="Numeric" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="Gender" FontSize="18" WidthRequest="100"/>
+                            <Picker x:Name="GenderPicker" Title="Gender" HorizontalOptions="FillAndExpand" SelectedItem="{Binding User.Gender}" IsEnabled="{Binding IsWaiting, Converter={StaticResource InvertedBoolConverter}}">
+                                <Picker.Items>
+                                    <x:String>Male</x:String>
+                                    <x:String>Female</x:String>
+                                    <x:String>Other</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Button Margin="5,20" Text="Apply" 
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding ApplyChangesCommand}" CornerRadius="10" 
+                            BackgroundColor="{StaticResource Accent}" />
+                            <Button Margin="5,20" Text="Cancel" 
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding CancelEditingCommand}" CornerRadius="10" 
+                            BackgroundColor="{StaticResource Warning}" />
+                        </StackLayout>
+                        <Label Text="Device Access" Margin="10"/>
+                        <StackLayout BindableLayout.ItemsSource="{Binding DevicesAccess}" 
+                                     IsVisible="{Binding IsAdminOrOwner, Converter={StaticResource InvertedBoolConverter}}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="common:DeviceModel">
+                                    <Frame CornerRadius="15" HasShadow="True" BackgroundColor="Transparent" Padding="0" Margin="0">
+                                        <StackLayout Orientation="Horizontal">
+                                            <StackLayout HorizontalOptions="StartAndExpand">
+                                                <Label TextColor="{StaticResource White}"
+                                                       Text="{Binding Name}"
+                                                       Margin="10,0"/>
+                                                <Label Text="{Binding Id}"
+                                                       Margin="10,0"/>
+                                            </StackLayout>
+                                            <Button Margin="5" Text="Remove" 
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="End"
+                                                    WidthRequest="100"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveDeviceAccessCommand}" 
+                                                    CommandParameter="{Binding Id}"
+                                                    CornerRadius="10" 
+                                                    BackgroundColor="{StaticResource Warning}"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                            <BindableLayout.EmptyView>
+                                <Label Text="This user doesn't have access to any devices!"
+                                       Margin="10,25,10,10"
+                                       FontAttributes="Bold"
+                                       FontSize="18"
+                                       HorizontalOptions="Fill"
+                                       HorizontalTextAlignment="Center"/>
+                            </BindableLayout.EmptyView>
+                        </StackLayout>
+                        <Button Margin="5,20" Text="Add" 
+                                HorizontalOptions="FillAndExpand"
+                                Command="{Binding AddDeviceAccessCommand}" CornerRadius="10" 
+                                BackgroundColor="{StaticResource Accent}" 
+                                IsVisible="{Binding IsAdminOrOwner, Converter={StaticResource InvertedBoolConverter}}"/>
+                    </StackLayout>
+                </ScrollView>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Frame x:Name="PageFrame" Padding="0" BackgroundColor="{StaticResource Primary}"/>
     </ContentPage.Content>
 </ContentPage>

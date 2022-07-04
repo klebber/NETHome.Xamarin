@@ -14,6 +14,8 @@ namespace NetHome.Services
 
         public static async Task SetUserData(UserModel user)
         {
+            if (userData is not null && userData.Id != user.Id)
+                return;
             userData = user;
             await SecureStorage.SetAsync("Username", user.Username);
         }

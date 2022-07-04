@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:NetHome.ViewModels" 
+             xmlns:common="clr-namespace:NetHome.Common;assembly=NetHome.Common"
+             x:DataType="viewmodels:UserSettingsViewModel"
+             x:Class="NetHome.Views.UserSettingsPage"
+             x:Name="Page"
+             Title="User Settings"
+             Shell.TabBarIsVisible="False">
+    <ContentPage.Content>
+        <RefreshView Command="{Binding OnRefreshed}" IsRefreshing="{Binding IsWaiting}">
+            <CollectionView ItemsSource="{Binding Users}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="common:UserModel">
+                        <StackLayout>
+                            <Frame Padding="0" Margin="30,0" HeightRequest="50" BackgroundColor="{StaticResource Primary}">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.GoToUserInfo, Source={x:Reference Page}}"
+                                                          CommandParameter="{Binding Id}"/>
+                                </Frame.GestureRecognizers>
+                                <Label Text="{Binding Username}" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center"
+                                       FontSize="20" FontAttributes="Bold"/>
+                            </Frame>
+                            <BoxView HeightRequest="1" BackgroundColor="{StaticResource Neutral}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                             ItemSpacing="0"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.EmptyView>
+                    <Label Text="There are no users to display!"
+                           Margin="10,25,10,10"
+                           FontAttributes="Bold"
+                           FontSize="18"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center"/>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

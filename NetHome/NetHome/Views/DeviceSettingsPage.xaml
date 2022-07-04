@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:viewmodels="clr-namespace:NetHome.ViewModels" xmlns:common="clr-namespace:NetHome.Common;assembly=NetHome.Common"
+             xmlns:viewmodels="clr-namespace:NetHome.ViewModels" 
+             xmlns:common="clr-namespace:NetHome.Common;assembly=NetHome.Common"
              x:DataType="viewmodels:DeviceSettingsViewModel"
              x:Class="NetHome.Views.DeviceSettingsPage"
              Title="Device Settings"

@@ -2,6 +2,7 @@
 using NetHome.Exceptions;
 using NetHome.Helpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -102,11 +103,80 @@ namespace NetHome.Services
                         ErrorMessage = "Your token may have expired. Please try logging in again."
                     };
                 }
-                return new RequestResult(false)
-                {
-                    ErrorType = e.GetType().Name,
-                    ErrorMessage = e.Message
-                };
+                return new RequestResult(e);
+            }
+        }
+
+        public async Task<RequestResultPayload<UserModel>> GetUser(string id)
+        {
+            try
+            {
+                var response = await HttpRequestHelper.GetAsync($"api/user/get?id={id}");
+                var stream = await response.Content.ReadAsStreamAsync();
+                var users = await JsonSerializer.DeserializeAsync<UserModel>(stream, JsonHelper.GetOptions());
+                return new RequestResultPayload<UserModel>(true, users);
+            }
+            catch (Exception e)
+            {
+                return new RequestResultPayload<UserModel>(e);
+            }
+        }
+
+        public async Task<RequestResultPayload<ICollection<UserModel>>> GetAllUsers()
+        {
+            try
+            {
+                var response = await HttpRequestHelper.GetAsync("api/user/getall");
+                var stream = await response.Content.ReadAsStreamAsync();
+                var users = await JsonSerializer.DeserializeAsync<ICollection<UserModel>>(stream, JsonHelper.GetOptions());
+                return new RequestResultPayload<ICollection<UserModel>>(true, users);
+            }
+            catch (Exception e)
+            {
+                return new RequestResultPayload<ICollection<UserModel>>(e);
+            }
+        }
+
+        public async Task<RequestResultPayload<ICollection<DeviceModel>>> GetAccessibleDevices(string userId)
+        {
+            try
+            {
+                var response = await HttpRequestHelper.GetAsync($"api/user/getaccessible?userId={userId}");
+                var stream = await response.Content.ReadAsStreamAsync();
+                var users = await JsonSerializer.DeserializeAsync<ICollection<DeviceModel>>(stream, JsonHelper.GetOptions());
+                return new RequestResultPayload<ICollection<DeviceModel>>(true, users);
+            }
+            catch (Exception e)
+            {
+                return new RequestResultPayload<ICollection<DeviceModel>>(e);
+            }
+        }
+
+        public async Task<RequestResult> AddDeviceAccess(DeviceAccessPayload dap)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(dap, JsonHelper.GetOptions());
+                var response = await HttpRequestHelper.PostAsync("api/user/giveaccess", json);
+                return new RequestResult(true);
+            }
+            catch (Exception e)
+            {
+                return new RequestResult(e);
+            }
+        }
+
+        public async Task<RequestResult> RemoveDeviceAccess(DeviceAccessPayload dap)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(dap, JsonHelper.GetOptions());
+                var response = await HttpRequestHelper.PostAsync("api/user/removeaccess", json);
+                return new RequestResult(true);
+            }
+            catch (Exception e)
+            {
+                return new RequestResult(e);
             }
         }
     }

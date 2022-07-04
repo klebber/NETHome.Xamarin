@@ -24,6 +24,7 @@ namespace NetHome
             Routing.RegisterRoute(nameof(AccountInfoPage), typeof(AccountInfoPage));
             Routing.RegisterRoute(nameof(DeviceSettingsPage), typeof(DeviceSettingsPage));
             Routing.RegisterRoute(nameof(DeviceInfoPage), typeof(DeviceInfoPage));
+            Routing.RegisterRoute(nameof(UserSettingsPage), typeof(UserSettingsPage));
         }
     }
 }
