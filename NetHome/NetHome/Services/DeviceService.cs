@@ -82,33 +82,33 @@ namespace NetHome.Services
             }
         }
 
-        public async Task<RequestResultPayload<List<string>>> GetAllRooms()
+        public async Task<RequestResultPayload<List<RoomModel>>> GetAllRooms()
         {
             try
             {
                 var response = await HttpRequestHelper.GetAsync("api/devices/getrooms");
                 var stream = await response.Content.ReadAsStreamAsync();
-                var rooms =  await JsonSerializer.DeserializeAsync<List<string>>(stream, JsonHelper.GetOptions());
-                return new RequestResultPayload<List<string>>(true, rooms);
+                var rooms =  await JsonSerializer.DeserializeAsync<List<RoomModel>>(stream, JsonHelper.GetOptions());
+                return new RequestResultPayload<List<RoomModel>>(true, rooms);
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<List<string>>(e);
+                return new RequestResultPayload<List<RoomModel>>(e);
             }
         }
 
-        public async Task<RequestResultPayload<List<string>>> GetAllDeviceTypes()
+        public async Task<RequestResultPayload<List<DeviceTypeModel>>> GetAllDeviceTypes()
         {
             try
             {
                 var response = await HttpRequestHelper.GetAsync("api/devices/gettypes");
                 var stream = await response.Content.ReadAsStreamAsync();
-                var types = await JsonSerializer.DeserializeAsync<List<string>>(stream, JsonHelper.GetOptions());
-                return new RequestResultPayload<List<string>>(true, types);
+                var types = await JsonSerializer.DeserializeAsync<List<DeviceTypeModel>>(stream, JsonHelper.GetOptions());
+                return new RequestResultPayload<List<DeviceTypeModel>>(true, types);
             }
             catch (Exception e)
             {
-                return new RequestResultPayload<List<string>>(e);
+                return new RequestResultPayload<List<DeviceTypeModel>>(e);
             }
         }
 
@@ -127,11 +127,11 @@ namespace NetHome.Services
             }
         }
 
-        public async Task<RequestResult> AddRoom(string roomName)
+        public async Task<RequestResult> AddRoom(RoomModel room)
         {
             try
             {
-                var json = JsonSerializer.Serialize(roomName, JsonHelper.GetOptions());
+                var json = JsonSerializer.Serialize(room, JsonHelper.GetOptions());
                 await HttpRequestHelper.PostAsync("api/devices/addroom", json);
                 return new RequestResult(true);
             }
@@ -141,11 +141,11 @@ namespace NetHome.Services
             }
         }
 
-        public async Task<RequestResult> DeleteRoom(string roomName)
+        public async Task<RequestResult> DeleteRoom(RoomModel room)
         {
             try
             {
-                var json = JsonSerializer.Serialize(roomName, JsonHelper.GetOptions());
+                var json = JsonSerializer.Serialize(room, JsonHelper.GetOptions());
                 await HttpRequestHelper.PostAsync("api/devices/deleteroom", json);
                 return new RequestResult(true);
             }
@@ -155,11 +155,11 @@ namespace NetHome.Services
             }
         }
 
-        public async Task<RequestResult> AddType(string typeName)
+        public async Task<RequestResult> AddType(DeviceTypeModel type)
         {
             try
             {
-                var json = JsonSerializer.Serialize(typeName, JsonHelper.GetOptions());
+                var json = JsonSerializer.Serialize(type, JsonHelper.GetOptions());
                 await HttpRequestHelper.PostAsync("api/devices/addtype", json);
                 return new RequestResult(true);
             }
@@ -169,11 +169,11 @@ namespace NetHome.Services
             }
         }
 
-        public async Task<RequestResult> DeleteType(string typeName)
+        public async Task<RequestResult> DeleteType(DeviceTypeModel type)
         {
             try
             {
-                var json = JsonSerializer.Serialize(typeName, JsonHelper.GetOptions());
+                var json = JsonSerializer.Serialize(type, JsonHelper.GetOptions());
                 await HttpRequestHelper.PostAsync("api/devices/deletetype", json);
                 return new RequestResult(true);
             }

@@ -12,6 +12,7 @@ using NetHome.Views.Popups;
 using Xamarin.CommunityToolkit.Extensions;
 using System.Text.RegularExpressions;
 using System.Net;
+using System.Linq;
 
 namespace NetHome.ViewModels.Devices
 {
@@ -25,9 +26,8 @@ namespace NetHome.ViewModels.Devices
         private Command addDeviceCommand;
         private Command cancelAddingCommand;
         private Command deleteCommand;
-        private List<string> rooms;
-        private List<string> generalTypes;
-        private List<string> types;
+        private List<RoomModel> roomModels;
+        private List<DeviceTypeModel> typeModels;
         private readonly WeakEventManager<string> _frameContentChangeEventManager;
         public event EventHandler<string> FrameContentChange
         {
@@ -41,9 +41,10 @@ namespace NetHome.ViewModels.Devices
         public string NewRoom { get; set; }
         public string NewType { get; set; }
         public DevicePayload Payload { get => payload; set { SetProperty(ref payload, value); OnPropertyChanged(); } }
-        public List<string> Rooms { get => rooms; set => SetProperty(ref rooms, value); }
-        public List<string> GeneralTypes { get => generalTypes; set => SetProperty(ref generalTypes, value); }
-        public List<string> Types { get => types; set => SetProperty(ref types, value); }
+        public List<RoomModel> RoomModels { get => roomModels; set => SetProperty(ref roomModels, value); }
+        public List<string> Rooms { get => RoomModels.Select(r => r.Name).ToList(); }
+        public List<DeviceTypeModel> TypeModels { get => typeModels; set => SetProperty(ref typeModels, value); }
+        public List<string> Types { get => TypeModels.Select(t => t.Name).ToList(); }
         public ICommand ApplyChangesCommand => applyChangesCommand ??= new Command(async () => await ApplyChanges());
         public ICommand CancelEditingCommand => cancelEditingCommand ??= new Command(CancelEditing);
         public ICommand AddDeviceCommand => addDeviceCommand ??= new Command(async () => await AddDevice());
@@ -64,7 +65,7 @@ namespace NetHome.ViewModels.Devices
             var roomsResponse = await _deviceService.GetAllRooms();
             if (roomsResponse.IsSuccessful)
             {
-                Rooms = roomsResponse.Paylaod;
+                RoomModels = roomsResponse.Paylaod;
             }
             else
             {
@@ -75,7 +76,7 @@ namespace NetHome.ViewModels.Devices
             var typesResponse = await _deviceService.GetAllDeviceTypes();
             if (typesResponse.IsSuccessful)
             {
-                Types = typesResponse.Paylaod;
+                TypeModels = typesResponse.Paylaod;
             }
             else
             {
@@ -179,7 +180,7 @@ namespace NetHome.ViewModels.Devices
             var response = await _deviceService.DeleteDevice(Payload.Device);
             if (response.IsSuccessful)
             {
-                await Shell.Current.ShowPopupAsync(new Alert("Success!", "Device has successfuly been updated.", "Ok", true));
+                await Shell.Current.ShowPopupAsync(new Alert("Success!", "Device has successfuly been deleted.", "Ok", true));
                 await Shell.Current.GoToAsync("..");
             }
             else

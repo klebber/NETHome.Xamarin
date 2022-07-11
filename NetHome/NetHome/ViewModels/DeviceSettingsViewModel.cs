@@ -13,6 +13,7 @@ using Xamarin.CommunityToolkit.Extensions;
 using NetHome.Views;
 using NetHome.Views.DevicePages;
 using Xamarin.Essentials;
+using System.Linq;
 
 namespace NetHome.ViewModels
 {
@@ -99,7 +100,12 @@ namespace NetHome.ViewModels
                 "Room Name", "", "Add", true, true, keyboard: Keyboard.Text));
             if (string.IsNullOrWhiteSpace(result))
                 return;
-            var response = await _deviceService.AddRoom(result);
+            var room = new RoomModel()
+            {
+                Id = -1,
+                Name = result
+            };
+            var response = await _deviceService.AddRoom(room);
             if (response.IsSuccessful)
             {
                 await Shell.Current.ShowPopupAsync(new Alert("Success!", "New room has been added.", "Ok", true));
@@ -116,10 +122,11 @@ namespace NetHome.ViewModels
             var itemsSource = await _deviceService.GetAllRooms();
             string result = await Shell.Current.ShowPopupAsync(new PickerPopup(
                 "Delete Room", "Pick a room to delete:",
-                "Room Name", itemsSource.Paylaod, "Delete", true, true, keyboard: Keyboard.Text));
+                "Room Name", itemsSource.Paylaod.Select(r => r.Name).ToList(), "Delete", true, true, keyboard: Keyboard.Text));
             if (string.IsNullOrWhiteSpace(result))
                 return;
-            var response = await _deviceService.DeleteRoom(result);
+            var room = itemsSource.Paylaod.First(r => r.Name == result);
+            var response = await _deviceService.DeleteRoom(room);
             if (response.IsSuccessful)
             {
                 await Shell.Current.ShowPopupAsync(new Alert("Success!", $"Room {result} has been deleted.", "Ok", true));
@@ -138,7 +145,12 @@ namespace NetHome.ViewModels
                 "Type Name", "", "Add", true, true, keyboard: Keyboard.Text));
             if (string.IsNullOrWhiteSpace(result))
                 return;
-            var response = await _deviceService.AddType(result);
+            var type = new DeviceTypeModel()
+            {
+                Id = -1,
+                Name = result
+            };
+            var response = await _deviceService.AddType(type);
             if (response.IsSuccessful)
             {
                 await Shell.Current.ShowPopupAsync(new Alert("Success!", "New type has been added.", "Ok", true));
@@ -155,10 +167,11 @@ namespace NetHome.ViewModels
             var itemsSource = await _deviceService.GetAllDeviceTypes();
             string result = await Shell.Current.ShowPopupAsync(new PickerPopup(
                 "Delete Device Type", "Pick a type to delete:",
-                "Type Name", itemsSource.Paylaod, "Delete", true, true, keyboard: Keyboard.Text));
+                "Type Name", itemsSource.Paylaod.Select(t => t.Name).ToList(), "Delete", true, true, keyboard: Keyboard.Text));
             if (string.IsNullOrWhiteSpace(result))
                 return;
-            var response = await _deviceService.DeleteType(result);
+            var type = itemsSource.Paylaod.First(t => t.Name == result);
+            var response = await _deviceService.DeleteType(type);
             if (response.IsSuccessful)
             {
                 await Shell.Current.ShowPopupAsync(new Alert("Success!", $"Device type {result} has been deleted.", "Ok", true));
